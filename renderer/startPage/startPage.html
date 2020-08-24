@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
+    <link rel="stylesheet" href="startPage.css" />
+    <title>P2Sys-Viewer</title>
+  </head>
+  <body>
+    <div id="check-customer">
+      <div id="p2s-logo"><img src="../icons/loader.png" alt="" /></div>
+
+      <div class="grab-search">
+        <img src="../icons/grab.png" />
+      </div>
+      <div id="check-background">
+        <div id="customer-number-list">
+          <span id="customer-list"></span>
+        </div>
+        <div id="customer-search-container">
+          <form action="javascript:null;">
+            <img src="../icons/search.png" />
+            <input
+              type="text"
+              id="customer-search"
+              placeholder="Customer #..."
+              spellcheck="false"
+              minlength="6"
+              maxlength="7"
+              title="Customer number needs to be 6 digits long"
+              autofocus
+            />
+            <input style="display: none;" id="hidden-submit" type="submit" />
+          </form>
+        </div>
+
+        <div>
+          <button class="btn" id="check-exit-btn" href="#">EXIT</button>
+          <button class="btn" id="check-view-btn" href="#">VIEW</button>
+          <span id="disabled" href="#">DISABLED</span>
+        </div>
+      </div>
+      <div id="assist-box">
+        <button class="btn" id="assist-btn" href="#">CUSTOMER FIND</button>
+      </div>
+      <div id="db-customer-search" title="Database status" class="db-light">
+        <div id="db-customer-search-text" class="text" data-label="DATABASE"></div>
+      </div>
+    </div>
+    <script src="startpageapp.js"></script>
+  </body>
+</html>

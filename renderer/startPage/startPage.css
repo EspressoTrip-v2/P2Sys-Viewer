@@ -1,0 +1,398 @@
+/* Set main colors */
+:root {
+  --main-blue: #3e6ba6ff;
+  --sec-blue: #8eafdafb;
+  --button-red: #cf2115;
+  --button-green: #80c432;
+  --button-gold: #d9793b;
+  --opaque-man: rgba(128, 196, 50, 0.4);
+  --auto: #d9793b;
+  --opaque-auto: rgba(217, 122, 58, 0.3);
+}
+
+/* Fonts */
+@font-face {
+  font-family: Forelle;
+  src: url('../fonts/Forelle.ttf');
+}
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}
+button:focus {
+  outline: none;
+}
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+}
+/* MAIN TAG SECTION WITH CHILDREN*/
+html {
+  background-image: url('../icons/whitcher-logo-small-opacity.png');
+  background-repeat: repeat space;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 1vh;
+}
+
+/* /////////////////////// */
+/* CHECK CUSTOMER BOX CSS */
+/* //////////////////// /*/
+
+#db-customer-search {
+  position: absolute;
+  bottom: 3vh;
+}
+
+.text {
+  position: relative;
+  font-size: 11px;
+  font-weight: bolder;
+  text-align: center;
+  padding: 1vh 3vw;
+}
+.text::after {
+  content: attr(data-label);
+}
+
+.db-light {
+  position: relative;
+  color: #fff;
+  border-radius: 50%;
+  background-color: lightgrey;
+  display: flex;
+  width: 22vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
+}
+
+.db-fail {
+  position: relative;
+  color: #fff;
+  border-radius: 50%;
+  background-color: var(--button-red);
+  display: flex;
+  width: 22vw;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
+}
+
+.db-connected {
+  position: relative;
+  color: #fff;
+  border-radius: 50%;
+  background-color: lightgrey;
+  display: flex;
+  flex-direction: column;
+  width: 22vw;
+
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
+  animation: db-success 1.5s linear infinite alternate;
+}
+
+@keyframes db-success {
+  from {
+    background-color: #e1e1e1;
+  }
+  to {
+    background-color: var(--button-green);
+  }
+}
+
+#check-customer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  align-items: center;
+  height: 100%;
+  border: 4px solid var(--main-blue);
+  border-radius: 20px;
+  background-color: #fff;
+  background-image: url('../icons/whitcher-logo-small-opacity.png');
+  background-size: contain;
+  background-repeat: repeat-y;
+  background-position: center top;
+  z-index: 3;
+  transition: visibility 0.3s, opacity 0.3s linear;
+}
+#check-background {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh;
+  padding: 2vh;
+  background-color: var(--sec-blue);
+  border: 4px solid var(--main-blue);
+  border-radius: 20px;
+  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+}
+#customer-search-container {
+  padding: 5px 6px;
+  height: 7vh;
+  border: 2px solid #fff;
+  border-radius: 50px;
+}
+#customer-search-container img {
+  width: auto;
+  height: 34px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+#customer-search {
+  text-transform: uppercase;
+  padding: 4px;
+  margin-right: 15px;
+  width: 100%;
+  text-align: center;
+  font-weight: bolder;
+  border-radius: 50px;
+  border: 4px solid #fff;
+}
+#customer-search:focus {
+  outline: none;
+  animation: flash 1s steps(2, end) infinite;
+}
+@keyframes flash {
+  from {
+    border: 4px solid #fff;
+  }
+  to {
+    border: 4px solid orange;
+  }
+}
+
+#customer-number-list {
+  background-color: #fff;
+  border: 4px solid var(--main-blue);
+  border-radius: 20px;
+  height: 20vh;
+  padding: 5px;
+}
+#customer-list {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#customer-list::-webkit-scrollbar {
+  width: 2px;
+  background-color: lightgrey;
+}
+#customer-list::-webkit-scrollbar-thumb {
+  height: 3px;
+  background-color: grey;
+}
+
+/* /////////////////// */
+/* POPULATED HTML CSS */
+/* ///////////////// */
+
+.cusnum {
+  text-align: center;
+  font-size: 18px;
+  background-color: #fff;
+  border: 3px solid #fff;
+  margin: 0;
+  border-radius: 10px;
+
+  padding: 2px;
+  border-bottom: 3px solid #e8eaed80;
+}
+.cusnum-clicked {
+  position: relative;
+  background-color: var(--sec-blue);
+  color: #fff;
+  border: 3px solid var(--main-blue);
+  text-align: center;
+  font-size: 18px;
+  border-radius: 10px;
+  margin: 0;
+  padding: 2px;
+}
+
+#p2s-logo {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 38px;
+  left: 55px;
+  width: fit-content;
+}
+#p2s-logo img {
+  position: relative;
+  width: 135px;
+}
+#p2s-logo::after {
+  content: 'Viewer';
+  position: absolute;
+  font-family: Forelle;
+  left: 130px;
+  font-size: 77px;
+}
+
+/* BUTTONS */
+/* Search Box */
+
+.btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  border-radius: 200px;
+
+  background-color: var(--button-gold);
+  color: #fff;
+  border: 2px solid var(--button-gold);
+  font-size: 15px;
+  text-align: center;
+  padding: 10px 20px;
+  font-weight: bolder;
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+}
+#check-exit-btn {
+  position: relative;
+  text-align: center;
+  background-color: var(--button-red);
+  color: #fff;
+  border: 2px solid var(--button-red);
+  width: 30vw;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#check-exit-btn:hover {
+  background-color: #fff;
+  color: var(--button-red);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#check-view-btn {
+  position: relative;
+  display: flex;
+  text-align: center;
+
+  background-color: var(--button-green);
+  color: #fff;
+  border: 2px solid var(--button-green);
+  width: 30vw;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#check-view-btn:hover {
+  background-color: #fff;
+  color: var(--button-green);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#check-background div {
+  /* Alignment search box buttons */
+  display: inline-flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  justify-items: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+#disabled {
+  display: none;
+  margin-left: 2px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  font-weight: bolder;
+  border-radius: 200px;
+  height: auto;
+  width: 30vw;
+  color: #8f9691c0;
+  border: 2px solid #8f9691c0;
+}
+
+#assist-box {
+  bottom: 11vh;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  width: 100%;
+}
+
+#assist-btn {
+  text-align: center;
+  justify-self: center;
+  align-self: center;
+  background-color: rgba(255, 255, 255, 0.596);
+  font-weight: lighter;
+  color: black;
+  border: 0.5px solid black;
+  width: 45%;
+}
+
+#assist-btn:hover {
+  font-weight: bolder;
+  color: black;
+  background-color: #fff;
+  border: 2px solid black;
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+/* //////////////////// */
+/* WINDOW CONTROLS CSS */
+/* ////////////////// */
+
+/* Max and Grab icons */
+.max a {
+  display: block;
+  position: absolute;
+  top: -14px;
+  right: -45px;
+  outline: none;
+}
+
+.grab {
+  display: block;
+  position: absolute;
+  top: -14px;
+  left: -45px;
+  -webkit-app-region: drag;
+}
+
+.grab-search {
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  -webkit-app-region: drag;
+}

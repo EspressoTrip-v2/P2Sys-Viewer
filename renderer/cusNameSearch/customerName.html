@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
+    <link rel="stylesheet" href="customerName.css" />
+
+    <title>Customer Name Search</title>
+  </head>
+  <body>
+    <header>
+      <img src="../icons/whitcher-logo.png" />
+    </header>
+    <main>
+      <div id="container-background">
+        <div id="customer-list-container"></div>
+      </div>
+    </main>
+    <footer>
+      <div id="customer-search-container">
+        <div id="search-input">
+          <img src="../icons/search.png" alt="" />
+          <input
+            id="customer-search"
+            type="text"
+            placeholder="Search..."
+            spellcheck="false"
+            autofocus
+          />
+        </div>
+      </div>
+    </footer>
+    <script>
+      require('./customerName.js');
+    </script>
+  </body>
+</html>
