@@ -80,7 +80,7 @@ let trayMenu = Menu.buildFromTemplate([
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 650,
+    height: 600,
     width: 420,
     autoHideMenuBar: true,
     center: true,
@@ -100,17 +100,17 @@ function createCustomerSearchWindow() {
   customerSearchWindow.loadFile(`${dir}/renderer/startPage/startPage.html`);
 
   /* CLOSE LOADING WINDOW SHOW CUSTOMER WINDOW */
-  customerSearchWindow.once('ready-to-show', () => {
-    if (loadingWindow) {
-      loadingWindow.close();
-    }
-
+  customerSearchWindow.webContents.once('did-finish-load', () => {
     let message = {
       customerNumberName,
       customerPrices,
     };
 
     customerSearchWindow.webContents.send('database', message);
+
+    if (loadingWindow) {
+      loadingWindow.close();
+    }
     customerSearchWindow.show();
   });
 
@@ -125,11 +125,11 @@ function createCustomerNameWindow(message) {
   // Window State windowStateKeeper
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 655,
+    height: 605,
     width: 300,
     resizable: false,
-    x: message[0] - 300,
-    y: message[1],
+    x: message.dimensions[0] - 300,
+    y: message.dimensions[1],
     autoHideMenuBar: true,
     opacity: 0,
     show: false,
@@ -147,6 +147,9 @@ function createCustomerNameWindow(message) {
 
   //   Load html page
   customerNameWindow.loadFile(`${dir}/renderer/cusNameSearch/customerName.html`);
+  customerNameWindow.webContents.on('did-finish-load', (e) => {
+    customerNameWindow.webContents.send('name-search', message.customerNameNumber);
+  });
 
   //   Load dev tools
   // customerNameWindow.webContents.openDevTools();
@@ -202,4 +205,10 @@ app.on('ready', () => {
 /* IPC LISTENERS */
 ipcMain.on('name-search', (e, message) => {
   createCustomerNameWindow(message);
+});
+
+ipcMain.on('dock-select', (e, message) => {
+  if (customerSearchWindow) {
+    customerSearchWindow.webContents.send('dock-select', message);
+  }
 });

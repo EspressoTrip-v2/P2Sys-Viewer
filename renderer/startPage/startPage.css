@@ -25,6 +25,7 @@ form {
 button:focus {
   outline: none;
 }
+
 * {
   box-sizing: border-box;
   -webkit-user-select: none;
@@ -41,79 +42,6 @@ html {
 /* /////////////////////// */
 /* CHECK CUSTOMER BOX CSS */
 /* //////////////////// /*/
-
-#db-customer-search {
-  position: absolute;
-  bottom: 3vh;
-}
-
-.text {
-  position: relative;
-  font-size: 11px;
-  font-weight: bolder;
-  text-align: center;
-  padding: 1vh 3vw;
-}
-.text::after {
-  content: attr(data-label);
-}
-
-.db-light {
-  position: relative;
-  color: #fff;
-  border-radius: 50%;
-  background-color: lightgrey;
-  display: flex;
-  width: 22vw;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  text-align: center;
-  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
-}
-
-.db-fail {
-  position: relative;
-  color: #fff;
-  border-radius: 50%;
-  background-color: var(--button-red);
-  display: flex;
-  width: 22vw;
-
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  text-align: center;
-  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
-}
-
-.db-connected {
-  position: relative;
-  color: #fff;
-  border-radius: 50%;
-  background-color: lightgrey;
-  display: flex;
-  flex-direction: column;
-  width: 22vw;
-
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  text-align: center;
-  box-shadow: inset 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
-  animation: db-success 1.5s linear infinite alternate;
-}
-
-@keyframes db-success {
-  from {
-    background-color: #e1e1e1;
-  }
-  to {
-    background-color: var(--button-green);
-  }
-}
 
 #check-customer {
   position: absolute;
@@ -140,6 +68,7 @@ html {
 }
 #check-background {
   display: flex;
+  top: 20px;
   position: relative;
   flex-direction: column;
   justify-content: center;
@@ -280,6 +209,7 @@ html {
   font-weight: bolder;
   transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
+
 #check-exit-btn {
   position: relative;
   text-align: center;
@@ -295,10 +225,14 @@ html {
   color: var(--button-red);
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
 }
+#check-exit-btn:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
 
 #check-view-btn {
   position: relative;
-  display: flex;
+  display: none;
   text-align: center;
 
   background-color: var(--button-green);
@@ -313,6 +247,10 @@ html {
   color: var(--button-green);
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
 }
+#check-view-btn:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
 
 #check-background div {
   /* Alignment search box buttons */
@@ -326,7 +264,7 @@ html {
 }
 
 #disabled {
-  display: none;
+  display: flex;
   margin-left: 2px;
   justify-content: center;
   align-items: center;
@@ -341,6 +279,7 @@ html {
 
 #assist-box {
   bottom: 11vh;
+  bottom: 35px;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -366,6 +305,10 @@ html {
   background-color: #fff;
   border: 2px solid black;
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+#assist-btn:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
 }
 
 /* //////////////////// */
