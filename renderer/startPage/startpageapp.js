@@ -12,7 +12,7 @@ const curDir = __dirname;
 let customerSearchWindow = remote.getCurrentWindow();
 
 /* GLOBAL VARIABLES */
-let customerNumberName, customerPrices, customerNameNumber;
+let customerNumberName, customerPrices, customerNameNumber, numbersDivItems;
 
 //////////////////
 /* DOM ELEMENTS */
@@ -30,6 +30,13 @@ let customerFindBtn = document.getElementById('assist-btn'),
 /* FUNCTIONS */
 ///////////////
 
+function resetList() {
+  numbersDivItems.forEach((el) => {
+    el.style.display = 'block';
+    el.setAttribute('class', 'cusnum');
+  });
+}
+
 /////////////////////////////////
 /* CUSTOMER NUMBER SEARCH BOX */
 ///////////////////////////////
@@ -42,7 +49,6 @@ function fillCustomerPrices() {
     });
   }
 
-  let numbersDivItems;
   function addListListeners() {
     /* CLICK EVENTS ON CUSTOMER NUMBER SEARCH BOX */
     numbersDivItems = Array.from(customerNumberList.children);
@@ -112,6 +118,8 @@ function fillCustomerPrices() {
       checkDisabledBtn.style.display = 'flex';
     } else {
       customerNumberList.style.backgroundImage = 'none';
+      checkViewBtn.style.display = 'none';
+      checkDisabledBtn.style.display = 'flex';
     }
   });
 }
@@ -119,8 +127,10 @@ function fillCustomerPrices() {
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
+/* CLOSE BUTTON */
 checkExitBtn.addEventListener('click', (e) => {
   soundClick.play();
+  ipcRenderer.send('close-win', null);
   setTimeout(() => {
     customerSearchWindow.close();
   }, 200);
@@ -129,27 +139,47 @@ checkExitBtn.addEventListener('click', (e) => {
 checkViewBtn.addEventListener('click', (e) => {
   soundClick.play();
   /* ADD POPULATION CODE FOR TABLE */
-});
+  let jsonFile = customerPrices[customerSearchInput.value.toUpperCase()];
+  let customerName = customerNumberName[customerSearchInput.value.toUpperCase()];
+  let message = {
+    jsonFile,
+    customerName,
+    customerNumber: customerSearchInput.value.toUpperCase(),
+  };
 
-customerFindBtn.addEventListener('click', (e) => {
-  soundClick.play();
+  ipcRenderer.send('table-window', message);
+  if (customerSearchWindow.getChildWindows()[0]) {
+    customerSearchWindow.getChildWindows()[0].close();
+  }
+  resetList();
   customerSearchInput.value = '';
   customerSearchInput.dispatchEvent(new Event('keyup'));
+  customerSearchWindow.hide();
+});
+
+/* CUSTOMER FIND BUTTON */
+customerFindBtn.addEventListener('click', (e) => {
+  soundClick.play();
+
+  /* CREATE MESSAGE FOR THE POSITION AND CONTENTS OF FIND DOCK */
   let dimensions = customerSearchWindow.getPosition();
   let message = {
     dimensions,
     customerNameNumber,
   };
 
+  /* FIND DOCK BUTTON INTERACTION ON CLICK */
   if (customerSearchWindow.getChildWindows()[0]) {
     customerSearchWindow.getChildWindows()[0].close();
     customerSearchInput.focus();
   } else {
+    /* SEND MESSAGE TO FIND DOCK */
     ipcRenderer.send('name-search', message);
   }
 });
 
 ipcRenderer.on('database', async (e, message) => {
+  /* REMOVE THE _id TAG FROM DATABASES AND ASSIGN TO GLOBAL VARIABLE */
   customerNumberName = await message.customerNumberName;
   delete customerNumberName['_id'];
   customerNameNumber = {};
@@ -158,7 +188,9 @@ ipcRenderer.on('database', async (e, message) => {
   });
   customerPrices = await message.customerPrices;
   delete customerPrices['_id'];
-  fillCustomerPrices(customerPrices, customerSearchInput, customerNumberList);
+
+  /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
+  fillCustomerPrices();
 });
 
 /* IPC LISTENERS */

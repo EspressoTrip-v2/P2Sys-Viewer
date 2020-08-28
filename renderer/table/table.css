@@ -1,0 +1,531 @@
+/* Set main colors */
+:root {
+  --main-blue: #3e6ba6ff;
+  --sec-blue: #8eafdafb;
+  --button-red: #cf2115;
+  --button-green: #80c432;
+  --button-gold: #d9793b;
+  --opaque-man: rgba(128, 196, 50, 0.4);
+  --auto: #d9793b;
+  --opaque-auto: rgba(217, 122, 58, 0.3);
+}
+
+/* Fonts */
+@font-face {
+  font-family: Forelle;
+  src: url('../fonts/Forelle.ttf');
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+}
+button {
+  outline: none;
+}
+
+html {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 15px;
+}
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+#dimensions {
+  padding-left: 15px;
+}
+.dimensions {
+  position: relative;
+  left: 3px;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  font-size: 15px;
+  padding: 2px 0;
+  background-color: var(--main-blue);
+  color: #fff;
+  z-index: 2;
+}
+#row-columns {
+  position: sticky;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  background-color: #fff;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+}
+td {
+  font-size: 15px;
+  padding: 3px 5px;
+}
+
+input[type='text'] {
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+input[type='number'] {
+  margin: 0;
+  padding: 5px 0;
+  width: 50px;
+  text-align: left;
+  border: none;
+  position: relative;
+  left: 10px;
+}
+
+tbody {
+  position: relative;
+  padding: 0px;
+  margin: 0;
+  width: auto;
+  height: 100%;
+}
+tr {
+  position: relative;
+}
+tr:nth-child(3n + 1) {
+  border-bottom: 4px solid #ccdaec73;
+}
+
+main {
+  position: relative;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+header {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  justify-items: center;
+  align-items: center;
+  height: 70px;
+  width: 480px;
+  right: 20px;
+  background-color: var(--sec-blue);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 2px solid var(--main-blue);
+}
+
+#header-container {
+  width: 100%;
+  position: relative;
+  bottom: 8px;
+}
+
+#move-container {
+  position: absolute;
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+  background-color: var(--main-blue);
+  width: 40px;
+  height: 70px;
+  z-index: 1;
+  right: 0;
+}
+
+#move {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+}
+#narrow {
+  position: absolute;
+  right: 9px;
+  top: 37px;
+  overflow: hidden;
+  border: 2px solid var(--button-green);
+  background-color: var(--button-green);
+  font-weight: bolder;
+  color: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#narrow:hover {
+  background-color: #fff;
+  color: var(--button-green);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+#narrow:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+.arrow {
+  position: relative;
+  top: -21px;
+  right: 2px;
+  font-size: 20px;
+}
+
+#close {
+  position: absolute;
+  right: 9px;
+  top: 6px;
+  overflow: hidden;
+  border: 2px solid var(--button-red);
+  background-color: var(--button-red);
+  font-weight: bolder;
+  color: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#close:hover {
+  background-color: #fff;
+  color: var(--button-red);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#close:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+.cross {
+  position: relative;
+  top: -21px;
+  right: 2px;
+  font-size: 20px;
+}
+
+/* Main body container */
+#border {
+  position: absolute;
+  transform: scaleX(1);
+  transform-origin: left;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 0 5px;
+  bottom: 0;
+  top: 0;
+  width: 530px;
+  height: 100%;
+  border-radius: 10px;
+  filter: drop-shadow(0px 3px 2px black);
+  transition: transform 0.3s;
+}
+
+#label-customer-name,
+#label-customer-number {
+  color: #fff;
+  font-weight: bolder;
+  margin-bottom: 5px;
+}
+
+#overflow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 0 5px;
+}
+
+#customer-name {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  max-width: 250px;
+  width: 230px;
+  height: 100%;
+  text-align: center;
+  outline: none;
+  text-transform: uppercase;
+  overflow-y: auto;
+  line-height: 1em;
+  padding: 0 10px;
+  padding-top: 8px;
+}
+
+/* Scrollbar Customization for Table */
+#customer-name::-webkit-scrollbar {
+  width: 5px;
+}
+
+#customer-name::-webkit-scrollbar-track {
+  background-color: var(--main-blue);
+}
+
+#customer-name::-webkit-scrollbar-thumb {
+  background-color: var(--sec-blue);
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(62, 108, 168, 0.5);
+}
+
+#customer-number {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  width: 100%;
+}
+
+#customer-number-container {
+  position: relative;
+  width: 40%;
+  padding: 0 10px;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#customer-name-container {
+  position: relative;
+  width: 55%;
+  padding: 0 10px;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+/* Entire table container */
+.table-container {
+  position: relative;
+  text-align: center;
+  background-color: #ffff;
+  border-radius: 10px;
+  border: 2px solid var(--main-blue);
+  height: 82%;
+  overflow: hidden;
+}
+/* Inner container to seperate border and scrollbar */
+#container {
+  position: relative;
+  overflow: auto;
+  max-height: 100%;
+}
+
+/* Scrollbar Customization for Table */
+#container::-webkit-scrollbar {
+  width: 5px;
+}
+
+#container::-webkit-scrollbar-track {
+  background-color: var(--main-blue);
+}
+
+#container::-webkit-scrollbar-thumb {
+  background-color: var(--sec-blue);
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(62, 108, 168, 0.5);
+}
+
+/* floating column names */
+#columns {
+  background-color: var(--main-blue);
+  border-bottom: 3px solid var(--main-blue);
+}
+
+/* Container for js html population */
+#table {
+  position: relative;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#footer {
+  position: relative;
+  top: 8px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  height: 60px;
+  width: 100%;
+  background-color: var(--sec-blue);
+  border: 2px solid var(--main-blue);
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+}
+#footer-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: start;
+  width: 200px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+  filter: drop-shadow(2px 4px 6px black);
+}
+#footer-container::after {
+  position: absolute;
+  left: 102px;
+  content: 'Viewer';
+  font-family: Forelle;
+  font-size: 40px;
+}
+
+#p2sys-logo {
+  height: 50px;
+  left: 20px;
+  position: relative;
+}
+
+/* BUTTONS */
+
+#button-container {
+  position: relative;
+  transform: translateX(-70px);
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: flex-start;
+  align-content: center;
+  background-color: var(--sec-blue);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 2px solid var(--main-blue);
+  border-left: none;
+  align-items: center;
+  width: 43px;
+  height: 35vh;
+  z-index: 2;
+  filter: drop-shadow(2px 4px 6px black);
+  transition: transform 0.3s;
+}
+
+#button-container::after {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  content: attr(customer-number);
+  padding: 2px 10px;
+  border-radius: 200px;
+  border: 2px solid var(--main-blue);
+  position: absolute;
+  bottom: 55px;
+  width: 120px;
+  transform: rotate(90deg);
+  font-weight: bolder;
+  font-size: 20px;
+  color: var(--main-blue);
+  background-color: #fff;
+}
+
+#dock-hide-expand {
+  position: relative;
+  top: 18px;
+  overflow: hidden;
+  border: 2px solid var(--button-green);
+  background-color: var(--button-green);
+  font-weight: bolder;
+  color: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#dock-hide-expand:hover {
+  background-color: #fff;
+  color: var(--button-green);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#dock-hide-expand:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#dock-hide-close {
+  position: relative;
+  top: 10px;
+  overflow: hidden;
+  border: 2px solid var(--button-red);
+  background-color: var(--button-red);
+  font-weight: bolder;
+  color: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+}
+
+#dock-hide-close:hover {
+  background-color: #fff;
+  color: var(--button-red);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+#dock-hide-close:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}

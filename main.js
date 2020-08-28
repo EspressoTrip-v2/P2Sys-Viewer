@@ -1,5 +1,5 @@
 /* MODULE IMPORTS */
-const { app, BrowserWindow, ipcMain, Tray, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, screen } = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -15,10 +15,10 @@ const {
 const { databaseSetup } = require(`${dir}/data/objects.js`);
 
 /* WINDOW VARIABLES */
-let customerSearchWindow, tray, customerNameWindow, loadingWindow;
+let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow;
 
 /* GLOBAL VARIABLES */
-let customerNumberName, customerPrices;
+let customerNumberName, customerPrices, screenWidth, screenHeight;
 
 /* CONNECT TO DATABASE */
 function mongooseConnect() {
@@ -33,6 +33,7 @@ function mongooseConnect() {
       }
     )
     .catch((err) => {
+      /* CREATE ERROR LOG */
       let fileDir = `${dir}/data/logfiles/database-logfile.txt`;
       /* CHECK IF IT EXISTS */
       fs.existsSync(fileDir)
@@ -42,20 +43,37 @@ function mongooseConnect() {
         : fs.writeFile(fileDir, `${new Date()} -> Connection failure: ${err}\n`, 'utf8', () =>
             console.log('Logfile write error')
           );
+
+      setTimeout(() => {
+        if (loadingWindow) {
+          loadingWindow.close();
+        }
+      }, 500);
+      dialog.showMessageBoxSync({
+        type: 'info',
+        icon: `${dir}/renderer/icons/trayTemplate.png`,
+        message: 'DATABASE NOT AVAILABLE',
+        detail:
+          '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check network connection.',
+        buttons: ['OK'],
+      });
     });
 }
 mongooseConnect();
 
 let db = mongoose.connection;
 
+/* DB LISTENERS */
+//////////////////
 db.on('connected', async () => {
   let queryCustomerPrices = await customerPricesModel.findById('customerPrices');
   let queryCustomerNumberName = await customerNumberNameModel.findById('customerNumberName');
   customerPrices = queryCustomerPrices._doc;
   customerNumberName = queryCustomerNumberName._doc;
 
-  /* START CUSTOMER SEARCH WINDOW */
+  /* START CUSTOMER SEARCH WINDOW ON CONNECTION */
   createCustomerSearchWindow();
+  db.close();
 });
 
 /* FUNCTION TO CREATE TRAY MENU */
@@ -105,9 +123,10 @@ function createCustomerSearchWindow() {
       customerNumberName,
       customerPrices,
     };
-
+    /* SEND DOWNLOADED DATABASE TO SEARCH WINDOW */
     customerSearchWindow.webContents.send('database', message);
 
+    /* CLOSE THE LOADING WINDOW */
     if (loadingWindow) {
       loadingWindow.close();
     }
@@ -120,9 +139,8 @@ function createCustomerSearchWindow() {
   });
 }
 
-/* CHILD WINDOW CREATION */
+/* CREATE SEARCH DOCK */
 function createCustomerNameWindow(message) {
-  // Window State windowStateKeeper
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
     height: 605,
@@ -145,21 +163,17 @@ function createCustomerNameWindow(message) {
     icon: `${dir}/renderer/icons/trayTemplate.png`,
   });
 
-  //   Load html page
+  //   LOAD HTML PAGE
   customerNameWindow.loadFile(`${dir}/renderer/cusNameSearch/customerName.html`);
-  customerNameWindow.webContents.on('did-finish-load', (e) => {
+  customerNameWindow.webContents.once('did-finish-load', (e) => {
     customerNameWindow.webContents.send('name-search', message.customerNameNumber);
-  });
-
-  //   Load dev tools
-  // customerNameWindow.webContents.openDevTools();
-
-  // Only show on load completion
-  customerNameWindow.once('ready-to-show', () => {
     customerNameWindow.show();
   });
 
-  //   Event listener for closing
+  //  DEV TOOLS
+  // customerNameWindow.webContents.openDevTools();
+
+  //   EVENT LISTENER FOR CLOSING
   customerNameWindow.on('closed', () => {
     customerNameWindow = null;
   });
@@ -184,31 +198,104 @@ function createLoadingWindow() {
     icon: `${dir}/renderer/icons/trayTemplate.png`,
   });
 
-  //   Load html page
+  //   lOAD HTML PAGE
   loadingWindow.loadFile(`${dir}/renderer/loader/loader.html`);
 
-  //   Load dev tools
+  //   DEV TOOLS
   // loadingWindow.webContents.openDevTools();
 
-  //   Event listener for closing
+  //   CLOSING EVENT LISTENER
   loadingWindow.on('closed', () => {
     loadingWindow = null;
   });
 }
 
+/* TABLE WINDOW */
+function createTableWindow(message) {
+  tableWindow = new BrowserWindow({
+    height: screenHeight,
+    width: 545,
+    autoHideMenuBar: true,
+    x: 0,
+    y: 0,
+    center: true,
+    alwaysOnTop: true,
+    frame: false,
+    movable: false,
+    show: false,
+    spellCheck: false,
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      worldSafeExecuteJavaScript: true,
+    },
+    icon: `${dir}/renderer/icons/trayTemplate.png`,
+  });
+
+  //   lOAD HTML PAGE
+  tableWindow.loadFile(`${dir}/renderer/table/table.html`);
+
+  tableWindow.webContents.once('did-finish-load', (e) => {
+    tableWindow.webContents.send('table-window', message);
+    /* CLOSE THE LOADING WINDOW */
+    if (loadingWindow) {
+      loadingWindow.close();
+    }
+    tableWindow.show();
+  });
+
+  //   DEV TOOLS
+  // tableWindow.webContents.openDevTools();
+
+  //   CLOSING EVENT LISTENER
+  tableWindow.on('closed', () => {
+    customerSearchWindow.show();
+    tableWindow = null;
+  });
+}
+
+/* START THE LOADER */
 app.on('ready', () => {
+  /* GET SCREEN SIZE */
+  let res = screen.getPrimaryDisplay().size;
+  screenHeight = res.height;
+  screenWidth = res.width;
   setTimeout(() => {
     createLoadingWindow();
   }, 300);
 });
 
+/* QUIT APP WHEN ALL WINDOWS ARE CLOSED */
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+///////////////////
 /* IPC LISTENERS */
+///////////////////
+
+/* FIND DOCK CREATION LISTENER */
 ipcMain.on('name-search', (e, message) => {
   createCustomerNameWindow(message);
 });
 
+/* DOCK SELECTION LISTENER TO PASS NUMBER TO CUSTOMER SEARCH WINDOW */
 ipcMain.on('dock-select', (e, message) => {
   if (customerSearchWindow) {
     customerSearchWindow.webContents.send('dock-select', message);
+  }
+});
+
+/* TABLE WINDOW CREATION MESSAGE */
+ipcMain.on('table-window', (e, message) => {
+  createLoadingWindow();
+  createTableWindow(message);
+});
+
+/* CLOSE TABLE WINDOW */
+ipcMain.on('close-win', (e, message) => {
+  if (tableWindow) {
+    tableWindow.close();
   }
 });
