@@ -13,6 +13,12 @@
   --opaque-auto: #d97a3acc;
 }
 
+/* Fonts */
+@font-face {
+  font-family: Forelle;
+  src: url('../fonts/Forelle.ttf');
+}
+
 *,
 *::before,
 *::after {

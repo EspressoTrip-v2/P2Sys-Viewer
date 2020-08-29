@@ -1,12 +1,13 @@
 /* MODULES */
 ////////////
 const { remote, ipcRenderer, shell } = require('electron');
-const { customerPricesModel } = require('../../database/mongoDbConnect');
 
 /* GET WORKING DIRECTORY */
-const dir = process.cwd();
-/* GET CURRENT DIR */
-const curDir = __dirname;
+let dir = process.cwd();
+if (process.platform === 'win32') {
+  let pattern = /[\\]+/g;
+  dir = dir.replace(pattern, '/');
+}
 
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
@@ -24,7 +25,13 @@ let customerFindBtn = document.getElementById('assist-btn'),
   checkDisabledBtn = document.getElementById('disabled'),
   customerSearchInput = document.getElementById('customer-search'),
   customerNumberList = document.getElementById('customer-list'),
-  soundClick = document.getElementById('click');
+  soundClick = document.getElementById('click'),
+  systemInfoBtn = document.getElementById('info'),
+  /* INFO PAGE DOM ELEMENTS */
+  systemBackBtn = document.getElementById('back-btn-system'),
+  systemEmailDevBtn = document.getElementById('mail-btn'),
+  systemDatabaseSettingsBtn = document.getElementById('database-setup'),
+  systemSettingsPage = document.getElementsByClassName('system-settings')[0];
 
 ///////////////
 /* FUNCTIONS */
@@ -136,6 +143,7 @@ checkExitBtn.addEventListener('click', (e) => {
   }, 200);
 });
 
+/* VIEW BUTTON */
 checkViewBtn.addEventListener('click', (e) => {
   soundClick.play();
   /* ADD POPULATION CODE FOR TABLE */
@@ -178,6 +186,49 @@ customerFindBtn.addEventListener('click', (e) => {
   }
 });
 
+/* SYSTEM INFO BUTTON */
+systemInfoBtn.addEventListener('click', (e) => {
+  soundClick.play();
+  systemSettingsPage.style.display = 'flex';
+  setTimeout(() => {
+    systemSettingsPage.style.opacity = '1';
+  }, 200);
+});
+
+/* SYSTEM BACK BUTTON */
+systemBackBtn.addEventListener('click', () => {
+  soundClick.play();
+  systemSettingsPage.style.opacity = '0';
+  setTimeout(() => {
+    systemSettingsPage.style.display = 'none';
+  }, 600);
+});
+
+/* EMAIL DEV BUTTON */
+systemEmailDevBtn.addEventListener('click', () => {
+  soundClick.play();
+  shell.openExternal('mailto:juanbo.jb@gmail.com?subject=P2Sys() Inquiry/ Bug report');
+});
+
+/* DATABASE SETUP BUTTON */
+systemDatabaseSettingsBtn.addEventListener('click', () => {
+  soundClick.play();
+  shell.openPath(`${dir}/data/appdata/database.json`);
+});
+
+///////////////////
+/* IPC LISTENERS */
+///////////////////
+ipcRenderer.on('dock-select', (e, message) => {
+  /* CLEAR THE INPUT DISPATCH KEYUP EVENT TO REMOVE ANY BACKGROUND */
+  customerSearchInput.value = '';
+  customerSearchInput.dispatchEvent(new Event('keyup'));
+
+  /* FOCUS SEARCH FIELD AND INSERT CLICKED CYUSTOMER NUMBER */
+  customerSearchInput.focus();
+  customerSearchInput.value = message;
+  customerSearchInput.dispatchEvent(new Event('keyup'));
+});
 ipcRenderer.on('database', async (e, message) => {
   /* REMOVE THE _id TAG FROM DATABASES AND ASSIGN TO GLOBAL VARIABLE */
   customerNumberName = await message.customerNumberName;
@@ -191,16 +242,4 @@ ipcRenderer.on('database', async (e, message) => {
 
   /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
   fillCustomerPrices();
-});
-
-/* IPC LISTENERS */
-ipcRenderer.on('dock-select', (e, message) => {
-  /* CLEAR THE INPUT DISPATCH KEYUP EVENT TO REMOVE ANY BACKGROUND */
-  customerSearchInput.value = '';
-  customerSearchInput.dispatchEvent(new Event('keyup'));
-
-  /* FOCUS SEARCH FIELD AND INSERT CLICKED CYUSTOMER NUMBER */
-  customerSearchInput.focus();
-  customerSearchInput.value = message;
-  customerSearchInput.dispatchEvent(new Event('keyup'));
 });

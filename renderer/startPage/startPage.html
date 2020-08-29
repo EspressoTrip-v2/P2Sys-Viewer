@@ -15,6 +15,17 @@
       <div class="grab-search">
         <img src="../icons/grab.png" />
       </div>
+      <button id="info">
+        <svg id="info-icon" width="402" height="402" viewBox="0 0 402 402">
+          <path
+            d="M164.5 91.4h73.1c4.9 0 9.2-1.8 12.8-5.4 3.6-3.6 5.4-7.9 5.4-12.8V18.3c0-4.9-1.8-9.2-5.4-12.8C246.8 1.8 242.5 0 237.5 0h-73.1c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.9v54.8c0 4.9 1.8 9.2 5.4 12.8C155.2 89.6 159.5 91.4 164.5 91.4z"
+          />
+          <path
+            d="M286.9 334.3c-3.6-3.6-7.9-5.4-12.8-5.4h-18.3V164.5c0-4.9-1.8-9.2-5.4-12.8 -3.6-3.6-7.9-5.4-12.8-5.4H127.9c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.8v36.5c0 4.9 1.8 9.2 5.4 12.8 3.6 3.6 7.9 5.4 12.8 5.4h18.3v109.6h-18.3c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.8v36.5c0 4.9 1.8 9.2 5.4 12.9 3.6 3.6 7.9 5.4 12.8 5.4h146.2c4.9 0 9.2-1.8 12.8-5.4 3.6-3.6 5.4-7.9 5.4-12.9v-36.5C292.4 342.2 290.6 337.9 286.9 334.3z"
+          />
+        </svg>
+      </button>
+
       <div id="check-background">
         <div id="customer-number-list">
           <span id="customer-list"></span>
@@ -46,6 +57,53 @@
         <button class="btn" id="assist-btn" href="#">CUSTOMER FIND</button>
       </div>
     </div>
+
+    <div class="system-settings" style="display: none">
+      <div id="system-settings-header"><img src="../icons/loader.png" /></div>
+      <div class="paragraph">
+        <p>
+          P2Sys is software developed to help assist companies streamline their price-list
+          generation and order template distribution. It utilizes a user friendly GUI to aid in
+          the creation of custom price-lists. Effortlessly generating order-sheets for
+          distribution as well as matching system templates for the companies implemented ERP
+          system.
+        </p>
+      </div>
+      <br />
+      <div class="paragraph">
+        For system error's or bug reporting, please click on the email developer button. <br />
+      </div>
+
+      <div id="setup-container">
+        <button class="system-btn" id="database-setup">DATABASE SETUP</button>
+      </div>
+
+      <button class="btn-back" title="Back" id="back-btn-system" href="#">
+        <svg id="back-icon" viewBox="0 0 512 512">
+          <polygon
+            points="513 216.6 158.5 216.6 316.1 59.1 197.9 59.1 1 256 197.9 452.9 316.1 452.9 158.5 295.4 513 295.4 "
+          />
+        </svg>
+      </button>
+      <button class="mail" title="Email Developer" id="mail-btn" href="#">
+        <svg
+          id="dev-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-at-sign"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+        </svg>
+      </button>
+
+      <footer>P2Sys_() &trade; &nbsp; 2020</footer>
+    </div>
+
     <script src="startpageapp.js"></script>
   </body>
 </html>

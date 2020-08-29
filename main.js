@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 
 /* GET WORKING DIRECTORY */
-const dir = process.cwd();
+let dir = process.cwd();
+if (process.platform === 'win32') {
+  let pattern = /[\\]+/g;
+  dir = dir.replace(pattern, '/');
+}
 
 /* LOCAL MODULES */
 ///////////////////
@@ -54,7 +58,7 @@ function mongooseConnect() {
         icon: `${dir}/renderer/icons/trayTemplate.png`,
         message: 'DATABASE NOT AVAILABLE',
         detail:
-          '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check network connection.',
+          '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check the network connection.',
         buttons: ['OK'],
       });
     });
@@ -98,8 +102,8 @@ let trayMenu = Menu.buildFromTemplate([
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 600,
-    width: 420,
+    height: 630,
+    width: 430,
     autoHideMenuBar: true,
     center: true,
     show: false,
@@ -143,13 +147,12 @@ function createCustomerSearchWindow() {
 function createCustomerNameWindow(message) {
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 605,
+    height: 625,
     width: 300,
     resizable: false,
     x: message.dimensions[0] - 300,
     y: message.dimensions[1],
     autoHideMenuBar: true,
-    opacity: 0,
     show: false,
     center: true,
     frame: false,
@@ -214,7 +217,7 @@ function createLoadingWindow() {
 function createTableWindow(message) {
   tableWindow = new BrowserWindow({
     height: screenHeight,
-    width: 545,
+    width: 550,
     autoHideMenuBar: true,
     x: 0,
     y: 0,

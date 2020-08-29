@@ -4,6 +4,10 @@ const { set } = require('mongoose');
 
 /* GET WORKING DIRECTORY */
 let dir = process.cwd();
+if (process.platform === 'win32') {
+  let pattern = /[\\]+/g;
+  dir = dir.replace(pattern, '/');
+}
 
 /* LOCAL IMPORTS */
 const { tablePopulate } = require(`${dir}/renderer/table/tablePopulate.js`);
@@ -61,20 +65,19 @@ dockMainMid */
 /* DOCK HIDE FUNCTION */
 function dockHide() {
   let size = tableWindow.getSize();
-  console.log(size);
   if (size[0] === 65) {
     dockButtonContainer.style.transform = 'translateX(-70px)';
     setTimeout(() => {
-      tableWindow.setSize(545, parseInt(screenHeight));
+      tableWindow.setSize(550, size[1]);
       setTimeout(() => {
         border.style.transform = 'scaleX(1)';
       }, 200);
     }, 500);
-  } else if (size[0] === 545) {
+  } else if (size[0] === 550) {
     dockButtonContainer.setAttribute('customer-number', customerNumbervalue);
     border.style.transform = 'scaleX(0)';
     setTimeout(() => {
-      tableWindow.setSize(65, parseInt(screenHeight));
+      tableWindow.setSize(65, size[1]);
       setTimeout(() => {
         dockButtonContainer.style.transform = 'translateX(0px)';
       }, 200);

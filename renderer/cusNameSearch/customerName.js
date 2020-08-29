@@ -1,10 +1,5 @@
 // Import modules
-const { remote, ipcRenderer } = require('electron');
-
-/* GET WORKING DIRECTORY */
-const dir = process.cwd();
-/* GET CURRENT DIR */
-const curDir = __dirname;
+const { ipcRenderer } = require('electron');
 
 /* GLOBAL VARIABLES */
 //////////////////////
