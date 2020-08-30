@@ -1,15 +1,36 @@
 /* MODULE IMPORTS */
-const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, screen } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Tray,
+  Menu,
+  dialog,
+  screen,
+  Notification,
+} = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
 /* GET WORKING DIRECTORY */
-let dir = process.cwd();
-if (process.platform === 'win32') {
-  let pattern = /[\\]+/g;
-  dir = dir.replace(pattern, '/');
+let dir;
+function envFileChange() {
+  let fileName = `${process.cwd()}/resources/app.asar`;
+  /* LOCAL MODULES */
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = fileName.replace(pattern, '/');
+  }
 }
-
+if (!process.env.NODE_ENV) {
+  envFileChange();
+} else {
+  dir = process.cwd();
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = dir.replace(pattern, '/');
+  }
+}
 /* LOCAL MODULES */
 ///////////////////
 const {
@@ -91,24 +112,20 @@ function createTray() {
 //////////////////////////////
 
 /* TRAY MENU LAYOUT TEMPLATE */
-let trayMenu = Menu.buildFromTemplate([
-  { label: 'P2Sys-Viewer' },
-  { role: 'minimize' },
-  { role: 'reload' },
-  { role: 'toggleDevTools' },
-]);
+let trayMenu = Menu.buildFromTemplate([{ label: 'P2Sys-Viewer' }, { role: 'minimize' }]);
 
 /* CREATE CUSTOMER SEARCH WINDOW */
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
     height: 630,
-    width: 430,
+    width: 420,
     autoHideMenuBar: true,
     center: true,
-    show: false,
     frame: false,
+    show: false,
     spellCheck: false,
+    resizable: false,
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
@@ -127,6 +144,7 @@ function createCustomerSearchWindow() {
       customerNumberName,
       customerPrices,
     };
+
     /* SEND DOWNLOADED DATABASE TO SEARCH WINDOW */
     customerSearchWindow.webContents.send('database', message);
 
@@ -136,6 +154,8 @@ function createCustomerSearchWindow() {
     }
     customerSearchWindow.show();
   });
+
+  // customerSearchWindow.webContents.openDevTools();
 
   /* EVENT LISTENER FOR CLOSING */
   customerSearchWindow.on('closed', () => {
@@ -147,15 +167,14 @@ function createCustomerSearchWindow() {
 function createCustomerNameWindow(message) {
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 625,
-    width: 300,
-    resizable: false,
-    x: message.dimensions[0] - 300,
+    height: 622,
+    width: 320,
+    x: message.dimensions[0] - 320,
     y: message.dimensions[1],
     autoHideMenuBar: true,
-    show: false,
-    center: true,
     frame: false,
+    show: false,
+    resizable: false,
     spellCheck: false,
     transparent: true,
     webPreferences: {
@@ -191,6 +210,7 @@ function createLoadingWindow() {
     center: true,
     frame: false,
     spellCheck: false,
+    movable: false,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
@@ -221,7 +241,6 @@ function createTableWindow(message) {
     autoHideMenuBar: true,
     x: 0,
     y: 0,
-    center: true,
     alwaysOnTop: true,
     frame: false,
     movable: false,
@@ -253,7 +272,10 @@ function createTableWindow(message) {
 
   //   CLOSING EVENT LISTENER
   tableWindow.on('closed', () => {
-    customerSearchWindow.show();
+    customerSearchWindow.webContents.send('expand-window', null);
+    setTimeout(() => {
+      customerSearchWindow.show();
+    }, 500);
     tableWindow = null;
   });
 }
@@ -300,5 +322,11 @@ ipcMain.on('table-window', (e, message) => {
 ipcMain.on('close-win', (e, message) => {
   if (tableWindow) {
     tableWindow.close();
+  }
+});
+
+ipcMain.on('close-window-dock', (e, message) => {
+  if (customerNameWindow) {
+    customerNameWindow.webContents.send('close-window-dock', null);
   }
 });

@@ -3,10 +3,23 @@ const { ipcRenderer, remote } = require('electron');
 const { set } = require('mongoose');
 
 /* GET WORKING DIRECTORY */
-let dir = process.cwd();
-if (process.platform === 'win32') {
-  let pattern = /[\\]+/g;
-  dir = dir.replace(pattern, '/');
+let dir;
+function envFileChange() {
+  let fileName = `${process.cwd()}/resources/app.asar`;
+  /* LOCAL MODULES */
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = fileName.replace(pattern, '/');
+  }
+}
+if (!process.env.NODE_ENV) {
+  envFileChange();
+} else {
+  dir = process.cwd();
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = dir.replace(pattern, '/');
+  }
 }
 
 /* LOCAL IMPORTS */
@@ -56,11 +69,6 @@ function fillTable(json) {
   let generatedHtml = tablePopulate(json);
   htmlInnerFill(generatedHtml);
 }
-
-/* dockHeaderEnd
-dockHeaderMid
-dockMainEnd
-dockMainMid */
 
 /* DOCK HIDE FUNCTION */
 function dockHide() {

@@ -3,12 +3,24 @@
 const { remote, ipcRenderer, shell } = require('electron');
 
 /* GET WORKING DIRECTORY */
-let dir = process.cwd();
-if (process.platform === 'win32') {
-  let pattern = /[\\]+/g;
-  dir = dir.replace(pattern, '/');
+let dir;
+function envFileChange() {
+  let fileName = `${process.cwd()}/resources/app.asar`;
+  /* LOCAL MODULES */
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = fileName.replace(pattern, '/');
+  }
 }
-
+if (!process.env.NODE_ENV) {
+  envFileChange();
+} else {
+  dir = process.cwd();
+  if (process.platform === 'win32') {
+    let pattern = /[\\]+/g;
+    dir = dir.replace(pattern, '/');
+  }
+}
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
 
@@ -31,7 +43,8 @@ let customerFindBtn = document.getElementById('assist-btn'),
   systemBackBtn = document.getElementById('back-btn-system'),
   systemEmailDevBtn = document.getElementById('mail-btn'),
   systemDatabaseSettingsBtn = document.getElementById('database-setup'),
-  systemSettingsPage = document.getElementsByClassName('system-settings')[0];
+  systemSettingsPage = document.getElementsByClassName('system-settings')[0],
+  customerSearchHtmlDisplay = document.getElementById('check-customer');
 
 ///////////////
 /* FUNCTIONS */
@@ -48,15 +61,15 @@ function resetList() {
 /* CUSTOMER NUMBER SEARCH BOX */
 ///////////////////////////////
 
-function fillCustomerPrices() {
+const fillCustomerPrices = () => {
   /* CLEAR CURRENT LIST OF CLICKS FUNCTION */
-  function clearList() {
+  const clearList = () => {
     numbersDivItems.forEach((el) => {
       el.setAttribute('class', 'cusnum');
     });
-  }
+  };
 
-  function addListListeners() {
+  const addListListeners = () => {
     /* CLICK EVENTS ON CUSTOMER NUMBER SEARCH BOX */
     numbersDivItems = Array.from(customerNumberList.children);
     // CLICK EVENT ON CUSTOMER LIST ITEM
@@ -79,10 +92,10 @@ function fillCustomerPrices() {
         customerSearchInput.dispatchEvent(new Event('keyup'));
       });
     });
-  }
+  };
 
   /* POPLATE THE CUSTOMERLIST AND ADD CORRECT CLASSES */
-  (function populateList() {
+  (() => {
     customerNumberList.innerHTML = '';
     customerNumber = Object.keys(customerPrices);
     customerNumber.forEach((el) => {
@@ -129,7 +142,8 @@ function fillCustomerPrices() {
       checkDisabledBtn.style.display = 'flex';
     }
   });
-}
+  customerSearchHtmlDisplay.style.transform = 'scale(1)';
+};
 
 /////////////////////
 /* EVENT LISTENERS */
@@ -155,14 +169,18 @@ checkViewBtn.addEventListener('click', (e) => {
     customerNumber: customerSearchInput.value.toUpperCase(),
   };
 
-  ipcRenderer.send('table-window', message);
   if (customerSearchWindow.getChildWindows()[0]) {
     customerSearchWindow.getChildWindows()[0].close();
   }
   resetList();
   customerSearchInput.value = '';
   customerSearchInput.dispatchEvent(new Event('keyup'));
-  customerSearchWindow.hide();
+
+  customerSearchHtmlDisplay.style.transform = 'scale(0)';
+  setTimeout(() => {
+    ipcRenderer.send('table-window', message);
+    customerSearchWindow.hide();
+  }, 500);
 });
 
 /* CUSTOMER FIND BUTTON */
@@ -178,8 +196,11 @@ customerFindBtn.addEventListener('click', (e) => {
 
   /* FIND DOCK BUTTON INTERACTION ON CLICK */
   if (customerSearchWindow.getChildWindows()[0]) {
-    customerSearchWindow.getChildWindows()[0].close();
-    customerSearchInput.focus();
+    ipcRenderer.send('close-window-dock', null);
+    setTimeout(() => {
+      customerSearchWindow.getChildWindows()[0].close();
+      customerSearchInput.focus();
+    }, 500);
   } else {
     /* SEND MESSAGE TO FIND DOCK */
     ipcRenderer.send('name-search', message);
@@ -242,4 +263,9 @@ ipcRenderer.on('database', async (e, message) => {
 
   /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
   fillCustomerPrices();
+});
+
+/* MESSAGE TO EXPAND WINDOW AFTER TABLE CLOSED */
+ipcRenderer.on('expand-window', (e, message) => {
+  customerSearchHtmlDisplay.style.transform = 'scale(1)';
 });

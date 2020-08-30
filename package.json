@@ -1,31 +1,52 @@
 {
   "name": "P2Sys-Viewer",
   "version": "1.0.0",
-  "description": "P2Sys Viewer for the database",
+  "description": "P2Sys Viewer for P2Sys Main App",
   "main": "main.js",
   "scripts": {
-    "watch": "nodemon --ignore '*.json' --exec electron .",
-    "start": " electron ."
+    "watch": "nodemon --ignore '*.json' --exec NODE_ENV=dev electron .",
+    "dev": " NODE_ENV=dev electron .",
+    "start": "electron .",
+    "release": "electron-builder -wl -p OnTagOrDraft",
+    "build": "electron-builder -w",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/EspressoTrip-v2/P2Sys-Viewer",
   "author": "Juan",
   "license": "ISC",
-  "devDependencies": {
-    "electron": "^9.1.0",
-    "nodemon": "^2.0.4"
-  },
   "dependencies": {
     "mongoose": "^5.10.0"
   },
   "build": {
-    "appId": "com.juan.p2sys",
-    "copyright": "P2Sys 2020",
+    "appId": "com.JBDevSoftware.P2Sys_()",
+    "copyright": "Copyright © 2020 ${name}",
+    "files": [
+      "!**/private?**/*",
+      "!**/build**/*"
+    ],
     "win": {
-      "target": "zip"
+      "publisherName": "${name}",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
-    "linux": {
-      "category": "Office",
-      "target": "AppImage"
+    "nsis": {
+      "deleteAppDataOnUninstall": true,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerSidebar": "./build/installerSidebar.bmp",
+      "uninstallerSidebar": "./build/uninstallerSidebar.bmp",
+      "installerHeaderIcon": "./build/installerHeaderIcon.ico",
+      "installerHeader": "./build/installerHeader.bmp"
     }
+  },
+  "devDependencies": {
+    "electron": "^9.1.0"
   }
 }

@@ -15,6 +15,38 @@
   font-family: Forelle;
   src: url('../fonts/Forelle.ttf');
 }
+
+/* MAIN TAG SECTION WITH CHILDREN*/
+
+html {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 15px;
+  background-color: transparent;
+}
+
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
 form {
   display: flex;
   flex-direction: row;
@@ -30,19 +62,6 @@ button:focus {
   box-sizing: border-box;
   -webkit-user-select: none;
 }
-/* MAIN TAG SECTION WITH CHILDREN*/
-html {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 1vh;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-}
 
 /* /////////////////////// */
 /* CHECK CUSTOMER BOX CSS */
@@ -51,9 +70,8 @@ body {
 #check-customer {
   position: relative;
   left: 0;
-  visibility: visible;
-  opacity: 1;
   display: flex;
+  transform: scale(0);
   flex-direction: column;
   justify-content: center;
   top: 0;
@@ -68,7 +86,7 @@ body {
   background-size: contain;
   background-repeat: repeat-y;
   background-position: center top;
-  transition: visibility 0.3s, opacity 0.3s linear;
+  transition: transform 0.5s;
   filter: drop-shadow(1px 2px 4px #636363);
 }
 #check-background {
@@ -321,28 +339,15 @@ body {
 /* ////////////////// */
 
 /* Max and Grab icons */
-.max a {
-  display: block;
-  position: absolute;
-  top: -14px;
-  right: -45px;
-  outline: none;
-}
-
-.grab {
-  display: block;
-  position: absolute;
-  top: -14px;
-  left: -45px;
-  -webkit-app-region: drag;
-}
-
 .grab-search {
   display: block;
   position: absolute;
   top: 6px;
   left: 6px;
   -webkit-app-region: drag;
+}
+.grab-search:hover {
+  cursor: move;
 }
 
 /* SYSTEM SETTINGS PAGE */

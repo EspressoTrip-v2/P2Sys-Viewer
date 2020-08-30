@@ -11,7 +11,8 @@ let customerNameNumber;
 
 let customerListContainer = document.getElementById('customer-list-container'),
   searchDock = document.getElementById('customer-search'),
-  soundClick = document.getElementById('click');
+  soundClick = document.getElementById('click'),
+  border = document.getElementById('border');
 
 ///////////////
 /* FUNCTIONS */
@@ -67,13 +68,22 @@ function fillCustomerNameNumber() {
       el.style.display = elMatch ? 'block' : 'none';
     });
   });
+  setTimeout(() => {
+    border.style.transform = 'scaleX(1)';
+  }, 300);
 }
 
 ////////////////////////
 /* MESSAGE LISTENERS */
 //////////////////////
 
+/* POPULATE THE LIST OF NAMES IN WINDOW */
 ipcRenderer.on('name-search', (event, message) => {
   customerNameNumber = message;
   fillCustomerNameNumber();
+});
+
+/* MESSAGE TO RETRACT WINDOW BEFORE CLOSE */
+ipcRenderer.on('close-window-dock', (e, message) => {
+  border.style.transform = 'scaleX(0)';
 });
