@@ -1,6 +1,5 @@
 /* MODULES */
 const { ipcRenderer, remote } = require('electron');
-const { set } = require('mongoose');
 
 /* GET WORKING DIRECTORY */
 let dir;
@@ -10,7 +9,7 @@ function envFileChange() {
   if (process.platform === 'win32') {
     let pattern = /[\\]+/g;
     dir = fileName.replace(pattern, '/');
-  }
+  } else dir = fileName;
 }
 if (!process.env.NODE_ENV) {
   envFileChange();

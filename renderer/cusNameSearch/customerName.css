@@ -72,6 +72,7 @@ body {
 
 #border {
   position: relative;
+  opacity: 0;
   padding: 0;
   margin: 0 50px;
   display: flex;
@@ -81,10 +82,10 @@ body {
   align-content: center;
   height: 100%;
   width: 300px;
-  transform: scaleX(0);
-  transform-origin: right;
+  /* transform: scaleX(0); */
+  /* transform-origin: right; */
   filter: drop-shadow(1px 2px 4px #636363);
-  transition: transform 0.3s;
+  transition: opacity 0.3s;
 }
 
 footer {

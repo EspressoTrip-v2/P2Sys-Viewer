@@ -1,14 +1,6 @@
 /* MODULE IMPORTS */
-const {
-  app,
-  BrowserWindow,
-  ipcMain,
-  Tray,
-  Menu,
-  dialog,
-  screen,
-  Notification,
-} = require('electron');
+require('dotenv').config();
+const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, screen } = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -20,24 +12,26 @@ function envFileChange() {
   if (process.platform === 'win32') {
     let pattern = /[\\]+/g;
     dir = fileName.replace(pattern, '/');
-  }
+  } else dir = fileName;
 }
+
 if (!process.env.NODE_ENV) {
   envFileChange();
 } else {
   dir = process.cwd();
+
   if (process.platform === 'win32') {
     let pattern = /[\\]+/g;
     dir = dir.replace(pattern, '/');
   }
 }
+
 /* LOCAL MODULES */
 ///////////////////
 const {
   customerPricesModel,
   customerNumberNameModel,
 } = require(`${dir}/database/mongoDbConnect.js`);
-const { databaseSetup } = require(`${dir}/data/objects.js`);
 
 /* WINDOW VARIABLES */
 let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow;
@@ -49,7 +43,7 @@ let customerNumberName, customerPrices, screenWidth, screenHeight;
 function mongooseConnect() {
   mongoose
     .connect(
-      `mongodb+srv://${databaseSetup['username']}:${databaseSetup['password']}@cluster0.61lij.mongodb.net/acwhitcher?retryWrites=true&w=majority`,
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
       {
         useNewUrlParser: true,
         useCreateIndex: true,
@@ -58,22 +52,24 @@ function mongooseConnect() {
       }
     )
     .catch((err) => {
-      /* CREATE ERROR LOG */
-      let fileDir = `${dir}/data/logfiles/database-logfile.txt`;
       /* CHECK IF IT EXISTS */
-      fs.existsSync(fileDir)
-        ? fs.appendFile(fileDir, `${new Date()} -> Connection failure: ${err}\n`, 'utf8', () =>
-            console.log('Logfile write error')
+      fs.existsSync('errorlog.txt')
+        ? fs.appendFile(
+            'errorlog.txt',
+            `${new Date()} -> Connection failure: ${err}\n`,
+            'utf8',
+            () => console.log('Logfile write error')
           )
-        : fs.writeFile(fileDir, `${new Date()} -> Connection failure: ${err}\n`, 'utf8', () =>
-            console.log('Logfile write error')
+        : fs.writeFile(
+            'errorlog.txt',
+            `${new Date()} -> Connection failure: ${err}\n`,
+            'utf8',
+            () => console.log('Logfile write error')
           );
+      if (loadingWindow) {
+        loadingWindow.close();
+      }
 
-      setTimeout(() => {
-        if (loadingWindow) {
-          loadingWindow.close();
-        }
-      }, 500);
       dialog.showMessageBoxSync({
         type: 'info',
         icon: `${dir}/renderer/icons/trayTemplate.png`,
@@ -119,11 +115,11 @@ function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
     height: 630,
+    backgroundColor: '#00FFFFFF',
     width: 420,
     autoHideMenuBar: true,
     center: true,
     frame: false,
-    show: false,
     spellCheck: false,
     resizable: false,
     transparent: true,
@@ -145,17 +141,18 @@ function createCustomerSearchWindow() {
       customerPrices,
     };
 
-    /* SEND DOWNLOADED DATABASE TO SEARCH WINDOW */
-    customerSearchWindow.webContents.send('database', message);
-
     /* CLOSE THE LOADING WINDOW */
     if (loadingWindow) {
       loadingWindow.close();
     }
+    /* SHOW WINDOW */
     customerSearchWindow.show();
-  });
 
-  // customerSearchWindow.webContents.openDevTools();
+    setTimeout(() => {
+      /* SEND DOWNLOADED DATABASE TO SEARCH WINDOW */
+      customerSearchWindow.webContents.send('database', message);
+    }, 300);
+  });
 
   /* EVENT LISTENER FOR CLOSING */
   customerSearchWindow.on('closed', () => {
@@ -172,8 +169,8 @@ function createCustomerNameWindow(message) {
     x: message.dimensions[0] - 320,
     y: message.dimensions[1],
     autoHideMenuBar: true,
+    backgroundColor: '#00FFFFFF',
     frame: false,
-    show: false,
     resizable: false,
     spellCheck: false,
     transparent: true,
@@ -189,11 +186,7 @@ function createCustomerNameWindow(message) {
   customerNameWindow.loadFile(`${dir}/renderer/cusNameSearch/customerName.html`);
   customerNameWindow.webContents.once('did-finish-load', (e) => {
     customerNameWindow.webContents.send('name-search', message.customerNameNumber);
-    customerNameWindow.show();
   });
-
-  //  DEV TOOLS
-  // customerNameWindow.webContents.openDevTools();
 
   //   EVENT LISTENER FOR CLOSING
   customerNameWindow.on('closed', () => {
@@ -207,6 +200,7 @@ function createLoadingWindow() {
     height: 500,
     width: 500,
     autoHideMenuBar: true,
+    backgroundColor: '#00FFFFFF',
     center: true,
     frame: false,
     spellCheck: false,
@@ -223,9 +217,6 @@ function createLoadingWindow() {
 
   //   lOAD HTML PAGE
   loadingWindow.loadFile(`${dir}/renderer/loader/loader.html`);
-
-  //   DEV TOOLS
-  // loadingWindow.webContents.openDevTools();
 
   //   CLOSING EVENT LISTENER
   loadingWindow.on('closed', () => {

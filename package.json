@@ -12,9 +12,10 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/EspressoTrip-v2/P2Sys-Viewer",
-  "author": "Juan",
+  "author": "JBDevSoftware",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "mongoose": "^5.10.0"
   },
   "build": {
@@ -23,6 +24,9 @@
     "files": [
       "!**/private?**/*",
       "!**/build**/*"
+    ],
+    "extraFiles": [
+      "./.env"
     ],
     "win": {
       "publisherName": "${name}",
@@ -44,6 +48,10 @@
       "uninstallerSidebar": "./build/uninstallerSidebar.bmp",
       "installerHeaderIcon": "./build/installerHeaderIcon.ico",
       "installerHeader": "./build/installerHeader.bmp"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
     }
   },
   "devDependencies": {

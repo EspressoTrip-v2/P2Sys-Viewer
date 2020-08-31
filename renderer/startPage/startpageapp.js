@@ -10,7 +10,7 @@ function envFileChange() {
   if (process.platform === 'win32') {
     let pattern = /[\\]+/g;
     dir = fileName.replace(pattern, '/');
-  }
+  } else dir = fileName;
 }
 if (!process.env.NODE_ENV) {
   envFileChange();
@@ -142,7 +142,7 @@ const fillCustomerPrices = () => {
       checkDisabledBtn.style.display = 'flex';
     }
   });
-  customerSearchHtmlDisplay.style.transform = 'scale(1)';
+  customerSearchHtmlDisplay.style.opacity = '1';
 };
 
 /////////////////////
@@ -176,7 +176,8 @@ checkViewBtn.addEventListener('click', (e) => {
   customerSearchInput.value = '';
   customerSearchInput.dispatchEvent(new Event('keyup'));
 
-  customerSearchHtmlDisplay.style.transform = 'scale(0)';
+  customerSearchHtmlDisplay.style.opacity = '0';
+
   setTimeout(() => {
     ipcRenderer.send('table-window', message);
     customerSearchWindow.hide();
@@ -234,7 +235,7 @@ systemEmailDevBtn.addEventListener('click', () => {
 /* DATABASE SETUP BUTTON */
 systemDatabaseSettingsBtn.addEventListener('click', () => {
   soundClick.play();
-  shell.openPath(`${dir}/data/appdata/database.json`);
+  shell.openPath('.env');
 });
 
 ///////////////////
@@ -250,6 +251,8 @@ ipcRenderer.on('dock-select', (e, message) => {
   customerSearchInput.value = message;
   customerSearchInput.dispatchEvent(new Event('keyup'));
 });
+
+/* CREATE WINDOW LISTENER */
 ipcRenderer.on('database', async (e, message) => {
   /* REMOVE THE _id TAG FROM DATABASES AND ASSIGN TO GLOBAL VARIABLE */
   customerNumberName = await message.customerNumberName;
@@ -267,5 +270,6 @@ ipcRenderer.on('database', async (e, message) => {
 
 /* MESSAGE TO EXPAND WINDOW AFTER TABLE CLOSED */
 ipcRenderer.on('expand-window', (e, message) => {
-  customerSearchHtmlDisplay.style.transform = 'scale(1)';
+  customerSearchHtmlDisplay.style.opacity = '1';
+  customerSearchInput.focus();
 });

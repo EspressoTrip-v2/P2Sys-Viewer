@@ -68,9 +68,7 @@ function fillCustomerNameNumber() {
       el.style.display = elMatch ? 'block' : 'none';
     });
   });
-  setTimeout(() => {
-    border.style.transform = 'scaleX(1)';
-  }, 300);
+  border.style.opacity = '1';
 }
 
 ////////////////////////
@@ -85,5 +83,5 @@ ipcRenderer.on('name-search', (event, message) => {
 
 /* MESSAGE TO RETRACT WINDOW BEFORE CLOSE */
 ipcRenderer.on('close-window-dock', (e, message) => {
-  border.style.transform = 'scaleX(0)';
+  border.style.opacity = '0';
 });
