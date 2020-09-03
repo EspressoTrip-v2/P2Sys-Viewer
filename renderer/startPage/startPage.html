@@ -10,6 +10,12 @@
     <audio src="../sounds/click.wav" id="click" style="display: none"></audio>
 
     <div id="check-customer">
+      <div id="update-btn-container">
+        <button id="update-btn">UPDATE</button>
+      </div>
+      <div id="update">
+        <div id="progress"></div>
+      </div>
       <div id="p2s-logo"><img src="../icons/loader.png" alt="" /></div>
 
       <div class="grab-search">
@@ -48,7 +54,7 @@
         </div>
 
         <div>
-          <button class="btn" id="check-exit-btn" href="#">EXIT</button>
+          <button class="btn-exit" id="check-exit-btn" href="#">EXIT</button>
           <button class="btn" id="check-view-btn" href="#">VIEW</button>
           <span id="disabled" href="#">DISABLED</span>
         </div>
@@ -60,6 +66,7 @@
 
     <div class="system-settings" style="display: none">
       <div id="system-settings-header"><img src="../icons/loader.png" /></div>
+      <p id="version"></p>
       <div class="paragraph">
         <p>
           P2Sys is software developed to help assist companies streamline their price-list
@@ -74,9 +81,9 @@
         For system error's or bug reporting, please click on the email developer button. <br />
       </div>
 
-      <div id="setup-container">
+      <!-- <div id="setup-container">
         <button class="system-btn" id="database-setup">VIEW DB CONFIG</button>
-      </div>
+      </div> -->
 
       <button class="btn-back" title="Back" id="back-btn-system" href="#">
         <svg id="back-icon" viewBox="0 0 512 512">
@@ -98,6 +105,19 @@
         >
           <circle cx="12" cy="12" r="4"></circle>
           <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+        </svg>
+      </button>
+      <button href="#" id="settings-button" title="System Settings" class="settings-btn">
+        <svg id="settings-icon" viewBox="0 0 482.6 482.6">
+          <path
+            d="M117 203.2c13.4-1.8 26.8 2.8 36.3 12.3l24 24 22.7-22.6 -32.8-32.7c-5.1-5.1-5.1-13.4 0-18.5s13.4-5.1 18.5 0l32.8 32.8 22.7-22.6 -24.1-24.1c-9.5-9.5-14.1-23-12.3-36.3 4-30.4-5.7-62.2-29-85.6 -23.8-23.8-56.4-33.4-87.3-28.8 -4.9 0.7-6.9 6.8-3.4 10.3l30.9 30.9c14.7 14.7 14.7 38.5 0 53.1l-19 19c-14.7 14.7-38.5 14.7-53.1 0l-31-30.9c-3.5-3.5-9.5-1.5-10.3 3.4 -4.6 30.9 5 63.5 28.8 87.3C54.8 197.5 86.6 207.2 117 203.2z"
+          />
+          <path
+            d="M309.2 243.9l-22.7 22.6 134.8 134.8c5.1 5.1 5.1 13.4 0 18.5s-13.4 5.1-18.5 0l-134.8-134.8 -22.7 22.6 138.9 138.9c17.6 17.6 46.1 17.5 63.7-0.1s17.6-46.1 0.1-63.7L309.2 243.9z"
+          />
+          <path
+            d="M361.3 153.9h59.9l59.9-119.7 -29.9-29.9 -119.8 59.8v59.9l-162.8 162.3 -29.3-29.2 -118 118c-24.6 24.6-24.6 64.4 0 89s64.4 24.6 89 0l118-118 -29.9-29.9L361.3 153.9z"
+          />
         </svg>
       </button>
 

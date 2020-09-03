@@ -1,7 +1,7 @@
 /* Set main colors */
 :root {
-  --main-blue: #3e6ba6ff;
-  --sec-blue: #8eafdafb;
+  --main: #000;
+  --sec-blue: #1e90ff;
   --button-red: #cf2115;
   --button-green: #80c432;
   --button-gold: #d9793b;
@@ -65,7 +65,7 @@ th {
   top: 0;
   font-size: 15px;
   padding: 2px 0;
-  background-color: var(--main-blue);
+  background-color: var(--main);
   color: #fff;
   z-index: 2;
 }
@@ -141,7 +141,7 @@ header {
   background-color: var(--sec-blue);
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  border: 2px solid var(--main-blue);
+  border: 3px solid var(--main);
 }
 
 #header-container {
@@ -154,7 +154,7 @@ header {
   position: absolute;
   border-bottom-right-radius: 6px;
   border-top-right-radius: 6px;
-  background-color: var(--main-blue);
+  background-color: var(--main);
   width: 40px;
   height: 70px;
   z-index: 1;
@@ -238,6 +238,7 @@ header {
 #border {
   position: absolute;
   transform: scaleX(1);
+  opacity: 0;
   transform-origin: left;
   left: 0;
   display: flex;
@@ -252,7 +253,7 @@ header {
   height: 99%;
   border-radius: 10px;
   filter: drop-shadow(1px 2px 4px #636363);
-  transition: transform 0.3s;
+  transition: transform 0.3s, opacity 0.3s 0.5s;
 }
 
 #label-customer-name,
@@ -300,7 +301,7 @@ header {
 }
 
 #customer-name::-webkit-scrollbar-track {
-  background-color: var(--main-blue);
+  background-color: var(--main);
 }
 
 #customer-name::-webkit-scrollbar-thumb {
@@ -352,7 +353,7 @@ header {
   text-align: center;
   background-color: #ffff;
   border-radius: 10px;
-  border: 2px solid var(--main-blue);
+  border: 2px solid var(--main);
   height: 82%;
   overflow: hidden;
 }
@@ -369,7 +370,7 @@ header {
 }
 
 #container::-webkit-scrollbar-track {
-  background-color: var(--main-blue);
+  background-color: var(--main);
 }
 
 #container::-webkit-scrollbar-thumb {
@@ -380,8 +381,8 @@ header {
 
 /* floating column names */
 #columns {
-  background-color: var(--main-blue);
-  border-bottom: 3px solid var(--main-blue);
+  background-color: var(--main);
+  border-bottom: 3px solid var(--main);
 }
 
 /* Container for js html population */
@@ -402,7 +403,7 @@ header {
   height: 60px;
   width: 100%;
   background-color: var(--sec-blue);
-  border: 2px solid var(--main-blue);
+  border: 3px solid var(--main);
   border-radius: 10px;
   padding: 0;
   margin: 0;
@@ -418,7 +419,8 @@ header {
   background-color: #fff;
   padding: 10px;
   border-radius: 50%;
-  filter: drop-shadow(1px 2px 4px #636363);
+  border: 2px solid #000;
+  filter: drop-shadow(2px 4px 6px black);
 }
 #footer-container::after {
   position: absolute;
@@ -449,7 +451,7 @@ header {
   background-color: var(--sec-blue);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  border: 2px solid var(--main-blue);
+  border: 2px solid var(--main);
   border-left: none;
   align-items: center;
   width: 43px;
@@ -467,14 +469,14 @@ header {
   content: attr(customer-number);
   padding: 2px 10px;
   border-radius: 200px;
-  border: 2px solid var(--main-blue);
+  border: 2px solid var(--main);
   position: absolute;
   bottom: 55px;
   width: 120px;
   transform: rotate(90deg);
   font-weight: bolder;
   font-size: 20px;
-  color: var(--main-blue);
+  color: var(--main);
   background-color: #fff;
 }
 

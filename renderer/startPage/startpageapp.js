@@ -21,6 +21,7 @@ if (!process.env.NODE_ENV) {
     dir = dir.replace(pattern, '/');
   }
 }
+
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
 
@@ -42,9 +43,15 @@ let customerFindBtn = document.getElementById('assist-btn'),
   /* INFO PAGE DOM ELEMENTS */
   systemBackBtn = document.getElementById('back-btn-system'),
   systemEmailDevBtn = document.getElementById('mail-btn'),
-  systemDatabaseSettingsBtn = document.getElementById('database-setup'),
+  systemDatabaseSettingsBtn = document.getElementById('settings-button'),
   systemSettingsPage = document.getElementsByClassName('system-settings')[0],
-  customerSearchHtmlDisplay = document.getElementById('check-customer');
+  customerSearchHtmlDisplay = document.getElementById('check-customer'),
+  versionText = document.getElementById('version'),
+  logoContainer = document.getElementById('p2s-logo'),
+  updateContainer = document.getElementById('update'),
+  downloadProgressBar = document.getElementById('progress'),
+  updateBtnContainer = document.getElementById('update-btn-container'),
+  updateBtn = document.getElementById('update-btn');
 
 ///////////////
 /* FUNCTIONS */
@@ -143,7 +150,12 @@ const fillCustomerPrices = () => {
     }
   });
   customerSearchHtmlDisplay.style.opacity = '1';
+  customerSearchWindow.focus();
 };
+
+/* DOM MANIPULATIONS */
+///////////////////////
+versionText.innerText = `P2Sys Viewer (v${remote.app.getVersion()})`;
 
 /////////////////////
 /* EVENT LISTENERS */
@@ -238,6 +250,11 @@ systemDatabaseSettingsBtn.addEventListener('click', () => {
   shell.openPath('.env');
 });
 
+/* UPDATE BUTTON */
+updateBtn.addEventListener('click', () => {
+  ipcRenderer.send('update-confirm', null);
+});
+
 ///////////////////
 /* IPC LISTENERS */
 ///////////////////
@@ -272,4 +289,29 @@ ipcRenderer.on('database', async (e, message) => {
 ipcRenderer.on('expand-window', (e, message) => {
   customerSearchHtmlDisplay.style.opacity = '1';
   customerSearchInput.focus();
+});
+
+/* MESSAGE FROM UPDATER */
+ipcRenderer.on('show-update-container', (e, message) => {
+  logoContainer.style.opacity = '0';
+  updateContainer.style.opacity = '1';
+  checkExitBtn.disabled = true;
+  checkExitBtn.setAttribute('class', 'btn-disabled');
+});
+
+/* UPDATE PERCENTAGE PROGRESS */
+ipcRenderer.on('update-progress', (e, message) => {
+  downloadProgressBar.style.setProperty('--width', message);
+});
+
+/* UPDATE PERCENTAGE PROGRESS */
+ipcRenderer.on('update-downloaded', (e, message) => {
+  new Notification('UPDATE DOWNLOAD COMPLETE', {
+    body: 'P2Sys Viewer update download has completed',
+    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    requireInteraction: true,
+  });
+  logoContainer.style.opacity = '0';
+  updateContainer.style.opacity = '0';
+  updateBtnContainer.style.opacity = '1';
 });

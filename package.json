@@ -5,31 +5,47 @@
   "main": "main.js",
   "scripts": {
     "watch": "nodemon --ignore '*.json' --exec NODE_ENV=dev electron .",
-    "dev": " NODE_ENV=dev electron .",
+    "dev": "NODE_ENV=dev electron .",
     "start": "electron .",
-    "release": "electron-builder -wl -p OnTagOrDraft",
+    "release": "electron-builder -w -p 'always'",
     "build": "electron-builder -w",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/EspressoTrip-v2/P2Sys-Viewer",
+  "repository": {
+    "type": "bintray",
+    "url": "https://bintray.com/espressotrip-v2/JDevSoftware/"
+  },
   "author": "JBDevSoftware",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "electron-log": "^4.2.4",
+    "electron-updater": "^4.3.4",
     "mongoose": "^5.10.0"
   },
   "build": {
-    "appId": "com.JBDevSoftware.P2Sys_()",
-    "copyright": "Copyright © 2020 ${name}",
+    "appId": "com.JBDevSoftware.P2Sys-Viewer",
+    "copyright": "Copyright © 2020 P2Sys-Viewer",
+    "publish": {
+      "provider": "bintray",
+      "package": "P2Sys-Viewer",
+      "owner": "espressotrip-v2",
+      "repo": "JDevSoftware",
+      "url": "https://bintray.com/espressotrip-v2/JDevSoftware/",
+      "token": "d11c8a929df2d2257c311fc939cdc35d7f4007ca"
+    },
     "files": [
-      "!**/private?**/*",
-      "!**/build**/*"
+      "!private**/*",
+      "!build**/*"
     ],
     "extraFiles": [
       "./.env"
     ],
     "win": {
-      "publisherName": "${name}",
+      "publisherName": "JBDevSoftware",
+      "verifyUpdateCodeSignature": false,
+      "certificateFile": "private/p2sysviewer.pfx",
+      "certificatePassword": "Juan@198103",
       "target": [
         {
           "target": "nsis",
@@ -55,6 +71,7 @@
     }
   },
   "devDependencies": {
-    "electron": "^9.1.0"
+    "electron": "^9.1.0",
+    "electron-builder": "^22.8.1"
   }
 }

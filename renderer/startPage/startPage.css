@@ -1,7 +1,7 @@
 /* Set main colors */
 :root {
-  --main-blue: #3e6ba6ff;
-  --sec-blue: #8eafdafb;
+  --main: #000;
+  --sec-blue: #1e90ff;
   --button-red: #cf2115;
   --button-green: #80c432;
   --button-gold: #d9793b;
@@ -77,13 +77,9 @@ button:focus {
   height: 595px;
   width: 400px;
   align-items: center;
-  border: 4px solid var(--main-blue);
+  border: 3px solid var(--main);
   border-radius: 20px;
   background-color: #fff;
-  background-image: url(../icons/whitcher-logo-small-opacity.png);
-  background-size: contain;
-  background-repeat: repeat-y;
-  background-position: center top;
   transition: opacity 0.3s;
   filter: drop-shadow(1px 2px 4px #636363);
 }
@@ -99,7 +95,7 @@ button:focus {
   margin-top: 2vh;
   padding: 2vh;
   background-color: var(--sec-blue);
-  border: 4px solid var(--main-blue);
+  border: 3px solid var(--main);
   border-radius: 20px;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
 }
@@ -141,7 +137,7 @@ button:focus {
 
 #customer-number-list {
   background-color: #fff;
-  border: 4px solid var(--main-blue);
+  border: 3px solid var(--main);
   border-radius: 20px;
   height: 20vh;
   padding: 5px;
@@ -182,7 +178,7 @@ button:focus {
   position: relative;
   background-color: var(--sec-blue);
   color: #fff;
-  border: 3px solid var(--main-blue);
+  border: 3px solid var(--main);
   text-align: center;
   font-size: 18px;
   border-radius: 10px;
@@ -190,8 +186,113 @@ button:focus {
   padding: 2px;
 }
 
+#update {
+  display: flex;
+  opacity: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: absolute;
+  width: 300px;
+  border-radius: 100px;
+  background-color: var(--sec-blue);
+  border: 3px solid var(--main);
+  height: 78px;
+  top: 38px;
+  z-index: 1;
+  filter: drop-shadow(1px 2px 4px #636363);
+  transition: opacity 0.3s 0.3s;
+}
+#update::before {
+  position: relative;
+  content: 'Downloading Update...';
+  font-size: 18px;
+  color: #fff;
+  top: -5px;
+  font-weight: bold;
+  animation: downloaded 1s ease infinite alternate;
+}
+
+@keyframes downloaded {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+#progress {
+  position: relative;
+  width: 250px;
+  height: 15px;
+  background-color: #9e9898;
+  border-radius: 200px;
+  border: 2px solid #fff;
+}
+#progress::before {
+  position: absolute;
+  content: '';
+  display: flex;
+  align-items: center;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(var(--width, 0) * 1%);
+  min-width: 0.5rem;
+  max-width: calc(100% - 4px);
+  border-radius: 20px;
+  background-color: greenyellow;
+}
+
+#update-btn-container {
+  display: flex;
+  opacity: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: absolute;
+  width: 300px;
+  border-radius: 100px;
+  background-color: var(--sec-blue);
+  border: 3px solid var(--main);
+  height: 78px;
+  top: 38px;
+  z-index: 2;
+  filter: drop-shadow(1px 2px 4px #636363);
+  transition: opacity 0.3s 0.3s;
+}
+
+#update-btn {
+  position: absolute;
+  background-color: var(--button-gold);
+  border: 2px solid var(--button-gold);
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 200px;
+  font-weight: bolder;
+  width: 150px;
+  height: 42px;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+}
+
+#update-btn:hover {
+  background-color: #fff;
+  color: var(--button-gold);
+  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+}
+#update-btn:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
 #p2s-logo {
   position: absolute;
+  opacity: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -199,6 +300,7 @@ button:focus {
   top: 38px;
   left: 55px;
   width: fit-content;
+  transition: opacity 0.3s;
 }
 #p2s-logo img {
   position: relative;
@@ -233,22 +335,49 @@ button:focus {
   transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
-#check-exit-btn {
+.btn-exit {
   position: relative;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  border-radius: 200px;
+  width: 30vw;
+  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
   background-color: var(--button-red);
   color: #fff;
   border: 2px solid var(--button-red);
+  font-size: 15px;
+  text-align: center;
+  padding: 10px 20px;
+  font-weight: bolder;
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+}
+.btn-disabled {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  border-radius: 200px;
+  background-color: darkgrey;
+  color: #fff;
+  border: 2px solid darkgrey;
+  font-size: 15px;
   width: 30vw;
-  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+
+  text-align: center;
+  padding: 10px 20px;
+  font-weight: bolder;
+  transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
 
-#check-exit-btn:hover {
+.btn-exit:hover {
   background-color: #fff;
   color: var(--button-red);
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
 }
-#check-exit-btn:active {
+.btn-exit:active {
   transform: scale(0.95);
   box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
 }
@@ -296,8 +425,8 @@ button:focus {
   border-radius: 200px;
   height: auto;
   width: 30vw;
-  color: #8f9691c0;
-  border: 2px solid #8f9691c0;
+  color: darkgrey;
+  border: 2px solid darkgrey;
 }
 
 #assist-box {
@@ -364,7 +493,7 @@ button:focus {
   width: 400px;
   align-content: space-evenly;
   background-color: #fff;
-  border: 4px solid #111;
+  border: 3px solid #111;
   border-radius: 20px;
   transition: opacity 0.5s linear;
 }
@@ -381,19 +510,29 @@ button:focus {
 }
 #system-settings-header img {
   position: relative;
-  left: 8px;
+  left: 40px;
 }
+#version {
+  position: relative;
+  top: -20px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+}
+
 .paragraph {
   position: relative;
-  top: 60px;
   text-align: justify;
 }
 
 #system-settings-header::after {
   position: absolute;
-  content: 'Settings';
+  content: 'About';
   font-size: 80px;
-  right: 10px;
+  right: 30px;
   font-family: Forelle;
 }
 
@@ -468,19 +607,23 @@ button:focus {
 }
 .settings-btn {
   position: absolute;
-  left: -18px;
-  top: 65px;
   width: 50px;
+  bottom: 65px;
   height: 50px;
   padding: 8px;
   background-color: #fff;
   border: 2px solid #000;
 }
 
+#settings-icon {
+  position: absolute;
+  width: 30px;
+}
+
 .mail {
   position: absolute;
   bottom: 65px;
-  right: 140px;
+  right: 75px;
   width: 50px;
   height: 50px;
   padding: 4px;
@@ -508,7 +651,7 @@ button:focus {
 .btn-back {
   position: absolute;
   bottom: 65px;
-  left: 140px;
+  left: 75px;
   background-color: var(--button-red);
   border: 2px solid var(--button-red);
   height: 50px;
@@ -541,7 +684,7 @@ button:focus {
 #info {
   position: absolute;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: #000;
   border: 0.5px solid #000;
   width: 30px;
   height: 30px;
@@ -550,11 +693,18 @@ button:focus {
   transition: box-shadow 0.5s;
 }
 #info-icon {
-  position: relative;
-  width: 15px;
-  height: 15px;
-  top: 0;
+  position: absolute;
+  fill: #fff;
+  width: 75%;
+  height: 100%;
+  top: 0px;
+  left: 4px;
 }
+
+#info-icon:hover {
+  fill: #000;
+}
+
 #info:hover {
   background-color: #fff;
   border: 1.5px solid #000;

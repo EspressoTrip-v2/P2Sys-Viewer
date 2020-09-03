@@ -33,6 +33,8 @@ const {
   customerNumberNameModel,
 } = require(`${dir}/database/mongoDbConnect.js`);
 
+const { updater, updateNow } = require(`${dir}/updater.js`);
+
 /* WINDOW VARIABLES */
 let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow;
 
@@ -66,9 +68,6 @@ function mongooseConnect() {
             'utf8',
             () => console.log('Logfile write error')
           );
-      if (loadingWindow) {
-        loadingWindow.close();
-      }
 
       dialog.showMessageBoxSync({
         type: 'info',
@@ -78,6 +77,11 @@ function mongooseConnect() {
           '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check the network connection.',
         buttons: ['OK'],
       });
+      setTimeout(() => {
+        if (loadingWindow) {
+          loadingWindow.close();
+        }
+      }, 50);
     });
 }
 mongooseConnect();
@@ -108,7 +112,11 @@ function createTray() {
 //////////////////////////////
 
 /* TRAY MENU LAYOUT TEMPLATE */
-let trayMenu = Menu.buildFromTemplate([{ label: 'P2Sys-Viewer' }, { role: 'minimize' }]);
+let trayMenu = Menu.buildFromTemplate([
+  { label: 'P2Sys-Viewer' },
+  { role: 'minimize' },
+  { role: 'about' },
+]);
 
 /* CREATE CUSTOMER SEARCH WINDOW */
 function createCustomerSearchWindow() {
@@ -147,6 +155,10 @@ function createCustomerSearchWindow() {
     }
     /* SHOW WINDOW */
     customerSearchWindow.show();
+
+    setTimeout(() => {
+      updater(customerSearchWindow);
+    }, 3000);
 
     setTimeout(() => {
       /* SEND DOWNLOADED DATABASE TO SEARCH WINDOW */
@@ -320,4 +332,9 @@ ipcMain.on('close-window-dock', (e, message) => {
   if (customerNameWindow) {
     customerNameWindow.webContents.send('close-window-dock', null);
   }
+});
+
+/* CONFIRM UPDATE */
+ipcMain.on('update-confirm', (e, message) => {
+  updateNow();
 });

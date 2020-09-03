@@ -61,6 +61,7 @@ function htmlInnerFill(html) {
     'beforeend',
     `<tbody id="table-body" ><tr id="row-columns">${innerTableColumns}</tr>${innerTable}</tbody>`
   );
+  border.style.opacity = '1';
 }
 
 /* POPULATE THE TABLE WITH THE SELECTED CUSTOMER */
