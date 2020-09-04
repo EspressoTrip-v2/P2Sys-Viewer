@@ -291,17 +291,13 @@ ipcRenderer.on('expand-window', (e, message) => {
   customerSearchInput.focus();
 });
 
-/* MESSAGE FROM UPDATER */
-ipcRenderer.on('show-update-container', (e, message) => {
+/* UPDATE PERCENTAGE PROGRESS */
+ipcRenderer.on('update-progress', (e, message) => {
   logoContainer.style.opacity = '0';
   updateContainer.style.opacity = '1';
   checkExitBtn.disabled = true;
   checkExitBtn.setAttribute('class', 'btn-disabled');
-});
-
-/* UPDATE PERCENTAGE PROGRESS */
-ipcRenderer.on('update-progress', (e, message) => {
-  downloadProgressBar.style.setProperty('--width', message);
+  downloadProgressBar.style.setProperty('--width', message.percent);
 });
 
 /* UPDATE PERCENTAGE PROGRESS */

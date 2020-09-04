@@ -1,13 +1,13 @@
 /* Set main colors */
 :root {
+  --psys-blue: #09e1ff;
+  --psys-red: #fe1604;
+  --psys-green: #04fe30;
+
   --main: #000;
   --sec-blue: #1e90ff;
-  --button-red: #cf2115;
-  --button-green: #80c432;
-  --button-gold: #d9793b;
-  --opaque-man: rgba(128, 196, 50, 0.4);
-  --auto: #d9793b;
-  --opaque-auto: rgba(217, 122, 58, 0.3);
+  --button-red: #fe1604;
+  --button-green: #04fe30;
 }
 
 /* Fonts */
@@ -181,6 +181,7 @@ header {
   border-radius: 50%;
   z-index: 1;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
 #narrow:hover {
@@ -214,6 +215,7 @@ header {
   border-radius: 50%;
   z-index: 1;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
 #close:hover {
@@ -493,6 +495,7 @@ header {
   border-radius: 50%;
   z-index: 1;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
 #dock-hide-expand:hover {
@@ -519,6 +522,7 @@ header {
   border-radius: 50%;
   z-index: 1;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
 #dock-hide-close:hover {

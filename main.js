@@ -75,13 +75,14 @@ function mongooseConnect() {
         message: 'DATABASE NOT AVAILABLE',
         detail:
           '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check the network connection.',
-        buttons: ['OK'],
+        buttons: ['QUIT'],
       });
       setTimeout(() => {
         if (loadingWindow) {
           loadingWindow.close();
         }
-      }, 50);
+        app.quit();
+      }, 20);
     });
 }
 mongooseConnect();

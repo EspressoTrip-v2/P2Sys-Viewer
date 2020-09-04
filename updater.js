@@ -1,8 +1,9 @@
 /* MODULES */
 const { dialog } = require('electron');
 const fs = require('fs');
-const { autoUpdater } = require('electron-updater');
+const { autoUpdater, UpdaterSignal } = require('electron-updater');
 autoUpdater.autoDownload = false;
+const signals = new UpdaterSignal(this);
 
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
@@ -32,15 +33,18 @@ if (!process.env.NODE_ENV) {
 /*  CREATE HTML FOR THE PROGRESS WINDOW */
 
 exports.updater = (window) => {
+  /* CHECK FOR UPDATES */
   autoUpdater.checkForUpdates().catch((err) => console.error);
+
+  /* SHOW MESSAGE BOX IF UPDATE AVAILABLE */
   autoUpdater.on('update-available', (info) => {
     dialog
       .showMessageBox(window, {
         type: 'info',
         title: 'UPDATE AVAILABLE',
         icon: `${dir}/renderer/icons/trayTemplate.png`,
-        message: `P2Sys Viewer v${info.version} is available.\nWould you like to update now?`,
-        buttons: ['UPDATE', 'CANCEL'],
+        message: `P2Sys Viewer v${info.version} is available.\nWould you like to download it now?`,
+        buttons: ['DOWNLOAD UPDATE', 'CANCEL'],
       })
       .then((selection) => {
         if (selection.response === 0) {
@@ -49,12 +53,12 @@ exports.updater = (window) => {
       });
   });
 
-  autoUpdater.on('download-progress', (progress, bps, per, trans) => {
-    if (window) {
-      window.webContents.send('update-progress', per);
-    }
+  /* SEND MESSAGE FOR DOWNLOAD PROGRESS */
+  autoUpdater.signals.progress((info) => {
+    window.webContents.send('update-progress', info);
   });
 
+  /* SEND MESSAGE ON UPDATE READY TO INSTALL */
   autoUpdater.on('update-downloaded', () => {
     window.webContents.send('update-downloaded', null);
   });

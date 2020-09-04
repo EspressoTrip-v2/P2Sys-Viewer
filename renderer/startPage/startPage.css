@@ -1,13 +1,14 @@
 /* Set main colors */
 :root {
+  --psys-blue: #09e1ff;
+  --psys-red: #fe1604;
+  --psys-green: #04fe30;
+
   --main: #000;
   --sec-blue: #1e90ff;
-  --button-red: #cf2115;
-  --button-green: #80c432;
+  --button-red: #fe1604;
+  --button-green: #04fe30;
   --button-gold: #d9793b;
-  --opaque-man: rgba(128, 196, 50, 0.4);
-  --auto: #d9793b;
-  --opaque-auto: rgba(217, 122, 58, 0.3);
 }
 
 /* Fonts */

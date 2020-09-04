@@ -34,6 +34,7 @@
       "url": "https://bintray.com/espressotrip-v2/JDevSoftware/",
       "token": "d11c8a929df2d2257c311fc939cdc35d7f4007ca"
     },
+    "electronUpdaterCompatibility": ">= 2.16",
     "files": [
       "!private**/*",
       "!build**/*"
@@ -71,7 +72,6 @@
     }
   },
   "devDependencies": {
-    "electron": "^9.1.0",
-    "electron-builder": "^22.8.1"
+    "electron": "^9.1.0"
   }
 }
