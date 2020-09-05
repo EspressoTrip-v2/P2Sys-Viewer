@@ -163,10 +163,28 @@ versionText.innerText = `P2Sys Viewer (v${remote.app.getVersion()})`;
 /* CLOSE BUTTON */
 checkExitBtn.addEventListener('click', (e) => {
   soundClick.play();
-  ipcRenderer.send('close-win', null);
-  setTimeout(() => {
-    customerSearchWindow.close();
-  }, 200);
+  if (window.getComputedStyle(updateContainer).opacity === '1') {
+    let selection = remote.dialog.showMessageBoxSync(customerSearchWindow, {
+      type: 'info',
+      title: 'DOWNLOAD IN PROGRESS',
+      message:
+        'There is a download for the latest update in progress.\nAre you sure you want to exit?',
+      icon: `${dir}/renderer/icons/trayTemplate.png`,
+      buttons: ['EXIT', 'CANCEL'],
+    });
+    if (selection === 0) {
+      console.log(selection);
+      ipcRenderer.send('close-win', null);
+      setTimeout(() => {
+        customerSearchWindow.close();
+      }, 200);
+    }
+  } else {
+    ipcRenderer.send('close-win', null);
+    setTimeout(() => {
+      customerSearchWindow.close();
+    }, 200);
+  }
 });
 
 /* VIEW BUTTON */
@@ -295,8 +313,6 @@ ipcRenderer.on('expand-window', (e, message) => {
 ipcRenderer.on('update-progress', (e, message) => {
   logoContainer.style.opacity = '0';
   updateContainer.style.opacity = '1';
-  checkExitBtn.disabled = true;
-  checkExitBtn.setAttribute('class', 'btn-disabled');
   downloadProgressBar.style.setProperty('--width', message.percent);
 });
 

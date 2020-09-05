@@ -1,16 +1,7 @@
 :root {
-  --psys-blue: #09e1ff;
+  --psys-blue: #05899c;
   --psys-red: #fe1604;
-  --psys-green: #04fe30;
-  --main-blue: #3e6ba6ff;
-  --sec-blue: #8eafdafb;
-  --button-red: #cf2115;
-  --button-green: #80c432;
-  --button-gold: #d9793b;
-  --man: #497813;
-  --opaque-man: #487613cc;
-  --auto: #d9793b;
-  --opaque-auto: #d97a3acc;
+  --psys-green: #03c224;
 }
 
 /* Fonts */
@@ -64,7 +55,6 @@ html {
 
 #logo {
   position: relative;
-  top: 7px;
   left: -63px;
   padding: 1vh 3vw;
   width: 165px;
@@ -79,7 +69,7 @@ html {
   font-family: Forelle;
   font-weight: 300;
   z-index: 1;
-  left: 170px;
+  left: 161px;
 }
 
 .spinner-sector {

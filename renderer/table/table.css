@@ -1,13 +1,14 @@
 /* Set main colors */
 :root {
-  --psys-blue: #09e1ff;
+  --psys-blue: #05899c;
   --psys-red: #fe1604;
-  --psys-green: #04fe30;
+  --psys-green: #03c224;
 
   --main: #000;
-  --sec-blue: #1e90ff;
+  --sec-blue: #05899c;
   --button-red: #fe1604;
-  --button-green: #04fe30;
+  --button-green: #03c224;
+  --button-gold: #fe7c04;
 }
 
 /* Fonts */
@@ -292,9 +293,8 @@ header {
   outline: none;
   text-transform: uppercase;
   overflow-y: auto;
-  line-height: 1em;
+  line-height: 2em;
   padding: 0 10px;
-  padding-top: 8px;
 }
 
 /* Scrollbar Customization for Table */
@@ -418,6 +418,7 @@ header {
   align-items: center;
   align-content: start;
   width: 200px;
+  height: 70px;
   background-color: #fff;
   padding: 10px;
   border-radius: 50%;
@@ -426,16 +427,18 @@ header {
 }
 #footer-container::after {
   position: absolute;
-  left: 102px;
+  left: 96px;
+  top: 12px;
   content: 'Viewer';
   font-family: Forelle;
   font-size: 40px;
 }
 
 #p2sys-logo {
-  height: 50px;
-  left: 20px;
-  position: relative;
+  height: 70px;
+  left: 30px;
+  bottom: 0px;
+  position: absolute;
 }
 
 /* BUTTONS */

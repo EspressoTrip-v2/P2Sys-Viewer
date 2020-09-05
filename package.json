@@ -1,6 +1,6 @@
 {
   "name": "P2Sys-Viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "P2Sys Viewer for P2Sys Main App",
   "main": "main.js",
   "scripts": {

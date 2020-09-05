@@ -132,7 +132,9 @@ function createCustomerSearchWindow() {
     spellCheck: false,
     resizable: false,
     transparent: true,
+
     webPreferences: {
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -188,6 +190,7 @@ function createCustomerNameWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -221,6 +224,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -252,6 +256,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,

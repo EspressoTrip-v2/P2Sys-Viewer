@@ -1,9 +1,14 @@
 /* Set main colors */
 :root {
+  --psys-blue: #09e1ff;
+  --psys-red: #fe1604;
+  --psys-green: #03c224;
+
   --main: #000;
-  --sec-blue: #1e90ff;
-  --button-red: #b82617;
-  --button-green: #2ecc71;
+  --sec-blue: #05899c;
+  --button-red: #fe1604;
+  --button-green: #03c224;
+  --button-gold: #fe7c04;
 }
 * {
   box-sizing: border-box;

@@ -1,7 +1,8 @@
 /* MODULES */
-const { dialog } = require('electron');
+const { dialog, app } = require('electron');
 const fs = require('fs');
 const { autoUpdater, UpdaterSignal } = require('electron-updater');
+const { info } = require('electron-log');
 autoUpdater.autoDownload = false;
 const signals = new UpdaterSignal(this);
 
@@ -30,13 +31,23 @@ if (!process.env.NODE_ENV) {
   }
 }
 
+/* ERROR GENERATOR */
+function erorrFunc(err) {
+  fs.existsSync('errorlog.txt')
+    ? fs.appendFile('errorlog.txt', `${new Date()} -> Update error: ${err}\n`, 'utf8', () =>
+        console.log('Logfile write')
+      )
+    : fs.writeFile('errorlog.txt', `${new Date()} -> Update error: ${err}\n`, 'utf8', () =>
+        console.log('Logfile write')
+      );
+}
+
 /*  CREATE HTML FOR THE PROGRESS WINDOW */
-
 exports.updater = (window) => {
-  /* CHECK FOR UPDATES */
-  autoUpdater.checkForUpdates().catch((err) => console.error);
+  autoUpdater.checkForUpdates().catch((err) => {
+    erorrFunc(err);
+  });
 
-  /* SHOW MESSAGE BOX IF UPDATE AVAILABLE */
   autoUpdater.on('update-available', (info) => {
     dialog
       .showMessageBox(window, {
@@ -64,14 +75,7 @@ exports.updater = (window) => {
   });
 
   autoUpdater.on('error', (err) => {
-    /* CHECK IF IT EXISTS */
-    fs.existsSync('errorlog.txt')
-      ? fs.appendFile('errorlog.txt', `${new Date()} -> Update error: ${err}\n`, 'utf8', () =>
-          console.log('Logfile write')
-        )
-      : fs.writeFile('errorlog.txt', `${new Date()} -> Update error: ${err}\n`, 'utf8', () =>
-          console.log('Logfile write')
-        );
+    erorrFunc(err);
   });
 };
 

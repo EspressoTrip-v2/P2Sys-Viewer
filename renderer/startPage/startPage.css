@@ -2,13 +2,13 @@
 :root {
   --psys-blue: #09e1ff;
   --psys-red: #fe1604;
-  --psys-green: #04fe30;
+  --psys-green: #03c224;
 
   --main: #000;
-  --sec-blue: #1e90ff;
+  --sec-blue: #05899c;
   --button-red: #fe1604;
-  --button-green: #04fe30;
-  --button-gold: #d9793b;
+  --button-green: #03c224;
+  --button-gold: #fe7c04;
 }
 
 /* Fonts */
@@ -207,12 +207,12 @@ button:focus {
 }
 #update::before {
   position: relative;
-  content: 'Downloading Update...';
+  content: 'Update Downloading...';
   font-size: 18px;
   color: #fff;
   top: -5px;
   font-weight: bold;
-  animation: downloaded 1s ease infinite alternate;
+  animation: downloaded 0.8s ease-in-out infinite alternate;
 }
 
 @keyframes downloaded {
@@ -275,8 +275,8 @@ button:focus {
   font-size: 15px;
   border-radius: 200px;
   font-weight: bolder;
-  width: 150px;
-  height: 42px;
+  width: 130px;
+  height: 40px;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
   transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
 }
@@ -298,7 +298,7 @@ button:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  top: 38px;
+  top: 10px;
   left: 55px;
   width: fit-content;
   transition: opacity 0.3s;
@@ -312,6 +312,7 @@ button:focus {
   position: absolute;
   font-family: Forelle;
   left: 130px;
+  bottom: 15px;
   font-size: 77px;
 }
 
@@ -505,7 +506,7 @@ button:focus {
   align-items: center;
   font-size: 30px;
   width: 88%;
-  top: 45px;
+  top: 30px;
   height: 100px;
   border-radius: 200px;
 }
@@ -516,12 +517,13 @@ button:focus {
 #version {
   position: relative;
   top: -20px;
-  width: 100%;
+  width: 280px;
   text-align: center;
   font-weight: bold;
-  border: 1px solid #000;
   border-radius: 5px;
   padding: 5px;
+  color: #fff;
+  background-color: var(--sec-blue);
 }
 
 .paragraph {
@@ -533,7 +535,8 @@ button:focus {
   position: absolute;
   content: 'About';
   font-size: 80px;
-  right: 30px;
+  top: 15px;
+  right: 33px;
   font-family: Forelle;
 }
 
@@ -586,6 +589,17 @@ button:focus {
   padding-top: 20px;
   position: absolute;
   bottom: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#trademark {
+  font-size: 13px;
+  position: relative;
 }
 
 .mail,
@@ -597,11 +611,11 @@ button:focus {
   padding: 10px 10px;
   font-weight: bolder;
   font-size: 12px;
-  background-color: #09e1ff;
+  background-color: var(--sec-blue);
   border-radius: 200px;
   margin-top: 20px;
   color: #fff;
-  border: 2px solid #09e1ff;
+  border: 2px solid var(--sec-blue);
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
 
   transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
@@ -633,7 +647,7 @@ button:focus {
 .mail:hover,
 .settings-btn:hover {
   background-color: #fff;
-  color: #09e1ff;
+  color: var(--sec-blue);
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
 }
 
@@ -685,8 +699,8 @@ button:focus {
 #info {
   position: absolute;
   border-radius: 50%;
-  background-color: #000;
-  border: 0.5px solid #000;
+  background-color: var(--sec-blue);
+  border: 0.5px solid var(--sec-blue);
   width: 30px;
   height: 30px;
   top: 4px;
@@ -694,21 +708,20 @@ button:focus {
   transition: box-shadow 0.5s;
 }
 #info-icon {
-  position: absolute;
+  position: relative;
   fill: #fff;
-  width: 75%;
+  width: 132%;
   height: 100%;
-  top: 0px;
-  left: 4px;
+  left: -2px;
 }
 
 #info-icon:hover {
-  fill: #000;
+  fill: var(--sec-blue);
 }
 
 #info:hover {
   background-color: #fff;
-  border: 1.5px solid #000;
+  border: 1.5px solid var(--sec-blue);
   box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
 }
 
