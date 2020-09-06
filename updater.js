@@ -54,7 +54,8 @@ exports.updater = (window) => {
         type: 'info',
         title: 'UPDATE AVAILABLE',
         icon: `${dir}/renderer/icons/trayTemplate.png`,
-        message: `P2Sys Viewer v${info.version} is available.\nWould you like to download it now?`,
+        message: `P2Sys-Viewer v${info.version} is available.\nWould you like to download it now?`,
+        detail: info.releaseNotes,
         buttons: ['DOWNLOAD UPDATE', 'CANCEL'],
       })
       .then((selection) => {

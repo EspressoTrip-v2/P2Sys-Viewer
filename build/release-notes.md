@@ -1,8 +1,8 @@
-## Version 1.0.1
+P2SYS-VIEWER VERSION 1.0.1
 
-### Changelog:
+# Changelog #
 
-### Added:
+Added:
 
 - Update progress display
 - Notification on available update
@@ -12,8 +12,4 @@
 
 - Changelog display on first start
 
-## Version 1.0.0
-
-### Changelog:
-
-- Initial Release
+Version release date: 06-09-20

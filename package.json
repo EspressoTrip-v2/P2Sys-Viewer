@@ -15,7 +15,7 @@
     "type": "bintray",
     "url": "https://bintray.com/espressotrip-v2/JDevSoftware/"
   },
-  "author": "JBDevSoftware",
+  "author": "JDevSoftware",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
@@ -24,7 +24,7 @@
     "mongoose": "^5.10.0"
   },
   "build": {
-    "appId": "com.JBDevSoftware.P2Sys-Viewer",
+    "appId": "com.JDevSoftware.P2Sys-Viewer",
     "copyright": "Copyright © 2020 P2Sys-Viewer",
     "publish": {
       "provider": "bintray",
@@ -43,7 +43,7 @@
       "./.env"
     ],
     "win": {
-      "publisherName": "JBDevSoftware",
+      "publisherName": "JDevSoftware",
       "verifyUpdateCodeSignature": false,
       "certificateFile": "private/p2sysviewer.pfx",
       "certificatePassword": "Juan@198103",
