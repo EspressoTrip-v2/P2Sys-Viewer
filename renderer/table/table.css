@@ -427,7 +427,7 @@ header {
 }
 #footer-container::after {
   position: absolute;
-  left: 96px;
+  left: 98px;
   top: 12px;
   content: 'Viewer';
   font-family: Forelle;

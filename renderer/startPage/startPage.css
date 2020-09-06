@@ -344,7 +344,7 @@ button:focus {
   align-items: center;
   font-weight: bolder;
   border-radius: 200px;
-  width: 30vw;
+  width: 29vw;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
   background-color: var(--button-red);
   color: #fff;
@@ -366,7 +366,7 @@ button:focus {
   color: #fff;
   border: 2px solid darkgrey;
   font-size: 15px;
-  width: 30vw;
+  width: 29vw;
 
   text-align: center;
   padding: 10px 20px;
@@ -392,7 +392,7 @@ button:focus {
   background-color: var(--button-green);
   color: #fff;
   border: 2px solid var(--button-green);
-  width: 30vw;
+  width: 29vw;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
 }
 
@@ -426,7 +426,7 @@ button:focus {
   font-weight: bolder;
   border-radius: 200px;
   height: auto;
-  width: 30vw;
+  width: 29vw;
   color: darkgrey;
   border: 2px solid darkgrey;
 }
