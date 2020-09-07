@@ -334,6 +334,7 @@ ipcMain.on('close-win', (e, message) => {
   }
 });
 
+/* CLOSE DOCK WINDOW */
 ipcMain.on('close-window-dock', (e, message) => {
   if (customerNameWindow) {
     customerNameWindow.webContents.send('close-window-dock', null);
