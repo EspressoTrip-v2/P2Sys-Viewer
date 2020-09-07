@@ -123,9 +123,9 @@ let trayMenu = Menu.buildFromTemplate([
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 630,
+    height: 600,
     backgroundColor: '#00FFFFFF',
-    width: 420,
+    width: 365,
     autoHideMenuBar: true,
     center: true,
     frame: false,
@@ -179,9 +179,9 @@ function createCustomerSearchWindow() {
 function createCustomerNameWindow(message) {
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 622,
-    width: 320,
-    x: message.dimensions[0] - 320,
+    height: 600,
+    width: 300,
+    x: message.dimensions[0] - 300,
     y: message.dimensions[1],
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
@@ -213,8 +213,8 @@ function createCustomerNameWindow(message) {
 /* LOADING WINDOW */
 function createLoadingWindow() {
   loadingWindow = new BrowserWindow({
-    height: 500,
-    width: 500,
+    height: 350,
+    width: 350,
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     center: true,

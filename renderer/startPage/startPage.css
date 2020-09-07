@@ -75,8 +75,8 @@ button:focus {
   justify-content: center;
   top: 0;
   right: 0;
-  height: 595px;
-  width: 400px;
+  height: 550px;
+  width: 350px;
   align-items: center;
   border: 3px solid var(--main);
   border-radius: 20px;
@@ -86,7 +86,7 @@ button:focus {
 }
 #check-background {
   display: flex;
-  top: 20px;
+  top: 7px;
   position: relative;
   width: 300px;
   height: 350px;
@@ -295,25 +295,25 @@ button:focus {
   position: absolute;
   opacity: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  top: 10px;
-  left: 55px;
+  top: -5px;
   width: fit-content;
   transition: opacity 0.3s;
 }
 #p2s-logo img {
   position: relative;
-  width: 135px;
+  left: 2px;
+  width: 115px;
 }
 #p2s-logo::after {
   content: 'Viewer';
-  position: absolute;
+  position: relative;
   font-family: Forelle;
-  left: 130px;
-  bottom: 15px;
-  font-size: 77px;
+  right: 2px;
+  top: 10px;
+  font-size: 60px;
 }
 
 /* BUTTONS */
@@ -344,7 +344,7 @@ button:focus {
   align-items: center;
   font-weight: bolder;
   border-radius: 200px;
-  width: 29vw;
+  width: 34vw;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
   background-color: var(--button-red);
   color: #fff;
@@ -366,7 +366,7 @@ button:focus {
   color: #fff;
   border: 2px solid darkgrey;
   font-size: 15px;
-  width: 29vw;
+  width: 34vw;
 
   text-align: center;
   padding: 10px 20px;
@@ -392,7 +392,7 @@ button:focus {
   background-color: var(--button-green);
   color: #fff;
   border: 2px solid var(--button-green);
-  width: 29vw;
+  width: 34vw;
   box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
 }
 
@@ -426,14 +426,13 @@ button:focus {
   font-weight: bolder;
   border-radius: 200px;
   height: auto;
-  width: 29vw;
+  width: 34vw;
   color: darkgrey;
   border: 2px solid darkgrey;
 }
 
 #assist-box {
-  bottom: 11vh;
-  bottom: 35px;
+  bottom: 22px;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -450,7 +449,6 @@ button:focus {
   font-weight: lighter;
   color: black;
   border: 0.5px solid black;
-  width: 45%;
 }
 
 #assist-btn:hover {
@@ -473,6 +471,7 @@ button:focus {
 .grab-search {
   display: block;
   position: absolute;
+  width: 30px;
   top: 6px;
   left: 6px;
   -webkit-app-region: drag;
@@ -490,29 +489,29 @@ button:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 595px;
+  height: 550px;
   padding: 0 30px;
-  width: 400px;
+  width: 365px;
   align-content: space-evenly;
   background-color: #fff;
   border: 3px solid #111;
   border-radius: 20px;
-  transition: opacity 0.5s linear;
+  transition: opacity 0.5s;
 }
 #system-settings-header {
   position: absolute;
   display: flex;
   align-content: center;
   align-items: center;
-  font-size: 30px;
   width: 88%;
-  top: 30px;
+  top: 15px;
   height: 100px;
   border-radius: 200px;
 }
 #system-settings-header img {
   position: relative;
   left: 40px;
+  width: 115px;
 }
 #version {
   position: relative;
@@ -528,15 +527,16 @@ button:focus {
 
 .paragraph {
   position: relative;
+  top: -12px;
   text-align: justify;
 }
 
 #system-settings-header::after {
-  position: absolute;
+  position: relative;
   content: 'About';
-  font-size: 80px;
-  top: 15px;
-  right: 33px;
+  font-size: 68px;
+  top: 7px;
+  right: -37px;
   font-family: Forelle;
 }
 
@@ -703,7 +703,7 @@ button:focus {
   border: 0.5px solid var(--sec-blue);
   width: 30px;
   height: 30px;
-  top: 4px;
+  top: 5px;
   right: 9px;
   transition: box-shadow 0.5s;
 }

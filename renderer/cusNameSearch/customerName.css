@@ -40,7 +40,8 @@ main {
   border: 3px solid var(--main);
   border-radius: 20px;
   padding: 10px 3px;
-  width: 300px;
+  width: 280px;
+  height: 335px;
 }
 
 header {
@@ -53,7 +54,7 @@ header {
   border: 3px solid var(--main);
   border-radius: 20px;
   height: 15vh;
-  width: 300px;
+  width: 280px;
 }
 header img {
   position: relative;
@@ -98,7 +99,7 @@ body {
 footer {
   position: relative;
   bottom: -5px;
-  width: 300px;
+  width: 280px;
 }
 
 .customer-name {
