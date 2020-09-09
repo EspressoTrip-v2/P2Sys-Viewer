@@ -36,10 +36,24 @@ const {
 const { updater, updateNow } = require(`${dir}/updater.js`);
 
 /* WINDOW VARIABLES */
-let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow;
+let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow, dbLoaderWindow;
 
 /* GLOBAL VARIABLES */
 let customerNumberName, customerPrices, screenWidth, screenHeight;
+
+/* LOGFILE CREATION FUNCTION */
+//////////////////////////////
+function logfileFunc(message) {
+  let fileDir = `${dir}/error-log.txt`;
+  /* CHECK IF EXISTS */
+  if (fs.existsSync(fileDir)) {
+    fs.appendFile(fileDir, `${new Date()}: Database ${message}\n`, (err) => console.log(err));
+  } else {
+    fs.writeFileSync(fileDir, `${new Date()}: Database ${message}\n`, (err) =>
+      console.log(err)
+    );
+  }
+}
 
 /* CONNECT TO DATABASE */
 function mongooseConnect() {
@@ -85,17 +99,39 @@ function mongooseConnect() {
       }, 20);
     });
 }
-mongooseConnect();
 
 let db = mongoose.connection;
 
 /* DB LISTENERS */
 //////////////////
 db.on('connected', async () => {
-  let queryCustomerPrices = await customerPricesModel.findById('customerPrices');
-  let queryCustomerNumberName = await customerNumberNameModel.findById('customerNumberName');
-  customerPrices = queryCustomerPrices._doc;
-  customerNumberName = queryCustomerNumberName._doc;
+  try {
+    dbLoaderWindow.webContents.send('db-download', {
+      database: 'Downloading CP-Db',
+      percentage: 50,
+    });
+    let queryCustomerPrices = await customerPricesModel.findById('customerPrices').exec();
+    customerPrices = queryCustomerPrices._doc;
+  } catch (err) {
+    logfileFunc(err);
+  }
+  try {
+    dbLoaderWindow.webContents.send('db-download', {
+      database: 'Downloading CNN-Db',
+      percentage: 100,
+    });
+    let queryCustomerNumberName = await customerNumberNameModel
+      .findById('customerNumberName')
+      .exec();
+    customerNumberName = queryCustomerNumberName._doc;
+
+    dbLoaderWindow.webContents.send('db-download', {
+      database: 'Success',
+      percentage: 100,
+    });
+  } catch (err) {
+    logfileFunc(err);
+  }
 
   /* START CUSTOMER SEARCH WINDOW ON CONNECTION */
   createCustomerSearchWindow();
@@ -153,8 +189,8 @@ function createCustomerSearchWindow() {
     };
 
     /* CLOSE THE LOADING WINDOW */
-    if (loadingWindow) {
-      loadingWindow.close();
+    if (dbLoaderWindow) {
+      dbLoaderWindow.close();
     }
     /* SHOW WINDOW */
     customerSearchWindow.show();
@@ -213,8 +249,8 @@ function createCustomerNameWindow(message) {
 /* LOADING WINDOW */
 function createLoadingWindow() {
   loadingWindow = new BrowserWindow({
-    height: 350,
-    width: 350,
+    height: 355,
+    width: 355,
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     center: true,
@@ -289,6 +325,33 @@ function createTableWindow(message) {
   });
 }
 
+/* DBLOADER WINDOW */
+function createDbLoaderWindow() {
+  dbLoaderWindow = new BrowserWindow({
+    height: 400,
+    width: 400,
+    spellCheck: false,
+    resizable: false,
+    autoHideMenuBar: true,
+    center: true,
+    frame: false,
+    transparent: true,
+    webPreferences: { nodeIntegration: true, enableRemoteModule: true },
+    icon: `${dir}/renderer/icons/trayTemplate.png`,
+  });
+
+  //   LOAD HTML PAGE
+  dbLoaderWindow.loadFile(`${dir}/renderer/dbloader/dbloader.html`);
+
+  //   LOAD DEV TOOLS
+  // dbLoaderWindow.webContents.openDevTools();
+
+  //   EVENT LISTENER FOR CLOSING
+  dbLoaderWindow.on('closed', () => {
+    dbLoaderWindow = null;
+  });
+}
+
 /* START THE LOADER */
 app.on('ready', () => {
   /* GET SCREEN SIZE */
@@ -296,7 +359,9 @@ app.on('ready', () => {
   screenHeight = res.height;
   screenWidth = res.width;
   setTimeout(() => {
-    createLoadingWindow();
+    mongooseConnect();
+
+    createDbLoaderWindow();
   }, 300);
 });
 
