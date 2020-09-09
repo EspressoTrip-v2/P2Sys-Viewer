@@ -200,7 +200,7 @@ button:focus {
   background-color: var(--sec-blue);
   border: 3px solid var(--main);
   height: 78px;
-  top: 38px;
+  top: 25px;
   z-index: 1;
   filter: drop-shadow(1px 2px 4px #636363);
   transition: opacity 0.3s 0.3s;
@@ -260,7 +260,7 @@ button:focus {
   background-color: var(--sec-blue);
   border: 3px solid var(--main);
   height: 78px;
-  top: 38px;
+  top: 25px;
   z-index: 2;
   filter: drop-shadow(1px 2px 4px #636363);
   transition: opacity 0.3s 0.3s;

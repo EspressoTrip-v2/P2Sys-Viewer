@@ -336,7 +336,11 @@ function createDbLoaderWindow() {
     center: true,
     frame: false,
     transparent: true,
-    webPreferences: { nodeIntegration: true, enableRemoteModule: true },
+    webPreferences: {
+      devTools: false,
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
     icon: `${dir}/renderer/icons/trayTemplate.png`,
   });
 
