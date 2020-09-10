@@ -83,17 +83,17 @@ function mongooseConnect() {
             () => console.log('Logfile write error')
           );
 
-      dialog.showMessageBoxSync({
+      dialog.showMessageBoxSync(dbLoaderWindow, {
         type: 'info',
         icon: `${dir}/renderer/icons/trayTemplate.png`,
         message: 'DATABASE NOT AVAILABLE',
         detail:
-          '\nP2Sys Viewer is an online database application.\n\nConnection to the database could not be made, Please check the network connection.',
-        buttons: ['QUIT'],
+          'P2Sys Viewer was unable to connect to the database. Please try again when a connection is available',
+        buttons: ['EXIT'],
       });
       setTimeout(() => {
-        if (loadingWindow) {
-          loadingWindow.close();
+        if (dbLoaderWindow) {
+          dbLoaderWindow.close();
         }
         app.quit();
       }, 20);
@@ -168,7 +168,7 @@ function createCustomerSearchWindow() {
     spellCheck: false,
     resizable: false,
     transparent: true,
-
+    alwaysOnTop: true,
     webPreferences: {
       devTools: false,
       nodeIntegration: true,
@@ -225,6 +225,7 @@ function createCustomerNameWindow(message) {
     resizable: false,
     spellCheck: false,
     transparent: true,
+    alwaysOnTop: true,
     webPreferences: {
       devTools: false,
       nodeIntegration: true,
@@ -333,6 +334,7 @@ function createDbLoaderWindow() {
     spellCheck: false,
     resizable: false,
     autoHideMenuBar: true,
+    alwaysOnTop: true,
     center: true,
     frame: false,
     transparent: true,

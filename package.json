@@ -4,7 +4,6 @@
   "description": "P2Sys Viewer for P2Sys Main App",
   "main": "main.js",
   "scripts": {
-    "watch": "nodemon --ignore '*.json' --exec NODE_ENV=dev electron .",
     "dev": "NODE_ENV=dev electron .",
     "start": "electron .",
     "release": "electron-builder -w -p 'always'",
