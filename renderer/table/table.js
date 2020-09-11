@@ -73,7 +73,7 @@ function fillTable(json) {
 /* DOCK HIDE FUNCTION */
 function dockHide() {
   let width;
-  if (screenHeight < 800) {
+  if (screenHeight <= 800) {
     width = 420;
   } else {
     width = 550;
