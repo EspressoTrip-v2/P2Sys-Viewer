@@ -34,19 +34,18 @@ main {
   display: flex;
   position: relative;
   flex-direction: column;
-  top: 17px;
+  top: 14px;
   justify-content: center;
   background-color: #fff;
   border: 3px solid var(--main);
   border-radius: 20px;
   padding: 10px 3px;
   width: 280px;
-  height: 335px;
+  height: 340px;
 }
 
 header {
   position: relative;
-  top: 6px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -231,4 +230,10 @@ footer {
   align-self: center;
   border: 3px solid var(--main);
   border-radius: 8px;
+}
+
+@media screen and (max-height: 550px) {
+  body {
+    transform: scale(0.75);
+  }
 }

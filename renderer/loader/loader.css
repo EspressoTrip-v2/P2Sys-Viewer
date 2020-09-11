@@ -114,3 +114,9 @@ body {
     transform: rotate(360deg);
   }
 }
+
+@media screen and (max-height: 320px) {
+  body {
+    transform: scale(0.75);
+  }
+}

@@ -72,16 +72,23 @@ function fillTable(json) {
 
 /* DOCK HIDE FUNCTION */
 function dockHide() {
+  let width;
+  if (screenHeight < 800) {
+    width = 420;
+  } else {
+    width = 550;
+  }
+
   let size = tableWindow.getSize();
   if (size[0] === 65) {
-    dockButtonContainer.style.transform = 'translateX(-70px)';
+    dockButtonContainer.style.transform = 'translateX(-120px)';
     setTimeout(() => {
-      tableWindow.setSize(550, size[1]);
+      tableWindow.setSize(width, size[1]);
       setTimeout(() => {
         border.style.transform = 'scaleX(1)';
       }, 200);
     }, 500);
-  } else if (size[0] === 550) {
+  } else if (size[0] === width) {
     dockButtonContainer.setAttribute('customer-number', customerNumbervalue);
     border.style.transform = 'scaleX(0)';
     setTimeout(() => {

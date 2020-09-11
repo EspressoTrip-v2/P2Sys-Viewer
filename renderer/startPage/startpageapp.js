@@ -224,7 +224,6 @@ customerFindBtn.addEventListener('click', (e) => {
     dimensions,
     customerNameNumber,
   };
-
   /* FIND DOCK BUTTON INTERACTION ON CLICK */
   if (customerSearchWindow.getChildWindows()[0]) {
     ipcRenderer.send('close-window-dock', null);

@@ -35,6 +35,7 @@ html {
 
 body {
   position: relative;
+  transform: scale(1);
   padding: 0;
   margin: 0;
   display: flex;
@@ -728,4 +729,19 @@ button:focus {
 #info:active {
   transform: scale(0.95);
   box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+}
+
+@media screen and (max-height: 550px) {
+  body {
+    transform: scale(0.75);
+  }
+  #check-exit-btn {
+    width: 40vw;
+  }
+  #check-view-btn {
+    width: 40vw;
+  }
+  #disabled {
+    width: 40vw;
+  }
 }

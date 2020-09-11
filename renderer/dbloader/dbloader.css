@@ -168,3 +168,8 @@ html {
     transform: rotate(360deg);
   }
 }
+@media screen and (max-height: 350px) {
+  body {
+    transform: scale(0.75);
+  }
+}

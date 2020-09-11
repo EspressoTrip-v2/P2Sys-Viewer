@@ -157,11 +157,19 @@ let trayMenu = Menu.buildFromTemplate([
 
 /* CREATE CUSTOMER SEARCH WINDOW */
 function createCustomerSearchWindow() {
+  let width, height;
+  if (screenHeight <= 800) {
+    width = 300;
+    height = 550;
+  } else {
+    width = 365;
+    height = 600;
+  }
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 600,
+    height: height,
+    width: width,
     backgroundColor: '#00FFFFFF',
-    width: 365,
     autoHideMenuBar: true,
     center: true,
     frame: false,
@@ -170,7 +178,7 @@ function createCustomerSearchWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -213,11 +221,20 @@ function createCustomerSearchWindow() {
 
 /* CREATE SEARCH DOCK */
 function createCustomerNameWindow(message) {
+  let width, height;
+  if (screenHeight <= 800) {
+    width = 230;
+    height = 550;
+  } else {
+    width = 300;
+    height = 600;
+  }
+
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 600,
-    width: 300,
-    x: message.dimensions[0] - 300,
+    height: height,
+    width: width,
+    x: message.dimensions[0] - width,
     y: message.dimensions[1],
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
@@ -227,7 +244,7 @@ function createCustomerNameWindow(message) {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -249,9 +266,17 @@ function createCustomerNameWindow(message) {
 
 /* LOADING WINDOW */
 function createLoadingWindow() {
+  let width, height;
+  if (screenHeight <= 800) {
+    width = 320;
+    height = 320;
+  } else {
+    width = 355;
+    height = 355;
+  }
   loadingWindow = new BrowserWindow({
-    height: 355,
-    width: 355,
+    height: height,
+    width: width,
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     center: true,
@@ -261,7 +286,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -280,9 +305,15 @@ function createLoadingWindow() {
 
 /* TABLE WINDOW */
 function createTableWindow(message) {
+  let width;
+  if (screenHeight <= 800) {
+    width = 420;
+  } else {
+    width = 550;
+  }
   tableWindow = new BrowserWindow({
     height: screenHeight,
-    width: 550,
+    width: width,
     autoHideMenuBar: true,
     x: 0,
     y: 0,
@@ -293,7 +324,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -328,9 +359,17 @@ function createTableWindow(message) {
 
 /* DBLOADER WINDOW */
 function createDbLoaderWindow() {
+  let width, height;
+  if (screenHeight <= 800) {
+    width = 350;
+    height = 350;
+  } else {
+    width = 400;
+    height = 400;
+  }
   dbLoaderWindow = new BrowserWindow({
-    height: 400,
-    width: 400,
+    height: height,
+    width: width,
     spellCheck: false,
     resizable: false,
     autoHideMenuBar: true,
@@ -339,7 +378,7 @@ function createDbLoaderWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
