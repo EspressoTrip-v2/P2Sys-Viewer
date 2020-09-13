@@ -34,7 +34,7 @@ html {
 
 body {
   width: 215px;
-  height: 55px;
+  height: 65px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -59,13 +59,22 @@ body {
 }
 
 #progress-container::before {
-  content: attr(data-label);
+  content: 'Downloading Update';
   position: absolute;
   font-size: 15px;
   top: 6px;
   font-weight: bold;
   color: #fff;
   animation: downloaded 0.8s ease-in-out infinite alternate;
+}
+
+#progress-container::after {
+  content: attr(percentage-label);
+  color: #fff;
+  position: absolute;
+  top: 33px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 @keyframes downloaded {
@@ -79,9 +88,9 @@ body {
 
 #progress {
   position: absolute;
-  top: 28px;
+  top: 30px;
   width: 200px;
-  height: 14px;
+  height: 20px;
   background-color: #111;
   border-radius: 1.5em;
   border: 2px solid #fff;
@@ -98,7 +107,7 @@ body {
   width: calc(var(--width, 0) * 1%);
   min-width: 0.5rem;
   max-width: calc(100% - 4px);
-  background-color: var(--progress);
+  background-color: dodgerblue;
   border-radius: 1em;
 }
 #progress::after {

@@ -17,6 +17,8 @@ it doesn't take up so much area on your small screen.
 Added:
 
 - Better scaling for 1368 x 768 resolutions
+- Moved Updater from window, for easier monitoring
+- Install popup and exit popup added
 - Some bug fixes
 
 Version release date: 12-09-20

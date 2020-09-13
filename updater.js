@@ -74,7 +74,7 @@ exports.updater = (window) => {
   autoUpdater.on('update-downloaded', () => {
     dialog
       .showMessageBox(window, {
-        type: 'question',
+        type: 'info',
         title: 'UPDATE READY',
         icon: `${dir}/renderer/icons/updateTemplate.png`,
         message: `Would you like to install the update`,

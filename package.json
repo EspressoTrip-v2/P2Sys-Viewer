@@ -44,7 +44,7 @@
     "win": {
       "publisherName": "JDevSoftware",
       "verifyUpdateCodeSignature": false,
-      "certificateFile": "private/p2sysviewer.pfx",
+      "certificateFile": "private/JDevSoftware.pfx",
       "certificatePassword": "Juan@198103",
       "target": [
         {
@@ -62,8 +62,7 @@
       "allowToChangeInstallationDirectory": true,
       "installerSidebar": "./build/installerSidebar.bmp",
       "uninstallerSidebar": "./build/uninstallerSidebar.bmp",
-      "installerHeaderIcon": "./build/installerHeaderIcon.ico",
-      "installerHeader": "./build/installerHeader.bmp"
+      "installerHeaderIcon": "./build/installerHeaderIcon.ico"
     }
   },
   "devDependencies": {

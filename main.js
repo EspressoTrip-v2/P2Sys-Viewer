@@ -184,7 +184,7 @@ function createCustomerSearchWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -250,7 +250,7 @@ function createCustomerNameWindow(message) {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -292,7 +292,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -330,7 +330,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -384,7 +384,7 @@ function createDbLoaderWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -408,7 +408,7 @@ function createUpdateWindow() {
   xPos = screenWidth / 2 - 115;
   updateWindow = new BrowserWindow({
     height: 80,
-    width: 230,
+    width: 240,
     x: xPos,
     y: 0,
     spellCheck: false,
@@ -418,7 +418,11 @@ function createUpdateWindow() {
     center: true,
     frame: false,
     transparent: true,
-    webPreferences: { nodeIntegration: true, enableRemoteModule: true },
+    webPreferences: {
+      nodeIntegration: true,
+      devTools: false,
+      enableRemoteModule: true,
+    },
     icon: `${dir}/renderer/icons/updateTemplate.png`,
   });
 
