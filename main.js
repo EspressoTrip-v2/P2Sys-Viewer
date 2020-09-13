@@ -33,10 +33,16 @@ const {
   customerNumberNameModel,
 } = require(`${dir}/database/mongoDbConnect.js`);
 
-const { updater, updateNow } = require(`${dir}/updater.js`);
+const { updater } = require(`${dir}/updater.js`);
 
 /* WINDOW VARIABLES */
-let customerSearchWindow, tray, customerNameWindow, loadingWindow, tableWindow, dbLoaderWindow;
+let customerSearchWindow,
+  tray,
+  customerNameWindow,
+  loadingWindow,
+  tableWindow,
+  dbLoaderWindow,
+  updateWindow;
 
 /* GLOBAL VARIABLES */
 let customerNumberName, customerPrices, screenWidth, screenHeight;
@@ -397,6 +403,37 @@ function createDbLoaderWindow() {
   });
 }
 
+/* UPDATING WINDOW */
+function createUpdateWindow() {
+  xPos = screenWidth / 2 - 115;
+  updateWindow = new BrowserWindow({
+    height: 80,
+    width: 230,
+    x: xPos,
+    y: 0,
+    spellCheck: false,
+    resizable: false,
+    autoHideMenuBar: true,
+    alwaysOnTop: true,
+    center: true,
+    frame: false,
+    transparent: true,
+    webPreferences: { nodeIntegration: true, enableRemoteModule: true },
+    icon: `${dir}/renderer/icons/updateTemplate.png`,
+  });
+
+  //   LOAD HTML PAGE
+  updateWindow.loadFile(`${dir}/renderer/update/update.html`);
+
+  //   LOAD DEV TOOLS
+  // updateWindow.webContents.openDevTools();
+
+  //   EVENT LISTENER FOR CLOSING
+  updateWindow.on('closed', () => {
+    updateWindow = null;
+  });
+}
+
 /* START THE LOADER */
 app.on('ready', () => {
   /* GET SCREEN SIZE */
@@ -442,6 +479,25 @@ ipcMain.on('close-win', (e, message) => {
   if (tableWindow) {
     tableWindow.close();
   }
+  if (updateWindow) {
+    let answer = dialog.showMessageBoxSync(customerSearchWindow, {
+      type: 'info',
+      title: 'DOWNLOAD IN PROGRESS',
+      icon: `${dir}/renderer/icons/updateTemplate.png`,
+      message: `A update is being downloaded, are you sure yo want to quit?`,
+      detail:
+        'Exiting will cause the download to be cancelled. You will have to download the update when asked ont he next restart',
+      buttons: ['EXIT', 'CANCEL'],
+    });
+    if (answer === 0) {
+      updateWindow.close();
+      setTimeout(() => {
+        customerSearchWindow.close();
+      }, 50);
+    }
+  } else {
+    customerSearchWindow.close();
+  }
 });
 
 /* CLOSE DOCK WINDOW */
@@ -451,7 +507,17 @@ ipcMain.on('close-window-dock', (e, message) => {
   }
 });
 
-/* CONFIRM UPDATE */
-ipcMain.on('update-confirm', (e, message) => {
-  updateNow();
+/* START UPDATE WINDOW */
+ipcMain.on('create-download-window', (e, message) => {
+  createUpdateWindow();
+});
+ipcMain.on('update-progress', (e, message) => {
+  if (updateWindow) {
+    updateWindow.webContents.send('download-percent', message);
+    if (message === 100) {
+      setTimeout(() => {
+        updateWindow.close();
+      }, 1000);
+    }
+  }
 });

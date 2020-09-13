@@ -46,12 +46,7 @@ let customerFindBtn = document.getElementById('assist-btn'),
   systemDatabaseSettingsBtn = document.getElementById('settings-button'),
   systemSettingsPage = document.getElementsByClassName('system-settings')[0],
   customerSearchHtmlDisplay = document.getElementById('check-customer'),
-  versionText = document.getElementById('version'),
-  logoContainer = document.getElementById('p2s-logo'),
-  updateContainer = document.getElementById('update'),
-  downloadProgressBar = document.getElementById('progress'),
-  updateBtnContainer = document.getElementById('update-btn-container'),
-  updateBtn = document.getElementById('update-btn');
+  versionText = document.getElementById('version');
 
 ///////////////
 /* FUNCTIONS */
@@ -163,28 +158,7 @@ versionText.innerText = `P2Sys Viewer (v${remote.app.getVersion()})`;
 /* CLOSE BUTTON */
 checkExitBtn.addEventListener('click', (e) => {
   soundClick.play();
-  if (window.getComputedStyle(updateContainer).opacity === '1') {
-    let selection = remote.dialog.showMessageBoxSync(customerSearchWindow, {
-      type: 'info',
-      title: 'DOWNLOAD IN PROGRESS',
-      message:
-        'There is a download for the latest update in progress.\nAre you sure you want to exit?',
-      icon: `${dir}/renderer/icons/trayTemplate.png`,
-      buttons: ['EXIT', 'CANCEL'],
-    });
-    if (selection === 0) {
-      console.log(selection);
-      ipcRenderer.send('close-win', null);
-      setTimeout(() => {
-        customerSearchWindow.close();
-      }, 200);
-    }
-  } else {
-    ipcRenderer.send('close-win', null);
-    setTimeout(() => {
-      customerSearchWindow.close();
-    }, 200);
-  }
+  ipcRenderer.send('close-win', null);
 });
 
 /* VIEW BUTTON */
@@ -267,11 +241,6 @@ systemDatabaseSettingsBtn.addEventListener('click', () => {
   shell.openPath('.env');
 });
 
-/* UPDATE BUTTON */
-updateBtn.addEventListener('click', () => {
-  ipcRenderer.send('update-confirm', null);
-});
-
 ///////////////////
 /* IPC LISTENERS */
 ///////////////////
@@ -308,21 +277,12 @@ ipcRenderer.on('expand-window', (e, message) => {
   customerSearchInput.focus();
 });
 
-/* UPDATE PERCENTAGE PROGRESS */
-ipcRenderer.on('update-progress', (e, message) => {
-  logoContainer.style.opacity = '0';
-  updateContainer.style.opacity = '1';
-  downloadProgressBar.style.setProperty('--width', message.percent);
+/* MESSAGE TO CREATE DOWNLOAD WINDOW */
+ipcRenderer.on('create-download-window', (e, message) => {
+  ipcRenderer.send('create-download-window', null);
 });
 
-/* UPDATE PERCENTAGE PROGRESS */
-ipcRenderer.on('update-downloaded', (e, message) => {
-  new Notification('UPDATE DOWNLOAD COMPLETE', {
-    body: 'P2Sys Viewer update download has completed',
-    icon: `${dir}/renderer/icons/trayTemplate.png`,
-    requireInteraction: true,
-  });
-  logoContainer.style.opacity = '0';
-  updateContainer.style.opacity = '0';
-  updateBtnContainer.style.opacity = '1';
+/* MESSAGE TO SEND PERCENTAGE DOWNLOADED */
+ipcRenderer.on('update-progress', (e, message) => {
+  ipcRenderer.send('update-progress', message);
 });

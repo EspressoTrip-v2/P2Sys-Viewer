@@ -1,0 +1,113 @@
+:root {
+  --psys-blue: #05899c;
+  --psys-red: #fe1604;
+  --psys-green: #03c224;
+
+  --main: #000;
+  --sec-blue: #05899c;
+  --button-red: #fe1604;
+  --button-green: #03c224;
+  --button-gold: #fe7c04;
+  --opaque-man: rgba(128, 196, 50, 0.4);
+  --auto: #d9793b;
+  --opaque-auto: rgba(217, 122, 58, 0.3);
+  --progress: #ffb004;
+}
+
+html {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+}
+
+body {
+  width: 215px;
+  height: 55px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#progress-container {
+  -webkit-app-region: drag;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--sec-blue);
+  border: 2px solid var(--main);
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+}
+
+#progress-container::before {
+  content: attr(data-label);
+  position: absolute;
+  font-size: 15px;
+  top: 6px;
+  font-weight: bold;
+  color: #fff;
+  animation: downloaded 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes downloaded {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+#progress {
+  position: absolute;
+  top: 28px;
+  width: 200px;
+  height: 14px;
+  background-color: #111;
+  border-radius: 1.5em;
+  border: 2px solid #fff;
+  color: #fff;
+}
+#progress::before {
+  position: absolute;
+  content: '';
+  display: flex;
+  align-items: center;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(var(--width, 0) * 1%);
+  min-width: 0.5rem;
+  max-width: calc(100% - 4px);
+  background-color: var(--progress);
+  border-radius: 1em;
+}
+#progress::after {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 6px;
+  bottom: 5px;
+  left: 20px;
+  content: '';
+  width: 100%;
+}

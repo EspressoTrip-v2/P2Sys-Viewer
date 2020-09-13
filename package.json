@@ -64,10 +64,6 @@
       "uninstallerSidebar": "./build/uninstallerSidebar.bmp",
       "installerHeaderIcon": "./build/installerHeaderIcon.ico",
       "installerHeader": "./build/installerHeader.bmp"
-    },
-    "linux": {
-      "target": "AppImage",
-      "category": "Office"
     }
   },
   "devDependencies": {

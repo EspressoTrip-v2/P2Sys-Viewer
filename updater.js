@@ -1,8 +1,7 @@
 /* MODULES */
-const { dialog, app } = require('electron');
+const { dialog } = require('electron');
 const fs = require('fs');
 const { autoUpdater, UpdaterSignal } = require('electron-updater');
-const { info } = require('electron-log');
 autoUpdater.autoDownload = false;
 const signals = new UpdaterSignal(this);
 
@@ -53,33 +52,42 @@ exports.updater = (window) => {
       .showMessageBox(window, {
         type: 'info',
         title: 'UPDATE AVAILABLE',
-        icon: `${dir}/renderer/icons/trayTemplate.png`,
-        message: `P2Sys-Viewer v${info.version} is available.\nWould you like to download it now?`,
+        icon: `${dir}/renderer/icons/updateTemplate.png`,
+        message: `P2Sys-Converter v${info.version} is available.\nWould you like to download it now?`,
         detail: info.releaseNotes,
         buttons: ['DOWNLOAD UPDATE', 'CANCEL'],
       })
       .then((selection) => {
         if (selection.response === 0) {
           autoUpdater.downloadUpdate();
+          window.webContents.send('create-download-window', null);
         }
       });
   });
 
   /* SEND MESSAGE FOR DOWNLOAD PROGRESS */
   autoUpdater.signals.progress((info) => {
-    window.webContents.send('update-progress', info);
+    window.webContents.send('update-progress', info.percent);
   });
 
   /* SEND MESSAGE ON UPDATE READY TO INSTALL */
   autoUpdater.on('update-downloaded', () => {
-    window.webContents.send('update-downloaded', null);
+    dialog
+      .showMessageBox(window, {
+        type: 'question',
+        title: 'UPDATE READY',
+        icon: `${dir}/renderer/icons/updateTemplate.png`,
+        message: `Would you like to install the update`,
+        buttons: ['INSTALL NOW', 'INSTALL LATER'],
+      })
+      .then((selection) => {
+        if (selection.response === 0) {
+          autoUpdater.quitAndInstall(false, true);
+        }
+      });
   });
 
   autoUpdater.on('error', (err) => {
     erorrFunc(err);
   });
-};
-
-exports.updateNow = () => {
-  autoUpdater.quitAndInstall(false, true);
 };
