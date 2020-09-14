@@ -47,6 +47,13 @@ let customerSearchWindow,
 /* GLOBAL VARIABLES */
 let customerNumberName, customerPrices, screenWidth, screenHeight;
 
+/* ICON FILE */
+if (process.platform === 'win32') {
+  iconImage = `${dir}/renderer/icons/icon.ico`;
+} else {
+  iconImage = `${dir}/renderer/icons/trayTemplate.png`;
+}
+
 /* LOGFILE CREATION FUNCTION */
 //////////////////////////////
 function logfileFunc(message) {
@@ -90,7 +97,7 @@ function mongooseConnect() {
           );
 
       dialog.showMessageBoxSync(dbLoaderWindow, {
-        type: 'info',
+        type: 'question',
         icon: `${dir}/renderer/icons/trayTemplate.png`,
         message: 'DATABASE NOT AVAILABLE',
         detail:
@@ -189,7 +196,7 @@ function createCustomerSearchWindow() {
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
     },
-    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    icon: iconImage,
   });
 
   /* LOAD HTML */
@@ -255,7 +262,7 @@ function createCustomerNameWindow(message) {
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
     },
-    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    icon: iconImage,
   });
 
   //   LOAD HTML PAGE
@@ -335,7 +342,7 @@ function createTableWindow(message) {
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
     },
-    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    icon: iconImage,
   });
 
   //   lOAD HTML PAGE
@@ -388,7 +395,7 @@ function createDbLoaderWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
     },
-    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    icon: iconImage,
   });
 
   //   LOAD HTML PAGE
@@ -440,6 +447,8 @@ function createUpdateWindow() {
 
 /* START THE LOADER */
 app.on('ready', () => {
+  /* SET APP NAME FOR WINDOWS NOTIFICATIONS*/
+  app.setAppUserModelId('P2Sys-Viewer');
   /* GET SCREEN SIZE */
   let res = screen.getPrimaryDisplay().size;
   screenHeight = res.height;
@@ -485,12 +494,12 @@ ipcMain.on('close-win', (e, message) => {
   }
   if (updateWindow) {
     let answer = dialog.showMessageBoxSync(customerSearchWindow, {
-      type: 'info',
+      type: 'question',
       title: 'DOWNLOAD IN PROGRESS',
       icon: `${dir}/renderer/icons/updateTemplate.png`,
-      message: `A update is being downloaded, are you sure yo want to quit?`,
+      message: `A update is being downloaded, are you sure you want to exit?`,
       detail:
-        'Exiting will cause the download to be cancelled. You will have to download the update when asked ont he next restart',
+        'Exiting will cause the download to be cancelled. You will have to download the update when asked on the next restart',
       buttons: ['EXIT', 'CANCEL'],
     });
     if (answer === 0) {

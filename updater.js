@@ -50,7 +50,7 @@ exports.updater = (window) => {
   autoUpdater.on('update-available', (info) => {
     dialog
       .showMessageBox(window, {
-        type: 'info',
+        type: 'question',
         title: 'UPDATE AVAILABLE',
         icon: `${dir}/renderer/icons/updateTemplate.png`,
         message: `P2Sys-Converter v${info.version} is available.\nWould you like to download it now?`,
@@ -74,7 +74,7 @@ exports.updater = (window) => {
   autoUpdater.on('update-downloaded', () => {
     dialog
       .showMessageBox(window, {
-        type: 'info',
+        type: 'question',
         title: 'UPDATE READY',
         icon: `${dir}/renderer/icons/updateTemplate.png`,
         message: `Would you like to install the update`,
