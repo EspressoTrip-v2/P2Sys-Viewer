@@ -27,27 +27,42 @@ const { tablePopulate } = require(`${dir}/renderer/table/tablePopulate.js`);
 /* GET CURRENT WINDOW */
 let tableWindow = remote.getCurrentWindow();
 
+/* GLOBAL VARIABLES */
+let customerNumbervalue, windowState;
+
 /* GET SCREEN SIZE */
 let res = remote.screen.getPrimaryDisplay().size;
 screenHeight = res.height;
 screenWidth = res.width;
+
+// /* GET CALCULATED HEIGHT */
+// if (screenHeight > 830) {
+//   height = 800;
+// } else if (screenHeight <= 830) {
+//   height = screenHeight - 80;
+// }
+
 //////////////////
 /* DOM ELEMENTS */
 //////////////////
 let table = document.getElementById('table'),
   customerName = document.getElementById('customer-name'),
   customerNumber = document.getElementById('customer-number'),
-  narrowBtn = document.getElementById('narrow'),
-  tableCloseBtn = document.getElementById('close'),
-  /* DOCK */
-  dockCloseBtn = document.getElementById('dock-hide-close'),
   border = document.getElementById('border'),
-  dockHideExpandBtn = document.getElementById('dock-hide-expand'),
+  hideBtn = document.getElementById('hide'),
+  unhideBtn = document.getElementById('unhide'),
+  minCloseBtn = document.getElementById('close-b'),
+  closeBtn = document.getElementById('close'),
+  infoBtn = document.getElementById('info'),
   soundClick = document.getElementById('click'),
-  dockButtonContainer = document.getElementById('button-container');
+  customerNameContainer = document.getElementById('customer-name-container'),
+  tableContainer = document.getElementsByClassName('table-container')[0],
+  shrunkContainer = document.getElementById('shrunk-container'),
+  minLogoBar = document.getElementById('min-logo'),
+  Container = document.getElementById('container'),
+  logoCircle = document.getElementById('logo-circle'),
+  grabMessageContainer = document.getElementById('grab-message-container');
 
-/* GLOBAL VARIABLES */
-let customerNumbervalue;
 ///////////////
 /* FUNCTIONS */
 ///////////////
@@ -70,61 +85,101 @@ function fillTable(json) {
   htmlInnerFill(generatedHtml);
 }
 
-/* DOCK HIDE FUNCTION */
-function dockHide() {
-  let width;
-  if (screenHeight <= 800) {
-    width = 420;
-  } else {
-    width = 550;
-  }
-
-  let size = tableWindow.getSize();
-  if (size[0] === 65) {
-    dockButtonContainer.style.transform = 'translateX(-120px)';
-    setTimeout(() => {
-      tableWindow.setSize(width, size[1]);
-      setTimeout(() => {
-        border.style.transform = 'scaleX(1)';
-      }, 200);
-    }, 500);
-  } else if (size[0] === width) {
-    dockButtonContainer.setAttribute('customer-number', customerNumbervalue);
-    border.style.transform = 'scaleX(0)';
-    setTimeout(() => {
-      tableWindow.setSize(65, size[1]);
-      setTimeout(() => {
-        dockButtonContainer.style.transform = 'translateX(0px)';
-      }, 200);
-    }, 500);
-  }
-}
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
 
-/* DOCK NARROW BUTTON */
-narrowBtn.addEventListener('click', (e) => {
-  soundClick.play();
+function infoButtonClick() {
   setTimeout(() => {
-    dockHide();
+    /* CHECK TO SEE IF CONTAINER IS SCALE(0) */
+    if (
+      window.getComputedStyle(customerNameContainer).transform === 'matrix(1, 0, 0, 0, 0, 0)'
+    ) {
+      customerNameContainer.style.transform = 'scaleY(1)';
+    } else {
+      customerNameContainer.style.transform = 'scaleY(0)';
+    }
   }, 200);
-});
+}
 
-dockHideExpandBtn.addEventListener('click', () => {
+/* INFO BUTTON */
+infoBtn.addEventListener('click', (e) => {
   soundClick.play();
-  dockHide();
+  infoButtonClick();
 });
 
-/* CLOSE BUTTONS */
-tableCloseBtn.addEventListener('click', (e) => {
+/* CLOSE BUTTON */
+closeBtn.addEventListener('click', (e) => {
   soundClick.play();
   setTimeout(() => {
     tableWindow.close();
   }, 200);
 });
 
-dockCloseBtn.addEventListener('click', (e) => {
+/* HIDE BUTTON */
+hideBtn.addEventListener('click', (e) => {
+  /* HIDE THE INFO DROPDOWN IF OPEN */
+  if (
+    window.getComputedStyle(customerNameContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)'
+  ) {
+    infoButtonClick();
+  }
+  /* GET THE WINDOW SIZE FOR WHEN UNHIDING */
+  windowState = tableWindow.getSize();
+  soundClick.play();
+  setTimeout(() => {
+    /* SCROLLS THE TABLE DOWN TO STOP FREEZING ON UNHIDE */
+    if (window.getComputedStyle(tableContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)') {
+      Container.scrollTo(0, windowState[1]);
+      tableContainer.style.transform = 'scaleY(0)';
+      setTimeout(() => {
+        border.style.transform = 'scaleX(0)';
+      }, 300);
+    }
+    /* SET WINDOW SIZE */
+    setTimeout(() => {
+      tableWindow.setSize(180, 80);
+
+      setTimeout(() => {
+        shrunkContainer.style.visibility = 'visible';
+        shrunkContainer.style.opacity = '1';
+        logoCircle.style.transform = 'rotate(360deg)';
+        setTimeout(() => {
+          minLogoBar.style.transform = 'scaleX(1)';
+          grabMessageContainer.style.animation = 'flash 1s linear 4';
+        }, 300);
+      }, 500);
+    }, 500);
+  }, 200);
+});
+
+unhideBtn.addEventListener('click', (e) => {
+  soundClick.play();
+  setTimeout(() => {
+    grabMessageContainer.style.animation = 'none';
+    minLogoBar.style.transform = 'scaleX(0)';
+    setTimeout(() => {
+      logoCircle.style.transform = 'rotate(0)';
+
+      shrunkContainer.style.opacity = '0';
+      setTimeout(() => {
+        shrunkContainer.style.visibility = 'hidden';
+        tableWindow.setSize(380, windowState[1]);
+        setTimeout(() => {
+          border.style.transform = 'scaleX(1)';
+          setTimeout(() => {
+            tableContainer.style.transform = 'scaleY(1)';
+            /* SCROLLS TABLE TO TOP TO STOP FREEZING BUG */
+            Container.scrollTo(0, 0);
+          }, 200);
+        }, 200);
+      }, 300);
+    }, 300);
+  }, 200);
+});
+
+/* CLOSE BUTTON MINI BAR */
+minCloseBtn.addEventListener('click', (e) => {
   soundClick.play();
   setTimeout(() => {
     tableWindow.close();
@@ -140,4 +195,6 @@ ipcRenderer.on('table-window', (e, message) => {
   customerName.innerText = message.customerName;
   customerNumber.innerText = message.customerNumber;
   customerNumbervalue = message.customerNumber;
+  /* SET TITLE OF BAR */
+  minLogoBar.title = message.customerName;
 });

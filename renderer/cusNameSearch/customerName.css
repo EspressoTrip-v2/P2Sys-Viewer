@@ -9,10 +9,16 @@
   --button-red: #fe1604;
   --button-green: #03c224;
   --button-gold: #fe7c04;
+  --hover-blue: rgba(5, 138, 158, 0.5);
 }
 * {
   box-sizing: border-box;
   -webkit-user-select: none;
+}
+/* Fonts */
+@font-face {
+  font-family: Forelle;
+  src: url('../fonts/Forelle.ttf');
 }
 
 html {
@@ -31,17 +37,17 @@ html {
 }
 
 main {
+  margin-top: 10px;
   display: flex;
   position: relative;
   flex-direction: column;
-  top: 14px;
   justify-content: center;
   background-color: #fff;
-  border: 3px solid var(--main);
-  border-radius: 20px;
+  border: 2px solid var(--main);
+  border-radius: 10px;
   padding: 10px 3px;
-  width: 280px;
-  height: 340px;
+  width: 235px;
+  height: 250px;
 }
 
 header {
@@ -50,21 +56,24 @@ header {
   flex-direction: column;
   justify-content: center;
   background-color: var(--sec-blue);
-  border: 3px solid var(--main);
-  border-radius: 20px;
-  height: 15vh;
-  width: 280px;
+  border: 2px solid var(--main);
+  border-radius: 10px;
+  height: 65px;
+  width: 235px;
 }
 header img {
   position: relative;
+  z-index: 1;
   height: auto;
   width: 100%;
   padding: 1px;
   filter: drop-shadow(1px 4px 4px black);
+  -webkit-user-drag: none;
 }
 
 body {
   position: relative;
+  top: 0;
   padding: 0;
   margin: 0;
   display: flex;
@@ -81,6 +90,7 @@ body {
   position: relative;
   opacity: 0;
   padding: 0;
+  top: 0;
   margin: 0 50px;
   display: flex;
   flex-direction: column;
@@ -88,17 +98,15 @@ body {
   align-items: center;
   align-content: center;
   height: 100%;
-  width: 300px;
-  /* transform: scaleX(0); */
-  /* transform-origin: right; */
+  width: 245px;
   filter: drop-shadow(1px 2px 4px #636363);
   transition: opacity 0.3s;
 }
 
 footer {
   position: relative;
-  bottom: -5px;
-  width: 280px;
+  width: 235px;
+  margin-top: 10px;
 }
 
 .customer-name {
@@ -107,15 +115,21 @@ footer {
   justify-content: center;
   justify-items: center;
   text-align: center;
-  font-size: 16px;
   margin-top: 3px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 3px 5px;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 3px;
   background-color: #fff;
-  border: 3px solid #fff;
-  border-bottom: 3px solid #e9ebeeb0;
-  border-radius: 10px;
+  border: 1px solid #fff;
+  border-radius: 5px;
 }
+
+.customer-name:hover {
+  color: #fff;
+  background-color: var(--hover-blue);
+}
+
 .customer-name-clicked {
   display: flex;
   color: #fff;
@@ -123,13 +137,13 @@ footer {
   justify-content: center;
   justify-items: center;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: bold;
   margin-top: 3px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 3px 5px;
   background-color: var(--sec-blue);
-  border: 3px solid var(--main);
-  border-radius: 10px;
+  border: 1px solid var(--main);
+  border-radius: 5px;
 }
 
 #container-background {
@@ -156,20 +170,23 @@ footer {
   justify-items: center;
   align-items: center;
   background-color: var(--sec-blue);
-  border: 3px solid var(--main);
-  border-radius: 20px;
-  height: 15vh;
-  margin-top: 3.8vh;
+  border: 2px solid var(--main);
+  border-radius: 10px;
+  height: 65px;
 }
 
 #customer-search {
   text-transform: uppercase;
-  padding: 2px;
+  font-size: 12px;
+  position: relative;
   border: 4px solid #fff;
   border-radius: 50px;
   text-align: center;
   margin-right: 8px;
   font-weight: bolder;
+  width: 170px;
+  height: 25px;
+  bottom: 2px;
 }
 
 #customer-search:focus {
@@ -188,7 +205,8 @@ footer {
 #search-input {
   display: flex;
   flex-direction: row;
-  height: 46px;
+  height: 35px;
+  width: 215px;
   justify-content: center;
   justify-items: center;
   padding: 5px 12px;
@@ -199,9 +217,10 @@ footer {
 #search-input img {
   width: auto;
   position: relative;
-  height: 34px;
-  margin-right: 11px;
-  margin-left: 1px;
+  height: 22px;
+  margin-right: 5px;
+  margin-left: 5px;
+  -webkit-user-drag: none;
 }
 
 #customer-list-container {
@@ -210,7 +229,6 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  padding: 0 10px;
   background-color: #fff;
 }
 
@@ -228,12 +246,6 @@ footer {
   top: 21px;
   margin: 5rem auto;
   align-self: center;
-  border: 3px solid var(--main);
+  border: 2px solid var(--main);
   border-radius: 8px;
-}
-
-@media screen and (max-height: 550px) {
-  body {
-    transform: scale(0.75);
-  }
 }

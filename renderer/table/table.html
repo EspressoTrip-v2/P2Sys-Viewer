@@ -14,39 +14,67 @@
   <div id="border">
 
     <div id="header-container">
-      <div id="move-container">
 
-        <button id="close">
-          <p class="cross">X</p>
-        </button>
-        <button id="narrow">
-          <p class="arrow">&lt</p>
-        </button>
-
-      </div>
       <!-- Table -->
       <!-- ///// -->
       <main>
         <header id="header">
+          <button id="info" title="Show customer name">
 
-          <div id="customer-name-container">
-            <div id="label-customer-name">CUSTOMER NAME</div>
-            <div id="overflow">
-              <span role="textbox" id="customer-name" spellcheck="false" contenteditable="false">
-              </span>
-            </div>
-          </div>
+            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="info-logo">
+              <path
+                d="m722.7 856.4v89.1c0 12.1-4.4 22.5-13.2 31.3s-19.3 13.2-31.3 13.2h-356.4c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-89.1c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h44.5v-267.4h-44.5c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-89.1c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h267.3c12.1 0 22.5 4.4 31.3 13.2s13.2 19.3 13.2 31.3v400.9h44.5c12.1 0 22.5 4.4 31.3 13.2 8.9 8.9 13.3 19.3 13.3 31.4zm-89.1-801.9v133.6c0 12.1-4.4 22.5-13.2 31.3s-19.3 13.2-31.3 13.2h-178.2c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-133.6c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h178.2c12.1 0 22.5 4.4 31.3 13.2s13.2 19.3 13.2 31.3z" />
+            </svg>
+
+          </button>
+
+          <button id="hide" title="Retract table">
+
+
+            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="hide-logo">
+              <g transform="translate(0 511) scale(.1 -.1)">
+                <path d="m426.7 4356.7v-653.3h9146.6v1306.6h-9146.6v-653.3z" />
+                <path
+                  d="m4011.8 1079.8-971.8-1296.5h1306.6v-4573.3h1306.7v4573.4h1306.7l-971.8 1296.5c-534.9 712.5-980 1296.5-988.2 1296.5-8.2-0.1-453.3-584.1-988.2-1296.6z" />
+              </g>
+            </svg>
+
+          </button>
+
+          <button class='close' id="close" title="Close table">
+
+            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" class="close-logo">
+              <path
+                d="m961.8 825.6-787.3-787.3c-37.5-37.5-98.5-37.5-136.1 0s-37.5 98.6 0 136.1l787.3 787.3c37.5 37.5 98.6 37.5 136.1 0 37.6-37.5 37.6-98.5 0-136.1z" />
+              <path
+                d="m961.8 38.3c-37.5-37.5-98.5-37.5-136.1 0l-787.5 787.3c-37.5 37.5-37.5 98.6 0 136.1s98.6 37.5 136.1 0l787.3-787.3c37.8-37.6 37.8-98.6 0.2-136.1z" />
+            </svg>
+
+          </button>
           <div id="customer-number-container">
-            <span id="label-customer-number">
-              <span>CUSTOMER NUMBER</span>
-            </span>
-            <div id="customer-number"></div>
+
+            <span id="customer-number"></span>
           </div>
 
+          <div id="move-container">
+            <div id="grab">
 
+              <svg viewBox="0 0 1000 1000" id="grab-logo">
+                <path
+                  d="M814.2 675.4l-43.5-43.6 101.2-101H530.8V872l101-101.2 43.6 43.5L500 990 324.6 814.2l43.6-43.5 101 101.2V530.8H128l101.2 101 -43.5 43.6L10 500l175.8-175.4 43.5 43.6L128 469.2h341.2V128l-101 101.2 -43.6-43.5L500 10l175.4 175.8 -43.6 43.5L530.8 128v341.2H872l-101.2-101 43.5-43.6L990 500 814.2 675.4 814.2 675.4z" />
+              </svg>
+            </div>
+
+          </div>
         </header>
     </div>
     <div class="table-container">
+      <div id="customer-name-container">
+        <div id="overflow">
+          <span role="textbox" id="customer-name" spellcheck="false" contenteditable="false">
+          </span>
+        </div>
+      </div>
       <div id="container">
         <table id="table">
 
@@ -574,25 +602,46 @@
         </table>
       </div>
     </div>
-    <div id="footer">
-      <div id="footer-container">
-        <img src="../icons/loader.png" id="p2sys-logo" />
-      </div>
-    </div>
+
     </main>
   </div>
-  </div>
+  <div id="shrunk-container">
+    <div id="grab-message-container">
+      <span id="grab-message">
+        GRAB HERE <br>
+        TO MOVE
+      </span>
+    </div>
+    <div id="logo-circle" title=''>
+      <img src="../icons/loader.png" alt="" id="logo">
+    </div>
+    <div id="min-logo">
+      <button id="unhide">
+
+        <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="unhide-logo">
+          <g transform="translate(0 511) scale(.1 -.1)">
+            <path
+              d="m4346.7 2723.3v-2286.6h-1306.7l971.8-1296.5c534.9-712.5 980-1296.5 988.2-1296.5s453.2 583.9 988.2 1296.5l971.8 1296.5h-1306.6v4573.3h-1306.7v-2286.7z" />
+            <path d="m426.7-4136.7v-653.3h9146.6v1306.6h-9146.6v-653.3z" />
+          </g>
+        </svg>
+
+      </button>
+      <button class='close' id="close-b">
+
+        <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" class="close-logo">
+          <path
+            d="m961.8 825.6-787.3-787.3c-37.5-37.5-98.5-37.5-136.1 0s-37.5 98.6 0 136.1l787.3 787.3c37.5 37.5 98.6 37.5 136.1 0 37.6-37.5 37.6-98.5 0-136.1z" />
+          <path
+            d="m961.8 38.3c-37.5-37.5-98.5-37.5-136.1 0l-787.5 787.3c-37.5 37.5-37.5 98.6 0 136.1s98.6 37.5 136.1 0l787.3-787.3c37.8-37.6 37.8-98.6 0.2-136.1z" />
+        </svg>
+
+      </button>
+    </div>
   </div>
 
-  <div id="button-container" customer-number>
-    <button id="dock-hide-close">
-      <p class="cross">X</p>
-    </button>
-    <button id="dock-hide-expand">
-      <p class="arrow">&gt</p>
-    </button>
   </div>
-
+  </div>
 
 
 </body>

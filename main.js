@@ -38,6 +38,7 @@ const { updater } = require(`${dir}/updater.js`);
 /* WINDOW VARIABLES */
 let customerSearchWindow,
   tray,
+  trayMenu,
   customerNameWindow,
   loadingWindow,
   tableWindow,
@@ -45,7 +46,7 @@ let customerSearchWindow,
   updateWindow;
 
 /* GLOBAL VARIABLES */
-let customerNumberName, customerPrices, screenWidth, screenHeight;
+let customerNumberName, customerPrices, screenWidth, screenHeight, version;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -146,6 +147,8 @@ db.on('connected', async () => {
     logfileFunc(err);
   }
 
+  /* CREATE THE TRAY MENU BY GETTING VERSION AFTER APP LOAD */
+  trayMenu = Menu.buildFromTemplate([{ label: `Viewer v${version}` }]);
   /* START CUSTOMER SEARCH WINDOW ON CONNECTION */
   createCustomerSearchWindow();
   db.close();
@@ -161,33 +164,19 @@ function createTray() {
 /* WINDOW CREATION FUNCTIONS */
 //////////////////////////////
 
-/* TRAY MENU LAYOUT TEMPLATE */
-let trayMenu = Menu.buildFromTemplate([
-  { label: 'P2Sys-Viewer' },
-  { role: 'minimize' },
-  { role: 'about' },
-]);
-
 /* CREATE CUSTOMER SEARCH WINDOW */
 function createCustomerSearchWindow() {
-  let width, height;
-  if (screenHeight <= 800) {
-    width = 300;
-    height = 550;
-  } else {
-    width = 365;
-    height = 600;
-  }
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: height,
-    width: width,
+    height: 425,
+    width: 265,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     center: true,
     frame: false,
     spellCheck: false,
     resizable: false,
+    maximizable: false,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
@@ -234,24 +223,16 @@ function createCustomerSearchWindow() {
 
 /* CREATE SEARCH DOCK */
 function createCustomerNameWindow(message) {
-  let width, height;
-  if (screenHeight <= 800) {
-    width = 230;
-    height = 550;
-  } else {
-    width = 300;
-    height = 600;
-  }
-
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: height,
-    width: width,
-    x: message.dimensions[0] - width,
+    height: 425,
+    width: 265,
+    x: message.dimensions[0] - 265,
     y: message.dimensions[1],
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     frame: false,
+    maximizable: false,
     resizable: false,
     spellCheck: false,
     transparent: true,
@@ -268,7 +249,10 @@ function createCustomerNameWindow(message) {
   //   LOAD HTML PAGE
   customerNameWindow.loadFile(`${dir}/renderer/cusNameSearch/customerName.html`);
   customerNameWindow.webContents.once('did-finish-load', (e) => {
-    customerNameWindow.webContents.send('name-search', message.customerNameNumber);
+    customerNameWindow.webContents.send('name-search', {
+      customerNameNumber: message.customerNameNumber,
+      customerPrices: message.customerPrices,
+    });
   });
 
   //   EVENT LISTENER FOR CLOSING
@@ -279,21 +263,14 @@ function createCustomerNameWindow(message) {
 
 /* LOADING WINDOW */
 function createLoadingWindow() {
-  let width, height;
-  if (screenHeight <= 800) {
-    width = 320;
-    height = 320;
-  } else {
-    width = 355;
-    height = 355;
-  }
   loadingWindow = new BrowserWindow({
-    height: height,
-    width: width,
+    height: 280,
+    width: 280,
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     center: true,
     frame: false,
+    maximizable: false,
     spellCheck: false,
     movable: false,
     transparent: true,
@@ -318,21 +295,23 @@ function createLoadingWindow() {
 
 /* TABLE WINDOW */
 function createTableWindow(message) {
-  let width;
-  if (screenHeight <= 800) {
-    width = 420;
-  } else {
-    width = 550;
+  let height;
+  if (screenHeight > 830) {
+    height = 800;
+  } else if (screenHeight <= 830) {
+    height = screenHeight - 80;
   }
   tableWindow = new BrowserWindow({
-    height: screenHeight,
-    width: width,
+    height: height,
+    maxHeight: 880,
+    maxWidth: 380,
+    width: 380,
+    backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
-    x: 0,
-    y: 0,
     alwaysOnTop: true,
+    maximizable: false,
     frame: false,
-    movable: false,
+    center: true,
     show: false,
     spellCheck: false,
     transparent: true,
@@ -372,19 +351,12 @@ function createTableWindow(message) {
 
 /* DBLOADER WINDOW */
 function createDbLoaderWindow() {
-  let width, height;
-  if (screenHeight <= 800) {
-    width = 350;
-    height = 350;
-  } else {
-    width = 400;
-    height = 400;
-  }
   dbLoaderWindow = new BrowserWindow({
-    height: height,
-    width: width,
+    height: 250,
+    width: 250,
     spellCheck: false,
     resizable: false,
+    maximizable: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
     center: true,
@@ -420,6 +392,7 @@ function createUpdateWindow() {
     y: 0,
     spellCheck: false,
     resizable: false,
+    maximizable: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
     center: true,
@@ -449,6 +422,9 @@ function createUpdateWindow() {
 app.on('ready', () => {
   /* SET APP NAME FOR WINDOWS NOTIFICATIONS*/
   app.setAppUserModelId('P2Sys-Viewer');
+  /* SET VERSION VARIABLE */
+  version = app.getVersion();
+
   /* GET SCREEN SIZE */
   let res = screen.getPrimaryDisplay().size;
   screenHeight = res.height;

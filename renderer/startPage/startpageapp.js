@@ -39,14 +39,8 @@ let customerFindBtn = document.getElementById('assist-btn'),
   customerSearchInput = document.getElementById('customer-search'),
   customerNumberList = document.getElementById('customer-list'),
   soundClick = document.getElementById('click'),
-  systemInfoBtn = document.getElementById('info'),
-  /* INFO PAGE DOM ELEMENTS */
-  systemBackBtn = document.getElementById('back-btn-system'),
-  systemEmailDevBtn = document.getElementById('mail-btn'),
-  systemDatabaseSettingsBtn = document.getElementById('settings-button'),
-  systemSettingsPage = document.getElementsByClassName('system-settings')[0],
   customerSearchHtmlDisplay = document.getElementById('check-customer'),
-  versionText = document.getElementById('version');
+  minimizeBtn = document.getElementById('minimize-search');
 
 ///////////////
 /* FUNCTIONS */
@@ -148,17 +142,15 @@ const fillCustomerPrices = () => {
   customerSearchWindow.focus();
 };
 
-/* DOM MANIPULATIONS */
-///////////////////////
-versionText.innerText = `P2Sys Viewer (v${remote.app.getVersion()})`;
-
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
 /* CLOSE BUTTON */
 checkExitBtn.addEventListener('click', (e) => {
   soundClick.play();
-  ipcRenderer.send('close-win', null);
+  setTimeout(() => {
+    ipcRenderer.send('close-win', null);
+  }, 300);
 });
 
 /* VIEW BUTTON */
@@ -197,6 +189,7 @@ customerFindBtn.addEventListener('click', (e) => {
   let message = {
     dimensions,
     customerNameNumber,
+    customerPrices,
   };
   /* FIND DOCK BUTTON INTERACTION ON CLICK */
   if (customerSearchWindow.getChildWindows()[0]) {
@@ -210,35 +203,12 @@ customerFindBtn.addEventListener('click', (e) => {
     ipcRenderer.send('name-search', message);
   }
 });
-
-/* SYSTEM INFO BUTTON */
-systemInfoBtn.addEventListener('click', (e) => {
+/* MINIMIZE */
+minimizeBtn.addEventListener('click', (e) => {
   soundClick.play();
-  systemSettingsPage.style.display = 'flex';
   setTimeout(() => {
-    systemSettingsPage.style.opacity = '1';
-  }, 200);
-});
-
-/* SYSTEM BACK BUTTON */
-systemBackBtn.addEventListener('click', () => {
-  soundClick.play();
-  systemSettingsPage.style.opacity = '0';
-  setTimeout(() => {
-    systemSettingsPage.style.display = 'none';
-  }, 600);
-});
-
-/* EMAIL DEV BUTTON */
-systemEmailDevBtn.addEventListener('click', () => {
-  soundClick.play();
-  shell.openExternal('mailto:juanbo.jb@gmail.com?subject=P2Sys() Inquiry/ Bug report');
-});
-
-/* DATABASE SETUP BUTTON */
-systemDatabaseSettingsBtn.addEventListener('click', () => {
-  soundClick.play();
-  shell.openPath('.env');
+    customerSearchWindow.minimize();
+  }, 300);
 });
 
 ///////////////////

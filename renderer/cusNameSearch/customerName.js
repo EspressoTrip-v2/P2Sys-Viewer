@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron');
 
 /* GLOBAL VARIABLES */
 //////////////////////
-let customerNameNumber;
+let customerNameNumber, customerPrices;
 
 ///////////////////
 /* DOM ELEMENTS */
@@ -21,13 +21,17 @@ function fillCustomerNameNumber() {
   /* POPULATE LIST OF CUSTOMERS */
   ///////////////////////////////
 
-  let customers = Object.keys(customerNameNumber);
+  let customers = Object.keys(customerNameNumber),
+    customerPricesKeys = Object.keys(customerPrices);
   (() => {
     customers.forEach((el) => {
-      let html = `<div title="${
-        customerNameNumber[el.toLocaleUpperCase()]
-      }" class="customer-name">${el.toUpperCase()}</div>`;
-      customerListContainer.insertAdjacentHTML('beforeend', html);
+      if (customerPricesKeys.includes(customerNameNumber[el.toUpperCase()])) {
+        console.log(el.toUpperCase());
+        let html = `<div title="${
+          customerNameNumber[el.toLocaleUpperCase()]
+        }" class="customer-name">${el.toUpperCase()}</div>`;
+        customerListContainer.insertAdjacentHTML('beforeend', html);
+      }
     });
   })();
   ////////////////////////////////////////
@@ -44,6 +48,7 @@ function fillCustomerNameNumber() {
     el.addEventListener('click', (e) => {
       soundClick.play();
       let number = customerNameNumber[e.target.innerText];
+      console.log(e.target.innerText);
       // send ipc
       ipcRenderer.send('dock-select', number);
 
@@ -77,7 +82,8 @@ function fillCustomerNameNumber() {
 
 /* POPULATE THE LIST OF NAMES IN WINDOW */
 ipcRenderer.on('name-search', (event, message) => {
-  customerNameNumber = message;
+  customerNameNumber = message.customerNameNumber;
+  customerPrices = message.customerPrices;
   fillCustomerNameNumber();
 });
 

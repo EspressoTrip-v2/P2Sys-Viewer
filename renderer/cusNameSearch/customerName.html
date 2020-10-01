@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
     <link rel="stylesheet" href="customerName.css" />
-
+    <script defer src="./customerName.js"></script>
     <title>Customer Name Search</title>
   </head>
   <body>
+    <audio src="../sounds/click.wav" id="click" style="display: none"></audio>
+
     <div id="border">
       <header>
         <img src="../icons/whitcher-logo.png" />
@@ -32,9 +34,5 @@
         </div>
       </footer>
     </div>
-    <audio src="../sounds/click.wav" id="click" style="display: none"></audio>
-    <script>
-      require('./customerName.js');
-    </script>
   </body>
 </html>

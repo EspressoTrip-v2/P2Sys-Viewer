@@ -16,21 +16,16 @@
 
     <div class="grab-search">
       <svg viewBox="0 0 1000 1000">
-        <metadata>
-          Svg Vector Icons : http:&#x2F;&#x2F;www.onlinewebfonts.com&#x2F;icon
-        </metadata>
         <path
           d="M814.2 675.4l-43.5-43.6 101.2-101H530.8V872l101-101.2 43.6 43.5L500 990 324.6 814.2l43.6-43.5 101 101.2V530.8H128l101.2 101 -43.5 43.6L10 500l175.8-175.4 43.5 43.6L128 469.2h341.2V128l-101 101.2 -43.6-43.5L500 10l175.4 175.8 -43.6 43.5L530.8 128v341.2H872l-101.2-101 43.5-43.6L990 500 814.2 675.4 814.2 675.4z" />
       </svg>
     </div>
-    <button id="info">
-      <svg id="info-icon" width="402" height="402" viewBox="0 0 402 402">
+    <a href="#" id="minimize-search">
+      <svg viewBox="0 0 56.8 34">
         <path
-          d="M164.5 91.4h73.1c4.9 0 9.2-1.8 12.8-5.4 3.6-3.6 5.4-7.9 5.4-12.8V18.3c0-4.9-1.8-9.2-5.4-12.8C246.8 1.8 242.5 0 237.5 0h-73.1c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.9v54.8c0 4.9 1.8 9.2 5.4 12.8C155.2 89.6 159.5 91.4 164.5 91.4z" />
-        <path
-          d="M286.9 334.3c-3.6-3.6-7.9-5.4-12.8-5.4h-18.3V164.5c0-4.9-1.8-9.2-5.4-12.8 -3.6-3.6-7.9-5.4-12.8-5.4H127.9c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.8v36.5c0 4.9 1.8 9.2 5.4 12.8 3.6 3.6 7.9 5.4 12.8 5.4h18.3v109.6h-18.3c-4.9 0-9.2 1.8-12.8 5.4 -3.6 3.6-5.4 7.9-5.4 12.8v36.5c0 4.9 1.8 9.2 5.4 12.9 3.6 3.6 7.9 5.4 12.8 5.4h146.2c4.9 0 9.2-1.8 12.8-5.4 3.6-3.6 5.4-7.9 5.4-12.9v-36.5C292.4 342.2 290.6 337.9 286.9 334.3z" />
-      </svg>
-    </button>
+          d="M30.7 32.7L55.3 8.1c1.1-1.1 1.1-2.7 0-3.8L53.1 2 30.7 24.3c-1.1 1.1-2.8 1.1-3.9 0L4.5 2 2.2 4.3C1.1 5.4 1.1 7 2.2 8.1l24.6 24.6C27.9 33.7 29.7 33.7 30.7 32.7L30.7 32.7z"
+          fill="#000" /></svg>
+    </a>
 
     <div id="check-background">
       <div id="customer-number-list">
@@ -45,65 +40,30 @@
         </form>
       </div>
 
-      <div>
+      <div id="button-container">
         <button class="btn-exit" id="check-exit-btn" href="#">EXIT</button>
         <button class="btn" id="check-view-btn" href="#">VIEW</button>
         <span id="disabled" href="#">DISABLED</span>
       </div>
     </div>
     <div id="assist-box">
-      <button class="btn" id="assist-btn" href="#">CUSTOMER FIND</button>
+      <button class="btn" id="assist-btn" href="#">
+        <div id="logo-assist">
+          <svg viewBox="0 0 240.95 261.27">
+
+            <g transform="translate(222.44 11.563)" fill="#000">
+              <path
+                d="m-72.662 244.6c-14.288 2.2225-29.739 3.5454-44.741 3.5454-49.768 0-105.04-5.08-105.04-28.84v-16.933c0-21.881 33.47-42.095 69.903-49.107 0 0 11.007-5.8473 8.3344-16.933-11.562-13.97-13.996-28.787-13.996-28.787-1.9844-0.87312-4.8154-2.5664-6.5881-4.8948-4.0746-5.5298-7.8317-17.436-7.0115-25.77 0.84667-8.6254 3.175-5.8738 3.4396-7.276-7.329-18.68-3.8364-41.54 5.5562-58.288 18.785-33.602 59.108-23.707 65.564-11.086 38.576-7.1702 36.883 52.943 31.671 68.95 0 0 3.519 0.68792 2.7252 15.372-0.71438 14.737-13.176 24.527-13.176 24.527-0.39688 4.0217-5.3181 16.351-13.414 27.226-1.5346 3.2279-1.8785 5.8208-1.614 7.9904-7.276 11.642-11.536 25.321-11.536 40.005-0.0529 24.633 11.747 46.434 29.924 60.299z"
+                stroke-width=".26458" />
+              <path
+                d="m15.938 234.74-20.595-20.584c5.6402-8.094 8.9778-17.909 8.9778-28.515 0-27.561-22.34-49.889-49.889-49.889-27.561 0-49.889 22.34-49.889 49.889s22.34 49.889 49.889 49.889c10.606 0 20.421-3.3376 28.515-8.9778l20.584 20.584c3.4306 3.4306 8.9778 3.4306 12.408 0 3.4306-3.4074 3.4306-8.9662 0-12.397zm-61.507-13.455c-19.677 0-35.644-15.955-35.644-35.644 0-19.677 15.955-35.644 35.644-35.644 19.677 0 35.644 15.955 35.644 35.644s-15.955 35.644-35.644 35.644z"
+                stroke-width=".11629" />
+            </g>
+          </svg>
+
+
+      </button>
     </div>
-  </div>
-
-  <div class="system-settings" style="display: none">
-    <div id="system-settings-header"><img src="../icons/loader.png" /></div>
-    <p id="version"></p>
-    <div class="paragraph">
-      <p>
-        P2Sys is software developed to help assist companies streamline their price-list
-        generation and order template distribution. It utilizes a user friendly GUI to aid in
-        the creation of custom price-lists. Effortlessly generating order-sheets for
-        distribution as well as matching system templates for the companies implemented ERP
-        system.
-      </p>
-    </div>
-    <br />
-    <div class="paragraph">
-      For system error's or bug reporting, please click on the email developer button. <br />
-    </div>
-
-    <!-- <div id="setup-container">
-        <button class="system-btn" id="database-setup">VIEW DB CONFIG</button>
-      </div> -->
-
-    <button class="btn-back" title="Back" id="back-btn-system" href="#">
-      <svg id="back-icon" viewBox="0 0 512 512">
-        <polygon
-          points="513 216.6 158.5 216.6 316.1 59.1 197.9 59.1 1 256 197.9 452.9 316.1 452.9 158.5 295.4 513 295.4 " />
-      </svg>
-    </button>
-    <button class="mail" title="Email Developer" id="mail-btn" href="#">
-      <svg id="dev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round" class="feather feather-at-sign">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
-      </svg>
-    </button>
-    <button href="#" id="settings-button" title="System Settings" class="settings-btn">
-      <svg id="settings-icon" viewBox="0 0 482.6 482.6">
-        <path
-          d="M117 203.2c13.4-1.8 26.8 2.8 36.3 12.3l24 24 22.7-22.6 -32.8-32.7c-5.1-5.1-5.1-13.4 0-18.5s13.4-5.1 18.5 0l32.8 32.8 22.7-22.6 -24.1-24.1c-9.5-9.5-14.1-23-12.3-36.3 4-30.4-5.7-62.2-29-85.6 -23.8-23.8-56.4-33.4-87.3-28.8 -4.9 0.7-6.9 6.8-3.4 10.3l30.9 30.9c14.7 14.7 14.7 38.5 0 53.1l-19 19c-14.7 14.7-38.5 14.7-53.1 0l-31-30.9c-3.5-3.5-9.5-1.5-10.3 3.4 -4.6 30.9 5 63.5 28.8 87.3C54.8 197.5 86.6 207.2 117 203.2z" />
-        <path
-          d="M309.2 243.9l-22.7 22.6 134.8 134.8c5.1 5.1 5.1 13.4 0 18.5s-13.4 5.1-18.5 0l-134.8-134.8 -22.7 22.6 138.9 138.9c17.6 17.6 46.1 17.5 63.7-0.1s17.6-46.1 0.1-63.7L309.2 243.9z" />
-        <path
-          d="M361.3 153.9h59.9l59.9-119.7 -29.9-29.9 -119.8 59.8v59.9l-162.8 162.3 -29.3-29.2 -118 118c-24.6 24.6-24.6 64.4 0 89s64.4 24.6 89 0l118-118 -29.9-29.9L361.3 153.9z" />
-      </svg>
-    </button>
-
-    <footer>
-      <span id="trademark">P2Sys-Viewer &trade; &nbsp; 2020</span>
-    </footer>
   </div>
 
   <script src="startpageapp.js"></script>
