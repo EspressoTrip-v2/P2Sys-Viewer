@@ -7,5 +7,4 @@ let progressBar = document.getElementById('progress'),
 
 ipcRenderer.on('db-download', (e, message) => {
   progressLabel.setAttribute('data-label', message.database);
-  progressBar.style.setProperty('--width', message.percentage);
 });

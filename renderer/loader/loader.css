@@ -1,7 +1,21 @@
+/* Set main colors */
 :root {
-  --psys-blue: #05899c;
-  --psys-red: #fe1604;
-  --psys-green: #03c224;
+  --main: #000;
+  --sec-blue: #05899c;
+  --sec-blue-hover: #08d1ee;
+  --scrollbar-track: rgba(5, 136, 156, 0.1);
+
+  --button-red: #d63031;
+  --button-red-hover: #de5b5b;
+
+  --button-green: #00b894;
+  --button-green-hover: #00daaf;
+  --button-gold: #fe7c04;
+  --button-gold-hover: #ce6301;
+
+  --hover-blue: rgba(5, 136, 156, 0.5);
+  --button-disabled: #b2bec3;
+  --text-color: #2d3436;
 }
 
 /* Fonts */
@@ -32,8 +46,8 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
-  width: 250px;
-  height: 250px;
+  width: 115px;
+  height: 115px;
 }
 
 .spinner {
@@ -41,8 +55,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 150px;
-  height: 150px;
+  width: 115px;
+  height: 115px;
   border-radius: 50%;
 }
 
@@ -53,32 +67,19 @@ body {
   flex-direction: column;
   align-items: center;
   font-weight: bolder;
-  width: 200px;
-  height: 70px;
+  width: 85px;
+  height: 85px;
   border-radius: 50%;
   background-color: #fff;
-  border: 2px solid #000;
   z-index: 1;
-  backdrop-filter: blur(4px);
-  filter: drop-shadow(2px 4px 6px black);
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 
 #logo {
   position: relative;
-  right: 40px;
+  top: 4px;
   width: 65px;
   height: auto;
-}
-
-#progress::before {
-  position: absolute;
-  content: 'Converter';
-  font-size: 37px;
-  top: 15px;
-  font-family: Forelle;
-  font-weight: 300;
-  z-index: 1;
-  left: 90px;
 }
 
 .spinner-sector {
@@ -86,21 +87,21 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 20px solid transparent;
+  border: 10px solid transparent;
   mix-blend-mode: overlay;
 }
 
 .spinner-color-a {
-  border-top: 20px solid var(--psys-blue);
+  border-top: 10px solid var(--sec-blue);
   animation: rotate 2s linear infinite;
 }
 
 .spinner-color-b {
-  border-left: 20px solid var(--psys-red);
+  border-left: 10px solid var(--button-red);
   animation: rotate 2.5s linear infinite;
 }
 .spinner-color-c {
-  border-right: 20px solid var(--psys-green);
+  border-right: 10px solid var(--button-green);
   animation: rotate 1.5s linear infinite;
 }
 

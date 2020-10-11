@@ -1,17 +1,22 @@
+/* Set main colors */
 :root {
-  --psys-blue: #05899c;
-  --psys-red: #fe1604;
-  --psys-green: #03c224;
-
   --main: #000;
   --sec-blue: #05899c;
-  --button-red: #fe1604;
-  --button-green: #03c224;
+  --sec-blue-hover: #08d1ee;
+  --scrollbar-track: rgba(5, 136, 156, 0.1);
+
+  --button-red: #d63031;
+  --button-red-hover: #de5b5b;
+
+  --button-green: #00b894;
+  --button-green-hover: #00daaf;
   --button-gold: #fe7c04;
-  --opaque-man: rgba(128, 196, 50, 0.4);
-  --auto: #d9793b;
-  --opaque-auto: rgba(217, 122, 58, 0.3);
-  --progress: #ffb004;
+  --button-gold-hover: #ce6301;
+
+  --hover-blue: rgba(5, 136, 156, 0.5);
+  --button-disabled: #b2bec3;
+  --text-color: #2d3436;
+  --progress: #fdcb6e;
 }
 
 /* Fonts */
@@ -40,80 +45,18 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 150px;
-  height: 150px;
+  width: 115px;
+  height: 115px;
   border-radius: 50%;
 }
 
-.spinner-inside {
-  position: relative;
-  top: 10px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: fit-content;
-  height: 22px;
-  font-size: 30px;
-  font-weight: bolder;
-  border-radius: 50px;
-  background-color: #fff;
-  border: 1px solid #fff;
-  z-index: 1;
-}
-
-#progress {
-  position: relative;
-  width: 180px;
-  height: 18px;
-  background-color: #111;
-  border-radius: 1.5em;
-  border: 2px solid #fff;
-  color: #fff;
-}
-#progress::before {
-  position: absolute;
-  content: '';
-  display: flex;
-  align-items: center;
-  top: 2px;
-  bottom: 2px;
-  left: 2px;
-  width: calc(var(--width, 0) * 1%);
-  min-width: 0.5rem;
-  max-width: calc(100% - 4px);
-  background-color: var(--progress);
-  border-radius: 1em;
-}
-#progress::after {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  top: 6px;
-  bottom: 5px;
-  left: 20px;
-  content: '';
-  width: 100%;
-}
-
-#spinner-inside::before {
-  position: absolute;
-  content: 'Converter';
-  font-size: 70px;
-  top: 40px;
-  font-family: Forelle;
-  font-weight: 300;
-  z-index: 1;
-  left: 178px;
-}
 #spinner-logo {
   position: absolute;
-  width: 200px;
-  height: 50px;
-  border-radius: 10px;
-  filter: drop-shadow(2px 4px 6px black);
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
   background-color: #fff;
-  border: 2px solid var(--main);
   z-index: 1;
 }
 #spinner-logo::after {
@@ -123,10 +66,14 @@ html {
   align-content: center;
   align-items: center;
   width: 100%;
-  height: 55%;
+  height: 100%;
   content: attr(data-label);
-  font-size: 15px;
+  text-align: center;
+  font-size: 12px;
   font-weight: bolder;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  color: var(--text-color);
 }
 
 #logo {
@@ -141,21 +88,21 @@ html {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 20px solid transparent;
+  border: 10px solid transparent;
   mix-blend-mode: overlay;
 }
 
 .spinner-color-a {
-  border-top: 20px solid var(--psys-blue);
+  border-top: 10px solid var(--sec-blue);
   animation: rotate 2s linear infinite;
 }
 
 .spinner-color-b {
-  border-left: 20px solid var(--psys-red);
+  border-left: 10px solid var(--button-red);
   animation: rotate 2.5s linear infinite;
 }
 .spinner-color-c {
-  border-right: 20px solid var(--psys-green);
+  border-right: 10px solid var(--button-green);
   animation: rotate 1.5s linear infinite;
 }
 

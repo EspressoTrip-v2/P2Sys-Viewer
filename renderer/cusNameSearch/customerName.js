@@ -48,7 +48,6 @@ function fillCustomerNameNumber() {
     el.addEventListener('click', (e) => {
       soundClick.play();
       let number = customerNameNumber[e.target.innerText];
-      console.log(e.target.innerText);
       // send ipc
       ipcRenderer.send('dock-select', number);
 

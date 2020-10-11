@@ -1,8 +1,19 @@
 /* MODULE IMPORTS */
 require('dotenv').config();
-const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, screen } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Tray,
+  Menu,
+  dialog,
+  screen,
+  clipboard,
+  globalShortcut,
+} = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
+const spawn = require('child_process').spawn;
 
 /* GET WORKING DIRECTORY */
 let dir;
@@ -31,6 +42,7 @@ if (!process.env.NODE_ENV) {
 const {
   customerPricesModel,
   customerNumberNameModel,
+  customerPricelistNumberModel,
 } = require(`${dir}/database/mongoDbConnect.js`);
 
 const { updater } = require(`${dir}/updater.js`);
@@ -46,7 +58,16 @@ let customerSearchWindow,
   updateWindow;
 
 /* GLOBAL VARIABLES */
-let customerNumberName, customerPrices, screenWidth, screenHeight, version;
+let customerNumberName,
+  customerPrices,
+  customerPricelistNumber,
+  screenWidth,
+  screenHeight,
+  version,
+  productCodes,
+  itemValue,
+  itemNo,
+  itemPricelist;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -55,15 +76,91 @@ if (process.platform === 'win32') {
   iconImage = `${dir}/renderer/icons/trayTemplate.png`;
 }
 
+let s5038Treated = [],
+  s5038Untreated = [],
+  s5050Untreated = [],
+  s5050Treated = [],
+  s5076Treated = [],
+  s5076Untreated = [];
+
+let s5038Key = 'PNTMB038',
+  s5050Key = 'PNTMB050',
+  s5076Key = 'PNTMB076';
+
+/* READ IN PRODUCT CODES */
+productCodes = JSON.parse(
+  fs.readFileSync(`${dir}/templates/s5_all_products.json`, 'utf8', (err, data) => {
+    if (err) {
+      logfileFunc(err);
+    }
+  })
+)['s5_all_products'];
+
+/* UNTREATED PRODUCT CODE KEYS */
+let productCodesKeysUntreated = Object.keys(productCodes['s5_untreated']),
+  productCodesUntreated = productCodes['s5_untreated'],
+  /* TREATED PRODUCT CODE KEYS */
+  productCodesKeysTreated = Object.keys(productCodes['s5_treated']),
+  productCodesTreated = productCodes['s5_treated'];
+
+/* 038 PRODUCTS */
+/////////////////////
+/* UNTREATED 038 */
+productCodesKeysUntreated.forEach((pkey) => {
+  if (productCodesUntreated[pkey][0].includes(s5038Key)) {
+    s5038Untreated.push(productCodesUntreated[pkey][0]);
+  }
+});
+/* TREATED 038 */
+productCodesKeysTreated.forEach((pkey) => {
+  if (productCodesTreated[pkey][0].includes(s5038Key)) {
+    s5038Treated.push(productCodesTreated[pkey][0]);
+  }
+});
+
+/* 050 PRODUCTS */
+/////////////////////
+
+/* UNTREATED 050*/
+productCodesKeysUntreated.forEach((pkey) => {
+  if (productCodesUntreated[pkey][0].includes(s5050Key)) {
+    s5050Untreated.push(productCodesUntreated[pkey][0]);
+  }
+});
+/* TREATED 050*/
+productCodesKeysTreated.forEach((pkey) => {
+  if (productCodesTreated[pkey][0].includes(s5050Key)) {
+    s5050Treated.push(productCodesTreated[pkey][0]);
+  }
+});
+
+/* 076 PRODUCTS */
+/////////////////////
+
+/* UNTREATED 076 */
+productCodesKeysUntreated.forEach((pkey) => {
+  if (productCodesUntreated[pkey][0].includes(s5076Key)) {
+    s5076Untreated.push(productCodesUntreated[pkey][0]);
+  }
+});
+/* TREATED 038 */
+productCodesKeysTreated.forEach((pkey) => {
+  if (productCodesTreated[pkey][0].includes(s5076Key)) {
+    s5076Treated.push(productCodesTreated[pkey][0]);
+  }
+});
+
 /* LOGFILE CREATION FUNCTION */
 //////////////////////////////
 function logfileFunc(message) {
-  let fileDir = `${dir}/error-log.txt`;
+  let fileDir = `${dir}/errorlog.txt`;
   /* CHECK IF EXISTS */
   if (fs.existsSync(fileDir)) {
-    fs.appendFile(fileDir, `${new Date()}: Database ${message}\n`, (err) => console.log(err));
+    fs.appendFile(fileDir, `${new Date()}: Main Process: ${message}\n`, (err) =>
+      console.log(err)
+    );
   } else {
-    fs.writeFileSync(fileDir, `${new Date()}: Database ${message}\n`, (err) =>
+    fs.writeFileSync(fileDir, `${new Date()}: Main Process: ${message}\n`, (err) =>
       console.log(err)
     );
   }
@@ -116,37 +213,65 @@ function mongooseConnect() {
 
 let db = mongoose.connection;
 
+/* DATABASE FAILURE FUNCTION */
+function dbFail(dbName) {
+  dialog.showMessageBoxSync(dbLoaderWindow, {
+    type: 'question',
+    icon: `${dir}/renderer/icons/trayTemplate.png`,
+    message: 'DATABASE DOWNLOAD FAILURE',
+    detail: `Unable to download ${dbName}, please contact your administrator.`,
+    buttons: ['EXIT'],
+  });
+  setTimeout(() => {
+    if (dbLoaderWindow) {
+      dbLoaderWindow.close();
+    }
+    app.quit();
+  }, 20);
+}
+
 /* DB LISTENERS */
 //////////////////
 db.on('connected', async () => {
   try {
     dbLoaderWindow.webContents.send('db-download', {
-      database: 'Downloading CP-Db',
-      percentage: 50,
+      database: 'CP DATABASE',
     });
     let queryCustomerPrices = await customerPricesModel.findById('customerPrices').exec();
     customerPrices = queryCustomerPrices._doc;
   } catch (err) {
     logfileFunc(err);
+    dbFail('CP DATABASE');
   }
   try {
     dbLoaderWindow.webContents.send('db-download', {
-      database: 'Downloading CNN-Db',
-      percentage: 100,
+      database: 'CNN DATABASE',
     });
     let queryCustomerNumberName = await customerNumberNameModel
       .findById('customerNumberName')
       .exec();
     customerNumberName = queryCustomerNumberName._doc;
-
-    dbLoaderWindow.webContents.send('db-download', {
-      database: 'Success',
-      percentage: 100,
-    });
   } catch (err) {
     logfileFunc(err);
+    dbFail('CNN DATABASE');
   }
 
+  try {
+    dbLoaderWindow.webContents.send('db-download', {
+      database: 'CPN DATABASE',
+    });
+    let queryCustomerPricelistNumber = await customerPricelistNumberModel
+      .findById('customerPricelistNumber')
+      .exec();
+    customerPricelistNumber = queryCustomerPricelistNumber._doc;
+  } catch (err) {
+    logfileFunc(err);
+    dbFail('CPN DATABASE');
+  }
+
+  dbLoaderWindow.webContents.send('db-download', {
+    database: 'SUCCESS',
+  });
   /* CREATE THE TRAY MENU BY GETTING VERSION AFTER APP LOAD */
   trayMenu = Menu.buildFromTemplate([{ label: `Viewer v${version}` }]);
   /* START CUSTOMER SEARCH WINDOW ON CONNECTION */
@@ -168,19 +293,19 @@ function createTray() {
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 425,
-    width: 265,
+    height: 350,
+    width: 235,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     center: true,
     frame: false,
     spellCheck: false,
-    resizable: false,
+    // resizable: false,
     maximizable: false,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -196,6 +321,7 @@ function createCustomerSearchWindow() {
     let message = {
       customerNumberName,
       customerPrices,
+      customerPricelistNumber,
     };
 
     /* CLOSE THE LOADING WINDOW */
@@ -225,9 +351,9 @@ function createCustomerSearchWindow() {
 function createCustomerNameWindow(message) {
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 425,
-    width: 265,
-    x: message.dimensions[0] - 265,
+    height: 350,
+    width: 225,
+    x: message.dimensions[0] - 225,
     y: message.dimensions[1],
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
@@ -237,8 +363,10 @@ function createCustomerNameWindow(message) {
     spellCheck: false,
     transparent: true,
     alwaysOnTop: true,
+    fullscreenable: false,
+    skipTaskbar: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -273,10 +401,11 @@ function createLoadingWindow() {
     maximizable: false,
     spellCheck: false,
     movable: false,
+    skipTaskbar: true,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -304,8 +433,8 @@ function createTableWindow(message) {
   tableWindow = new BrowserWindow({
     height: height,
     maxHeight: 880,
-    maxWidth: 380,
-    width: 380,
+    maxWidth: 360,
+    width: 360,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     alwaysOnTop: true,
@@ -316,7 +445,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -328,6 +457,16 @@ function createTableWindow(message) {
   tableWindow.loadFile(`${dir}/renderer/table/table.html`);
 
   tableWindow.webContents.once('did-finish-load', (e) => {
+    let products = {
+      s5038Untreated,
+      s5038Treated,
+      s5050Treated,
+      s5050Untreated,
+      s5076Treated,
+      s5076Untreated,
+    };
+    tableWindow.webContents.send('products', products);
+
     tableWindow.webContents.send('table-window', message);
     /* CLOSE THE LOADING WINDOW */
     if (loadingWindow) {
@@ -357,13 +496,14 @@ function createDbLoaderWindow() {
     spellCheck: false,
     resizable: false,
     maximizable: false,
+    skipTaskbar: true,
     autoHideMenuBar: true,
     alwaysOnTop: true,
     center: true,
     frame: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -400,7 +540,7 @@ function createUpdateWindow() {
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false,
+      // devTools: false,
       enableRemoteModule: true,
     },
     icon: `${dir}/renderer/icons/updateTemplate.png`,
@@ -500,6 +640,15 @@ ipcMain.on('close-window-dock', (e, message) => {
 ipcMain.on('create-download-window', (e, message) => {
   createUpdateWindow();
 });
+
+/* CLOSE DOWNLOAD WINDOW */
+ipcMain.on('close-download-window', (e, message) => {
+  if (updateWindow) {
+    updateWindow.close();
+  }
+});
+
+/* UPDATER PROGRESS */
 ipcMain.on('update-progress', (e, message) => {
   if (updateWindow) {
     updateWindow.webContents.send('download-percent', message);
@@ -509,4 +658,73 @@ ipcMain.on('update-progress', (e, message) => {
       }, 1000);
     }
   }
+});
+
+if (process.platform === 'win32') {
+  /* WINDOWS CHILD PROCESS FOR KEYSTROKES */
+  /* POWERSHELL MUST BE IN PATH */
+  let keyScriptPaste =
+    '$key=New-Object -ComObject wscript.shell; $key.SendKeys("^{v}"); $key.SendKeys("{TAB}");';
+  function pasteItemNo() {
+    if (itemNo) {
+      clipboard.writeText(itemNo);
+      setTimeout(() => {
+        let sp = spawn(keyScriptPaste, { shell: true });
+        sp.on('error', (err) => logfileFunc(err));
+      }, 200);
+    }
+  }
+  function pasteItemValue() {
+    if (itemValue) {
+      clipboard.writeText(itemValue);
+      setTimeout(() => {
+        let sp = spawn(keyScriptPaste, { shell: true });
+        sp.on('error', (err) => logfileFunc(err));
+      }, 200);
+    }
+  }
+} else {
+  /* LINUX CHILD PROCESS FOR KEYSTROKES*/
+  /* XDOTOOL MUST BE INSTALLED */
+  let keyScriptPaste = 'xdotool key --clearmodifiers ctrl+v';
+  function pasteItemNo() {
+    if (itemNo) {
+      clipboard.writeText(itemNo);
+      setTimeout(() => {
+        let sp = spawn(keyScriptPaste, { shell: true });
+        sp.on('error', (err) => logfileFunc(err));
+      }, 100);
+    }
+  }
+  function pasteItemValue() {
+    if (itemValue) {
+      clipboard.writeText(itemValue);
+      setTimeout(() => {
+        let sp = spawn(keyScriptPaste, { shell: true });
+        sp.on('error', (err) => logfileFunc(err));
+      }, 100);
+    }
+  }
+}
+
+/* SET THE PASTE VARIABLES */
+ipcMain.on('paste-variables', (e, message) => {
+  itemValue = message.itemValue;
+  itemNo = message.itemNo;
+  itemPricelist = message.itemPricelist;
+});
+
+/* REGISTER GLOBAL SHORTCUTS */
+ipcMain.on('global-shortcuts-register', (e, message) => {
+  globalShortcut.register('F11', () => {
+    pasteItemNo();
+  });
+  globalShortcut.register('F12', () => {
+    pasteItemValue();
+  });
+});
+
+/* UN REGISTER GLOBAL SHORTCUTS */
+ipcMain.on('global-shortcuts-unregister', (e, message) => {
+  globalShortcut.unregisterAll();
 });

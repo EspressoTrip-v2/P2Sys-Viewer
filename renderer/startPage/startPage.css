@@ -1,19 +1,21 @@
 /* Set main colors */
 :root {
-  --psys-blue: #05899c;
-  --psys-red: #fe1604;
-  --psys-green: #03c224;
-
   --main: #000;
   --sec-blue: #05899c;
-  --button-red: #fe1604;
-  --button-green: #03c224;
+  --sec-blue-hover: #08d1ee;
+  --scrollbar-track: rgba(5, 136, 156, 0.1);
+
+  --button-red: #d63031;
+  --button-red-hover: #de5b5b;
+
+  --button-green: #00b894;
+  --button-green-hover: #00daaf;
   --button-gold: #fe7c04;
-  --button-yellow: #ffb004;
-  --opaque-man: rgba(3, 194, 35, 0.2);
-  --auto: #fe7c04;
-  --opaque-auto: rgba(254, 126, 6, 0.2);
-  --hover-blue: rgba(5, 138, 158, 0.5);
+  --button-gold-hover: #ce6301;
+
+  --hover-blue: rgba(5, 136, 156, 0.5);
+  --button-disabled: #b2bec3;
+  --text-color: #2d3436;
 }
 
 /* Fonts */
@@ -80,9 +82,9 @@ button:focus {
   justify-content: center;
   align-self: center;
   align-items: center;
-  height: 400px;
-  width: 245px;
-  border: 2px solid var(--main);
+  height: 310px;
+  width: 210px;
+  border: 2px solid #fff;
   border-radius: 10px;
   background-color: #fff;
   transition: visibility 0.3s, opacity 0.3s 0.3s;
@@ -91,32 +93,30 @@ button:focus {
 #check-background {
   display: flex;
   position: relative;
-  width: 220px;
-  height: 280px;
-  top: 5px;
+  width: 195px;
+  height: 225px;
+  top: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 2vh;
   padding: 2vh;
   background-color: var(--sec-blue);
-  border: 2px solid var(--main);
+  border: 2px solid var(--sec-blue);
   border-radius: 10px;
-  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 #customer-search-container {
   position: relative;
   bottom: 5px;
-  display: inline-flex;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
   align-content: center;
-  justify-content: space-between;
+  justify-content: center;
   justify-items: center;
-  width: 200px;
-  padding: 5px 6px;
+  width: 175px;
   height: 35px;
-  border: 2px solid #fff;
-  border-radius: 50px;
+  border-radius: 5px;
 }
 #customer-search-container img {
   width: auto;
@@ -128,41 +128,43 @@ button:focus {
 #customer-search {
   text-transform: uppercase;
   font-size: 12px;
-  padding: 5px;
-  margin-right: 7px;
   width: 100%;
   text-align: center;
-  font-weight: bolder;
-  border-radius: 50px;
+  border-radius: 200px;
   height: 25px;
-  border: 4px solid #fff;
+  border: 2px solid #fff;
+  color: var(--text-color);
+  transition: filter 0.5s;
 }
+
 #customer-search:focus {
   outline: none;
+  filter: drop-shadow(2px 4px 6px black);
+
   animation: flash 1s steps(2, end) infinite;
 }
 @keyframes flash {
   from {
-    border: 4px solid #fff;
+    border: 2px solid #fff;
   }
   to {
-    border: 4px solid orange;
+    border: 2px solid #fdcb6e;
   }
 }
 
 #customer-number-list {
   position: relative;
-  bottom: 20px;
-  width: 200px;
+  bottom: 10px;
+  width: 180px;
   background-color: #fff;
-  border: 2px solid var(--main);
+  border: 2px solid var(--sec-blue);
   border-radius: 10px;
-  height: 135px;
+  height: 120px;
   padding: 2px;
 }
 #customer-list {
   width: 100%;
-  height: 120px;
+  height: 112px;
   overflow: auto;
   background-position: center;
   background-size: contain;
@@ -175,11 +177,11 @@ button:focus {
 }
 #customer-list::-webkit-scrollbar {
   width: 2px;
-  background-color: lightgrey;
+  background-color: var(--scrollbar-track);
 }
 #customer-list::-webkit-scrollbar-thumb {
   height: 3px;
-  background-color: grey;
+  background-color: var(--sec-blue);
 }
 
 /* /////////////////// */
@@ -195,6 +197,7 @@ button:focus {
   margin-top: 3px;
   border-radius: 5px;
   padding: 3px 0;
+  color: var(--text-color);
 }
 
 .cusnum:hover {
@@ -206,7 +209,7 @@ button:focus {
   position: relative;
   background-color: var(--sec-blue);
   color: #fff;
-  border: 1px solid var(--main);
+  border: 1px solid var(--sec-blue);
   text-align: center;
   padding: 3px 0;
   font-size: 12px;
@@ -217,7 +220,7 @@ button:focus {
 
 #p2s-logo {
   position: absolute;
-  top: -5px;
+  top: -3px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -227,27 +230,29 @@ button:focus {
 }
 #p2s-logo img {
   position: relative;
+  top: 0;
   left: 2px;
-  height: 75px;
+  height: 50px;
 }
 #p2s-logo::after {
   content: 'Viewer';
-  top: 6px;
-  right: 0px;
+  top: -1px;
+  right: -3px;
   position: relative;
   font-family: Forelle;
-  font-size: 40px;
+  font-size: 35px;
+  color: var(--text-color);
 }
 
 #button-container {
   position: relative;
-  top: 12px;
+  top: 5px;
   display: inline-flex;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
   justify-items: center;
-  width: 245px;
+  width: 225px;
 }
 
 /* BUTTONS */
@@ -259,15 +264,13 @@ button:focus {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-  border-radius: 10px;
-  padding: 7px 0;
-  background-color: var(--button-gold);
+  border-radius: 200px;
+  padding: 5px 0;
   color: #fff;
-  border: 2px solid var(--button-gold);
   font-size: 12px;
   text-align: center;
   font-weight: bolder;
-  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+  transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
 
 .btn-exit {
@@ -277,27 +280,23 @@ button:focus {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-  border-radius: 10px;
-  width: 90px;
-  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  border-radius: 200px;
+  width: 80px;
   background-color: var(--button-red);
   color: #fff;
-  border: 2px solid var(--button-red);
-  font-size: 15px;
+  border: 2px solid #fff;
+  font-size: 12px;
   text-align: center;
-  padding: 7px 0;
+  padding: 5px 0;
   font-weight: bolder;
-  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+  transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
 
 .btn-exit:hover {
-  background-color: #fff;
-  color: var(--button-red);
-  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 forwards;
 }
 .btn-exit:active {
-  transform: scale(0.95);
-  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 reverse;
 }
 
 #check-view-btn {
@@ -307,76 +306,78 @@ button:focus {
   text-align: center;
   background-color: var(--button-green);
   color: #fff;
-  border: 2px solid var(--button-green);
-  width: 90px;
-  padding: 7px 0;
-  box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.8);
+  border: 2px solid #fff;
+  width: 80px;
+  padding: 5px 0;
+  transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
-
 #check-view-btn:hover {
-  background-color: #fff;
-  color: var(--button-green);
-  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 forwards;
 }
 #check-view-btn:active {
-  transform: scale(0.95);
-  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 reverse;
 }
 
 #disabled {
   position: relative;
   display: flex;
+  font-size: 12px;
   right: 25px;
   justify-content: center;
   align-items: center;
-  padding: 7px 0px;
-  font-weight: bolder;
-  border-radius: 10px;
+  padding: 5px 0px;
+  font-weight: bold;
+  border-radius: 200px;
   height: auto;
-  width: 90px;
-  color: darkgrey;
-  border: 2px solid darkgrey;
+  width: 80px;
+  color: #fff;
+  background-color: var(--button-disabled);
+  border: 2px solid #fff;
 }
 
 #assist-box {
-  bottom: 5px;
+  bottom: 2px;
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   justify-items: center;
   width: 100%;
-  height: 38px;
+  height: 30px;
 }
 
 #assist-btn {
   text-align: center;
   justify-self: center;
   align-self: center;
-  background-color: rgba(255, 255, 255, 0.596);
-  font-weight: lighter;
-  color: black;
-  width: 80px;
+  padding: 0;
+  width: 30px;
   height: 30px;
-  border: 0.5px solid black;
+  background-color: #fff;
+  border: 2px solid var(--button-green);
+  border-radius: 50%;
 }
 
 #assist-btn:hover {
-  font-weight: bolder;
-  color: black;
-  background-color: #fff;
-  border: 2px solid black;
-  box-shadow: 14px 14px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 forwards;
 }
 #assist-btn:active {
-  transform: scale(0.95);
-  box-shadow: 3px 3px 18px 0px rgba(50, 50, 50, 0.75);
+  animation: button-hover 0.2s linear 1 reverse;
+}
+
+@keyframes button-hover {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
 }
 
 #logo-assist {
-  width: 20px;
+  width: 18px;
+  top: 2px;
   position: absolute;
-  top: 3px;
 }
 
 /* //////////////////// */
@@ -388,8 +389,8 @@ button:focus {
   display: block;
   position: absolute;
   width: 20px;
-  top: 8px;
-  left: 8px;
+  top: 5px;
+  left: 5px;
   -webkit-app-region: drag;
 }
 .grab-search:hover {
@@ -399,8 +400,8 @@ button:focus {
 #minimize-search {
   position: absolute;
   transform: scale(1);
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 8px;
   width: 15px;
   height: auto;
   outline: none;

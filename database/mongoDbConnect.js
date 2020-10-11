@@ -23,3 +23,16 @@ const customerNumberNameModel = mongoose.model(
   customerNumberNameSchema
 );
 exports.customerNumberNameModel = customerNumberNameModel;
+
+/* CUSTOMER NUMBER: PRICELIST NUMBER */
+/* SCHEMA */
+const customerPricelistNumberSchema = new mongoose.Schema(
+  {},
+  { strict: false, _id: false, versionKey: false }
+);
+/* MODEL */
+const customerPricelistNumberModel = mongoose.model(
+  'Customer_Pricelist_Number',
+  customerPricelistNumberSchema
+);
+exports.customerPricelistNumberModel = customerPricelistNumberModel;

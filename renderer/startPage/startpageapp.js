@@ -26,7 +26,11 @@ if (!process.env.NODE_ENV) {
 let customerSearchWindow = remote.getCurrentWindow();
 
 /* GLOBAL VARIABLES */
-let customerNumberName, customerPrices, customerNameNumber, numbersDivItems;
+let customerNumberName,
+  customerPrices,
+  customerNameNumber,
+  customerPricelistNumber,
+  numbersDivItems;
 
 //////////////////
 /* DOM ELEMENTS */
@@ -95,10 +99,12 @@ const fillCustomerPrices = () => {
     customerNumberList.innerHTML = '';
     customerNumber = Object.keys(customerPrices);
     customerNumber.forEach((el) => {
-      let html = `
-          <dl class="cusnum" id="${el}">${el}</dl>
-          `;
-      customerNumberList.insertAdjacentHTML('beforeend', html);
+      if (el !== '@EXMILL') {
+        let html = `
+            <dl class="cusnum" id="${el}">${el}</dl>
+            `;
+        customerNumberList.insertAdjacentHTML('beforeend', html);
+      }
     });
 
     addListListeners();
@@ -163,6 +169,7 @@ checkViewBtn.addEventListener('click', (e) => {
     jsonFile,
     customerName,
     customerNumber: customerSearchInput.value.toUpperCase(),
+    pricelistNumber: customerPricelistNumber[customerSearchInput.value.toUpperCase()],
   };
 
   if (customerSearchWindow.getChildWindows()[0]) {
@@ -236,9 +243,11 @@ ipcRenderer.on('database', async (e, message) => {
   });
   customerPrices = await message.customerPrices;
   delete customerPrices['_id'];
-
   /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
   fillCustomerPrices();
+
+  customerPricelistNumber = await message.customerPricelistNumber;
+  delete customerPricelistNumber['_id'];
 });
 
 /* MESSAGE TO EXPAND WINDOW AFTER TABLE CLOSED */

@@ -8,6 +8,12 @@ exports.tablePopulate = (jsonfile) => {
   jsonfile['COLUMNS'].splice(0, 1);
   let columns = jsonfile['COLUMNS'];
   columns.forEach((el) => {
+    if (el.includes('PRICE ')) {
+      el = el.replace('PRICE ', '');
+    }
+    if (el.includes('DIMENSIONS')) {
+      el = el.replace('DIMENSIONS', 'DIM');
+    }
     htmlColumns += `<th id="${el.toLowerCase().replace(' ', '-')}">${el}</th>`;
   });
 
@@ -18,10 +24,31 @@ exports.tablePopulate = (jsonfile) => {
     // LENGTH AND PRICE ENTRIES
     htmlInner += `
     
-    <tr id="R${el}" ">
-      <td class="dimensions" id="DR${el}">${row[1]}</td>
+    <tr id="R${el}" class="tr-standard">
+    
+    <td>
+    <div class="dimensions" id="DR${el}">${row[1]}</div>
+ </td>
       
       <td>
+      <div id="ER${el}" class="table-entries">${row[2]}</div>
+      </td>
+      
+      <td>
+      <div id="USER${el}" class="price-entries-untreated">${row[3]}</div>
+      </td>
+      
+      <td>
+      <div id="TSER${el}" class="price-entries-treated" >${row[4]}</div>
+      </td>
+    </tr>  
+    `;
+  });
+
+  return { htmlColumns, htmlInner };
+};
+
+/* <td>
       <input id="ER${el}" class="table-entries" type="text" value="${row[2]}" disabled/>
       </td>
       
@@ -31,10 +58,4 @@ exports.tablePopulate = (jsonfile) => {
       
       <td>
       <input id="TSER${el}" class="price-entries-treated" type="number" value="${row[4]}" disabled/>
-      </td>
-    </tr>  
-    `;
-  });
-
-  return { htmlColumns, htmlInner };
-};
+      </td> */

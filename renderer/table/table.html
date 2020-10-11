@@ -11,6 +11,8 @@
 
 <body>
   <audio src="../sounds/click.wav" id="click" style="display: none"></audio>
+  <audio src="../sounds/pop.wav" id="pop" style="display: none"></audio>
+  <audio src="../sounds/notify.wav" id="notify" style="display: none"></audio>
   <div id="border">
 
     <div id="header-container">
@@ -51,12 +53,14 @@
             </svg>
 
           </button>
-          <div id="customer-number-container">
 
-            <span id="customer-number"></span>
-          </div>
 
           <div id="move-container">
+
+            <div id="customer-number-container">
+
+              <span id="customer-number"></span>
+            </div>
             <div id="grab">
 
               <svg viewBox="0 0 1000 1000" id="grab-logo">
@@ -78,527 +82,6 @@
       <div id="container">
         <table id="table">
 
-          <!-- TEST TABLE -->
-          <!-- <tbody id="table-body">
-            <tr id="row-columns">
-              <th id="dimensions">DIMENSIONS</th>
-              <th id="length">LENGTH</th>
-              <th id="price-untreated">PRICE UNTREATED</th>
-              <th id="price-treated">PRICE TREATED</th>
-            </tr>
-
-            <tr id="R0" "="">
-                      <td class=" dimensions" id="DR0">38 X 38</td>
-
-              <td>
-                <input id="ER0" class="table-entries" type="text" value="0.9-2.7 AND 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER0" class="price-entries-untreated" type="number" value="3230" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER0" class="price-entries-treated" type="number" value="3620" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R1" "="">
-                      <td class=" dimensions" id="DR1">38 X 38</td>
-
-              <td>
-                <input id="ER1" class="table-entries" type="text" value="3.0-5.7 EXCL 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER1" class="price-entries-untreated" type="number" value="4080" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER1" class="price-entries-treated" type="number" value="4470" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R2" "="">
-                      <td class=" dimensions" id="DR2">38 X 38</td>
-
-              <td>
-                <input id="ER2" class="table-entries" type="text" value="6.0-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER2" class="price-entries-untreated" type="number" value="4290" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER2" class="price-entries-treated" type="number" value="4680" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R3" "="">
-                      <td class=" dimensions" id="DR3">38 X 50</td>
-
-              <td>
-                <input id="ER3" class="table-entries" type="text" value="ODD LENGTHS 2.7-5.7" disabled="">
-              </td>
-
-              <td>
-                <input id="USER3" class="price-entries-untreated" type="number" value="3230" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER3" class="price-entries-treated" type="number" value="3620" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R4" "="">
-                      <td class=" dimensions" id="DR4">38 X 50</td>
-
-              <td>
-                <input id="ER4" class="table-entries" type="text" value="EVEN LENGTHS 3.0-5.4" disabled="">
-              </td>
-
-              <td>
-                <input id="USER4" class="price-entries-untreated" type="number" value="4220" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER4" class="price-entries-treated" type="number" value="4610" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R5" "="">
-                      <td class=" dimensions" id="DR5">38 X 50</td>
-
-              <td>
-                <input id="ER5" class="table-entries" type="text" value="6.0-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER5" class="price-entries-untreated" type="number" value="4550" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER5" class="price-entries-treated" type="number" value="4940" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R6" "="">
-                      <td class=" dimensions" id="DR6">38 X 76</td>
-
-              <td>
-                <input id="ER6" class="table-entries" type="text" value="0.9-2.7 AND 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER6" class="price-entries-untreated" type="number" value="3420" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER6" class="price-entries-treated" type="number" value="3810" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R7" "="">
-                      <td class=" dimensions" id="DR7">38 X 76</td>
-
-              <td>
-                <input id="ER7" class="table-entries" type="text" value="3.0-5.7 EXCL 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER7" class="price-entries-untreated" type="number" value="3730" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER7" class="price-entries-treated" type="number" value="4120" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R8" "="">
-                      <td class=" dimensions" id="DR8">38 X 76</td>
-
-              <td>
-                <input id="ER8" class="table-entries" type="text" value="6.0-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER8" class="price-entries-untreated" type="number" value="4010" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER8" class="price-entries-treated" type="number" value="4400" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R9" "="">
-                      <td class=" dimensions" id="DR9">38 X 114</td>
-
-              <td>
-                <input id="ER9" class="table-entries" type="text" value="0.9-2.7 AND 3.3" disabled="">
-              </td>
-
-              <td>
-                <input id="USER9" class="price-entries-untreated" type="number" value="3500" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER9" class="price-entries-treated" type="number" value="3890" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R10" "="">
-                      <td class=" dimensions" id="DR10">38 X 114</td>
-
-              <td>
-                <input id="ER10" class="table-entries" type="text" value="3.0-4.8 EXCL 3.3" disabled="">
-              </td>
-
-              <td>
-                <input id="USER10" class="price-entries-untreated" type="number" value="3850" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER10" class="price-entries-treated" type="number" value="4240" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R11" "="">
-                      <td class=" dimensions" id="DR11">38 X 114</td>
-
-              <td>
-                <input id="ER11" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER11" class="price-entries-untreated" type="number" value="4050" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER11" class="price-entries-treated" type="number" value="4440" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R12" "="">
-                      <td class=" dimensions" id="DR12">38 X 152</td>
-
-              <td>
-                <input id="ER12" class="table-entries" type="text" value="0.9-2.7" disabled="">
-              </td>
-
-              <td>
-                <input id="USER12" class="price-entries-untreated" type="number" value="3560" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER12" class="price-entries-treated" type="number" value="3950" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R13" "="">
-                      <td class=" dimensions" id="DR13">38 X 152</td>
-
-              <td>
-                <input id="ER13" class="table-entries" type="text" value="3.0-4.8" disabled="">
-              </td>
-
-              <td>
-                <input id="USER13" class="price-entries-untreated" type="number" value="3960" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER13" class="price-entries-treated" type="number" value="4350" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R14" "="">
-                      <td class=" dimensions" id="DR14">38 X 152</td>
-
-              <td>
-                <input id="ER14" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER14" class="price-entries-untreated" type="number" value="4160" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER14" class="price-entries-treated" type="number" value="4550" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R15" "="">
-                      <td class=" dimensions" id="DR15">38 X 228</td>
-
-              <td>
-                <input id="ER15" class="table-entries" type="text" value="0.9-2.7" disabled="">
-              </td>
-
-              <td>
-                <input id="USER15" class="price-entries-untreated" type="number" value="3760" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER15" class="price-entries-treated" type="number" value="4150" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R16" "="">
-                      <td class=" dimensions" id="DR16">38 X 228</td>
-
-              <td>
-                <input id="ER16" class="table-entries" type="text" value="3.0-4.8" disabled="">
-              </td>
-
-              <td>
-                <input id="USER16" class="price-entries-untreated" type="number" value="4730" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER16" class="price-entries-treated" type="number" value="5120" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R17" "="">
-                      <td class=" dimensions" id="DR17">38 X 228</td>
-
-              <td>
-                <input id="ER17" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER17" class="price-entries-untreated" type="number" value="4950" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER17" class="price-entries-treated" type="number" value="5340" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R18" "="">
-                      <td class=" dimensions" id="DR18">50 X 76</td>
-
-              <td>
-                <input id="ER18" class="table-entries" type="text" value="0.9-2.7 AND 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER18" class="price-entries-untreated" type="number" value="3710" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER18" class="price-entries-treated" type="number" value="4100" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R19" "="">
-                      <td class=" dimensions" id="DR19">50 X 76</td>
-
-              <td>
-                <input id="ER19" class="table-entries" type="text" value="3.0-4.8 EXCL 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER19" class="price-entries-untreated" type="number" value="4210" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER19" class="price-entries-treated" type="number" value="4600" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R20" "="">
-                      <td class=" dimensions" id="DR20">50 X 76</td>
-
-              <td>
-                <input id="ER20" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER20" class="price-entries-untreated" type="number" value="4420" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER20" class="price-entries-treated" type="number" value="4810" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R21" "="">
-                      <td class=" dimensions" id="DR21">50 X 152</td>
-
-              <td>
-                <input id="ER21" class="table-entries" type="text" value="0.9-2.7 AND 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER21" class="price-entries-untreated" type="number" value="3710" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER21" class="price-entries-treated" type="number" value="4100" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R22" "="">
-                      <td class=" dimensions" id="DR22">50 X 152</td>
-
-              <td>
-                <input id="ER22" class="table-entries" type="text" value="3.0-4.8 EXCL 3.3 3.9" disabled="">
-              </td>
-
-              <td>
-                <input id="USER22" class="price-entries-untreated" type="number" value="4190" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER22" class="price-entries-treated" type="number" value="4580" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R23" "="">
-                      <td class=" dimensions" id="DR23">50 X 152</td>
-
-              <td>
-                <input id="ER23" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER23" class="price-entries-untreated" type="number" value="4430" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER23" class="price-entries-treated" type="number" value="4820" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R24" "="">
-                      <td class=" dimensions" id="DR24">50 X 228</td>
-
-              <td>
-                <input id="ER24" class="table-entries" type="text" value="0.9-2.7" disabled="">
-              </td>
-
-              <td>
-                <input id="USER24" class="price-entries-untreated" type="number" value="3920" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER24" class="price-entries-treated" type="number" value="4310" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R25" "="">
-                      <td class=" dimensions" id="DR25">50 X 228</td>
-
-              <td>
-                <input id="ER25" class="table-entries" type="text" value="3.0-4.8" disabled="">
-              </td>
-
-              <td>
-                <input id="USER25" class="price-entries-untreated" type="number" value="5010" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER25" class="price-entries-treated" type="number" value="5400" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R26" "="">
-                      <td class=" dimensions" id="DR26">50 X 228</td>
-
-              <td>
-                <input id="ER26" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER26" class="price-entries-untreated" type="number" value="5140" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER26" class="price-entries-treated" type="number" value="5530" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R27" "="">
-                      <td class=" dimensions" id="DR27">76 X 228</td>
-
-              <td>
-                <input id="ER27" class="table-entries" type="text" value="0.9-2.7" disabled="">
-              </td>
-
-              <td>
-                <input id="USER27" class="price-entries-untreated" type="number" value="4000" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER27" class="price-entries-treated" type="number" value="4470" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R28" "="">
-                      <td class=" dimensions" id="DR28">76 X 228</td>
-
-              <td>
-                <input id="ER28" class="table-entries" type="text" value="3.0-4.8" disabled="">
-              </td>
-
-              <td>
-                <input id="USER28" class="price-entries-untreated" type="number" value="5300" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER28" class="price-entries-treated" type="number" value="5770" disabled="">
-              </td>
-            </tr>
-
-
-            <tr id="R29" "="">
-                      <td class=" dimensions" id="DR29">76 X 228</td>
-
-              <td>
-                <input id="ER29" class="table-entries" type="text" value="5.1-6.6" disabled="">
-              </td>
-
-              <td>
-                <input id="USER29" class="price-entries-untreated" type="number" value="5500" disabled="">
-              </td>
-
-              <td>
-                <input id="TSER29" class="price-entries-treated" type="number" value="5970" disabled="">
-              </td>
-            </tr>
-          </tbody> -->
-
-          <!-- END TEST TABLE -->
-
         </table>
       </div>
     </div>
@@ -606,13 +89,7 @@
     </main>
   </div>
   <div id="shrunk-container">
-    <div id="grab-message-container">
-      <span id="grab-message">
-        GRAB HERE <br>
-        TO MOVE
-      </span>
-    </div>
-    <div id="logo-circle" title=''>
+    <div id="logo-circle">
       <img src="../icons/loader.png" alt="" id="logo">
     </div>
     <div id="min-logo">
@@ -642,6 +119,42 @@
 
   </div>
   </div>
+  <div id="blur">
+
+  </div>
+  <dialog id="product-itemno-popup">
+    <div id="itemno-header">SELECT PRODUCT</div>
+    <div id="itemno">
+
+      <!-- Test -->
+      <!-- <div class="size" title="PNTMB076228510005T">76 X 228 X 5100</div>
+      <div class="size" title="PNTMB076228540005T">76 X 228 X 5400</div>
+      <div class="size" title="PNTMB076228570005T">76 X 228 X 5700</div>
+      <div class="size" title="PNTMB076228600005T">76 X 228 X 6000</div>
+      <div class="size" title="PNTMB076228630005T">76 X 228 X 6300</div>
+      <div class="size" title="PNTMB076228660005T">76 X 228 X 6600</div> -->
+      <!-- / -->
+
+    </div>
+    <div id="type-flag"></div>
+  </dialog>
+  <dialog id="copied">
+    <div id="copied-logo">
+
+      <svg fill="var(--text-color)" enable-background="new 0 0 1000 1000" version="1.1" viewBox="0 0 1e3 1e3"
+        xml:space="preserve">
+        <path
+          d="M675,850H185c-57.9,0-105-47.1-105-105V115c0-57.9,47.1-105,105-105h490c57.9,0,105,47.1,105,105v630C780,802.9,732.9,850,675,850z M185,80c-19.3,0-35,15.7-35,35v630c0,19.3,15.7,35,35,35h490c19.3,0,35-15.7,35-35V115c0-19.3-15.7-35-35-35H185z" />
+        <path
+          d="m815 990h-525c-19.3 0-35-15.6-35-35s15.7-35 35-35h525c19.3 0 35-15.7 35-35v-665c0-19.3 15.6-35 35-35s35 15.7 35 35v665c0 57.9-47.1 105-105 105z" />
+        <path d="m535 290h-280c-19.3 0-35-15.7-35-35s15.7-35 35-35h280c19.4 0 35 15.7 35 35s-15.6 35-35 35z" />
+        <path d="m605 465h-350c-19.3 0-35-15.7-35-35s15.7-35 35-35h350c19.4 0 35 15.7 35 35s-15.6 35-35 35z" />
+        <path d="m605 640h-350c-19.3 0-35-15.6-35-35s15.7-35 35-35h350c19.4 0 35 15.6 35 35s-15.6 35-35 35z" />
+      </svg>
+
+    </div>
+    <div id="copied-text">COPIED</div>
+  </dialog>
 
 
 </body>

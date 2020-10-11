@@ -1,17 +1,22 @@
+/* Set main colors */
 :root {
-  --psys-blue: #05899c;
-  --psys-red: #fe1604;
-  --psys-green: #03c224;
-
   --main: #000;
   --sec-blue: #05899c;
-  --button-red: #fe1604;
-  --button-green: #03c224;
+  --sec-blue-hover: #08d1ee;
+  --scrollbar-track: rgba(5, 136, 156, 0.1);
+
+  --button-red: #d63031;
+  --button-red-hover: #de5b5b;
+
+  --button-green: #00b894;
+  --button-green-hover: #00daaf;
   --button-gold: #fe7c04;
-  --opaque-man: rgba(128, 196, 50, 0.4);
-  --auto: #d9793b;
-  --opaque-auto: rgba(217, 122, 58, 0.3);
-  --progress: #ffb004;
+  --button-gold-hover: #ce6301;
+
+  --hover-blue: rgba(5, 136, 156, 0.5);
+  --button-disabled: #b2bec3;
+  --text-color: #2d3436;
+  --progress: #fdcb6e;
 }
 
 html {
@@ -91,7 +96,7 @@ body {
   top: 30px;
   width: 200px;
   height: 20px;
-  background-color: #111;
+  background-color: var(--text-color);
   border-radius: 1.5em;
   border: 2px solid #fff;
   color: #fff;
@@ -107,7 +112,7 @@ body {
   width: calc(var(--width, 0) * 1%);
   min-width: 0.5rem;
   max-width: calc(100% - 4px);
-  background-color: dodgerblue;
+  background-color: var(--progress);
   border-radius: 1em;
 }
 #progress::after {
