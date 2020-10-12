@@ -13,7 +13,7 @@ const {
 } = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const spawn = require('child_process').spawn;
+const spawnSync = require('child_process').spawnSync;
 
 /* GET WORKING DIRECTORY */
 let dir;
@@ -663,46 +663,70 @@ ipcMain.on('update-progress', (e, message) => {
 if (process.platform === 'win32') {
   /* WINDOWS CHILD PROCESS FOR KEYSTROKES */
   /* POWERSHELL MUST BE IN PATH */
-  let keyScriptPaste =
-    '$key=New-Object -ComObject wscript.shell; $key.SendKeys("^{v}"); $key.SendKeys("{TAB}");';
   function pasteItemNo() {
+    let itemNoPaste = [
+        '$key=New-Object -ComObject wscript.shell;',
+        '$key.SendKeys("^{v}")::SendWait;',
+        ' $key.SendKeys("{ENTER}");',
+        ' $key.SendKeys("{ENTER}")',
+      ],
+      itemPriceListPaste = [
+        '$key=New-Object -ComObject wscript.shell;',
+        ' $key.SendKeys("^{v}")::SendWait;',
+        ' $key.SendKeys("{ENTER}")',
+      ];
     if (itemNo) {
       clipboard.writeText(itemNo);
       setTimeout(() => {
-        let sp = spawn(keyScriptPaste, { shell: true });
-        sp.on('error', (err) => logfileFunc(err));
+        spawnSync('powershell', itemNoPaste);
+        setTimeout(() => {
+          clipboard.writeText(itemPricelist);
+          setTimeout(() => {
+            spawnSync('powershell', itemPriceListPaste);
+          }, 200);
+        }, 100);
       }, 200);
     }
   }
   function pasteItemValue() {
+    let itemValuePaste = [
+      '$key=New-Object -ComObject wscript.shell;',
+      ' $key.SendKeys("^{v}");',
+      ' $key.SendKeys("{ENTER}")',
+    ];
     if (itemValue) {
       clipboard.writeText(itemValue);
       setTimeout(() => {
-        let sp = spawn(keyScriptPaste, { shell: true });
-        sp.on('error', (err) => logfileFunc(err));
+        spawnSync('powershell', [itemValuePaste]);
       }, 200);
     }
   }
 } else {
   /* LINUX CHILD PROCESS FOR KEYSTROKES*/
   /* XDOTOOL MUST BE INSTALLED */
-  let keyScriptPaste = 'xdotool key --clearmodifiers ctrl+v';
   function pasteItemNo() {
+    let itemNoPaste = 'xdotool key ctrl+v --clearmodifiers Return Return',
+      itemPriceListPaste = 'xdotool key ctrl+v --clearmodifiers Return';
     if (itemNo) {
       clipboard.writeText(itemNo);
       setTimeout(() => {
-        let sp = spawn(keyScriptPaste, { shell: true });
-        sp.on('error', (err) => logfileFunc(err));
-      }, 100);
+        spawnSync(itemNoPaste, { shell: true, stdio: 'ignore' });
+        setTimeout(() => {
+          clipboard.writeText(itemPricelist);
+          setTimeout(() => {
+            spawnSync(itemPriceListPaste, { shell: true, stdio: 'ignore' });
+          }, 200);
+        }, 100);
+      }, 200);
     }
   }
   function pasteItemValue() {
+    let itemValuePaste = 'xdotool key ctrl+v --clearmodifiers Return';
     if (itemValue) {
       clipboard.writeText(itemValue);
       setTimeout(() => {
-        let sp = spawn(keyScriptPaste, { shell: true });
-        sp.on('error', (err) => logfileFunc(err));
-      }, 100);
+        spawnSync(itemValuePaste, { shell: true, stdio: 'ignore' });
+      }, 200);
     }
   }
 }
@@ -716,10 +740,10 @@ ipcMain.on('paste-variables', (e, message) => {
 
 /* REGISTER GLOBAL SHORTCUTS */
 ipcMain.on('global-shortcuts-register', (e, message) => {
-  globalShortcut.register('F11', () => {
+  globalShortcut.register('F1', () => {
     pasteItemNo();
   });
-  globalShortcut.register('F12', () => {
+  globalShortcut.register('F2', () => {
     pasteItemValue();
   });
 });

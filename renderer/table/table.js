@@ -104,8 +104,14 @@ let table = document.getElementById('table'),
   blurItemNo = document.getElementById('blur'),
   soundPopup = document.getElementById('pop'),
   soundNotify = document.getElementById('notify'),
-  typeFlagText = document.getElementById('type-flag');
+  typeFlagText = document.getElementById('type-flag'),
+  pasteNotifyPopUp = document.getElementById('paste-notification-popup'),
+  pasteNotifyPopUpYes = document.getElementById('paste-notification-yes'),
+  neverShowBtn = document.getElementById('never-show');
 
+/* GET LOCALSTORAGE OBJECT */
+/////////////////////////////
+let localStorageObject = JSON.parse(localStorage.getItem('notifications'));
 ///////////////
 /* FUNCTIONS */
 ///////////////
@@ -122,6 +128,14 @@ function htmlInnerFill(html) {
   border.style.opacity = '1';
 }
 
+/* CLOSE FUNCTION FOR SLECTION POPUP */
+function selectionPopUpClose() {
+  itemNoPopup.close();
+  blurItemNo.style.visibility = 'hidden';
+  itemNoAddListener(false);
+  itemNoList.innerHTML = '';
+}
+
 /* EVENTLISTENER FUNCTION FOR ITEMNO LIST */
 function itemNoEventListener(e) {
   soundClick.play();
@@ -132,10 +146,7 @@ function itemNoEventListener(e) {
     itemPricelist: pricelistNumber,
   };
   ipcRenderer.send('paste-variables', itemMessage);
-  itemNoPopup.close();
-  blurItemNo.style.visibility = 'hidden';
-  itemNoAddListener(false);
-  itemNoList.innerHTML = '';
+  selectionPopUpClose();
   setTimeout(() => {
     soundNotify.play();
     copyPopup.show();
@@ -416,6 +427,28 @@ function fillTable(json) {
   htmlInnerFill(generatedHtml);
   eventListenerAdd();
   ipcRenderer.send('global-shortcuts-register', null);
+  /* SHOW POPUP NOTIFICATION */
+  if (localStorageObject['pasteItems']) {
+    /* ADD EVENT LISTENERS FOR THE POPUP BUTTONS */
+    pasteNotifyPopUpYes.addEventListener('click', (e) => {
+      soundClick.play();
+      blurItemNo.style.visibility = 'hidden';
+      pasteNotifyPopUp.close();
+    });
+    neverShowBtn.addEventListener('click', (e) => {
+      soundClick.play();
+      localStorageObject['pasteItems'] = false;
+      localStorage.setItem('notifications', JSON.stringify(localStorageObject));
+      blurItemNo.style.visibility = 'hidden';
+      pasteNotifyPopUp.close();
+    });
+    setTimeout(() => {
+      /* SHOW POPUP */
+      blurItemNo.style.visibility = 'visible';
+      pasteNotifyPopUp.show();
+      soundPopup.play();
+    }, 1000);
+  }
 }
 
 /////////////////////
@@ -517,6 +550,13 @@ minCloseBtn.addEventListener('click', (e) => {
   setTimeout(() => {
     tableWindow.close();
   }, 200);
+});
+
+/* LISTEN FOR ESCAPE KEY TO CLOSE SELE POPUP */
+window.addEventListener('keyup', (e) => {
+  if (e.key === 'Escape' && itemNoPopup.open) {
+    selectionPopUpClose();
+  }
 });
 
 ///////////////////

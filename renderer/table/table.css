@@ -26,8 +26,12 @@
 *::after {
   box-sizing: border-box;
   -webkit-user-select: none;
+  color: var(--text-color);
 }
 button {
+  outline: none;
+}
+a {
   outline: none;
 }
 
@@ -608,15 +612,6 @@ header {
   transition: opacity 0.3s;
 }
 
-@keyframes button-hover {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1);
-  }
-}
-
 #product-itemno-popup {
   position: absolute;
   border-radius: 8px;
@@ -743,6 +738,101 @@ header {
   transition: visibility 0.3s;
 }
 
+/* PASTE NOTIFICATION*/
+
+#f2,
+#f1 {
+  display: inline-block;
+  border: 2px solid var(--text-color);
+  border-radius: 5px;
+  padding: 4px 2px;
+  margin-right: 2px;
+}
+#itemno-popup {
+  display: flex;
+  position: relative;
+  bottom: 20px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+}
+
+#itemprice-popup {
+  display: flex;
+  position: relative;
+  bottom: 20px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+}
+#paste-notification-popup {
+  position: absolute;
+  z-index: 3;
+  width: 200px;
+  height: 195px;
+  text-align: justify;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--main);
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
+}
+#paste-notification-popup[open] {
+  animation: popup-notify 0.3s linear 1 forwards;
+}
+#paste-notification-popup p {
+  position: relative;
+  font-size: 12px;
+  bottom: 10px;
+}
+#paste-notification-popup h3 {
+  position: relative;
+  font-size: 12px;
+  top: -10px;
+}
+#paste-notification-yes {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+#paste-notification-yes svg {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+#paste-notification-yes :hover {
+  animation: button-hover 0.2s linear 1 forwards;
+}
+#paste-notification-yes :active {
+  animation: button-hover 0.2s linear 1 reverse;
+}
+
+#never-show {
+  position: absolute;
+  font-size: 10px;
+  right: 10px;
+  color: var(--main);
+  bottom: 10px;
+  padding: 2px 5px;
+  text-decoration: none;
+  border: 1px solid var(--main);
+  border-radius: 20px;
+}
+#never-show:hover {
+  animation: button-hover 0.2s linear 1 forwards;
+}
+#never-show:active {
+  animation: button-hover 0.2s linear 1 reverse;
+}
+
 @keyframes popup-notify {
   0% {
     transform: scale(0);
@@ -752,5 +842,14 @@ header {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes button-hover {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
   }
 }

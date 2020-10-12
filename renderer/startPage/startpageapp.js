@@ -22,6 +22,16 @@ if (!process.env.NODE_ENV) {
   }
 }
 
+/* SET NOTIFICATIONS OBJECT IF DOES NOT EXIST */
+if (!localStorage.getItem('notifications')) {
+  localStorage.setItem(
+    'notifications',
+    JSON.stringify({
+      pasteItems: true,
+    })
+  );
+}
+
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
 
