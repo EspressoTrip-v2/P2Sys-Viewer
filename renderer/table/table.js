@@ -490,11 +490,12 @@ window.addEventListener('blur', (e) => {
     ) {
       infoButtonClick();
     }
-    /* GET THE WINDOW SIZE FOR WHEN UNHIDING */
-    windowState = tableWindow.getSize();
+
     setTimeout(() => {
       /* SCROLLS THE TABLE DOWN TO STOP FREEZING ON UNHIDE */
       if (window.getComputedStyle(tableContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)') {
+        /* GET THE WINDOW SIZE FOR WHEN UNHIDING */
+        windowState = tableWindow.getSize();
         Container.scrollTo(0, [windowState[1]]);
         tableContainer.style.transform = 'scaleY(0)';
         setTimeout(() => {
