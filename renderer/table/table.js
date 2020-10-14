@@ -1,5 +1,7 @@
 /* MODULES */
 const { ipcRenderer, remote } = require('electron');
+const windowStateKeeper = require('electron-window-state');
+
 ('use strict');
 
 /* GET WORKING DIRECTORY */
@@ -29,7 +31,7 @@ const { tablePopulate } = require(`${dir}/renderer/table/tablePopulate.js`);
 let tableWindow = remote.getCurrentWindow();
 
 /* GLOBAL VARIABLES */
-let customerNumbervalue, windowState, productObject, productValue, pricelistNumber;
+let customerNumbervalue, productObject, productValue, windowState, pricelistNumber;
 
 /* CREATE ROW LOOKUP FOR PRODUCT NUMBERS */
 let productDict = {
@@ -86,16 +88,12 @@ let table = document.getElementById('table'),
   customerName = document.getElementById('customer-name'),
   customerNumber = document.getElementById('customer-number'),
   border = document.getElementById('border'),
-  hideBtn = document.getElementById('hide'),
-  unhideBtn = document.getElementById('unhide'),
-  minCloseBtn = document.getElementById('close-b'),
   closeBtn = document.getElementById('close'),
   infoBtn = document.getElementById('info'),
   soundClick = document.getElementById('click'),
   customerNameContainer = document.getElementById('customer-name-container'),
   tableContainer = document.getElementsByClassName('table-container')[0],
   shrunkContainer = document.getElementById('shrunk-container'),
-  minLogoBar = document.getElementById('min-logo'),
   Container = document.getElementById('container'),
   logoCircle = document.getElementById('logo-circle'),
   copyPopup = document.getElementById('copied'),
@@ -153,7 +151,7 @@ function itemNoEventListener(e) {
   }, 300);
   setTimeout(() => {
     copyPopup.close();
-  }, 1500);
+  }, 1000);
 }
 
 /* ADD EVENT LISTENER TO ITEMNO LIST */
@@ -484,72 +482,54 @@ closeBtn.addEventListener('click', (e) => {
 });
 
 /* HIDE BUTTON */
-hideBtn.addEventListener('click', (e) => {
-  /* HIDE THE INFO DROPDOWN IF OPEN */
-  if (
-    window.getComputedStyle(customerNameContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)'
-  ) {
-    infoButtonClick();
-  }
-  /* GET THE WINDOW SIZE FOR WHEN UNHIDING */
-  windowState = tableWindow.getSize();
-  soundClick.play();
-  setTimeout(() => {
-    /* SCROLLS THE TABLE DOWN TO STOP FREEZING ON UNHIDE */
-    if (window.getComputedStyle(tableContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)') {
-      Container.scrollTo(0, windowState[1]);
-      tableContainer.style.transform = 'scaleY(0)';
-      setTimeout(() => {
-        border.style.transform = 'scaleX(0)';
-      }, 300);
+window.addEventListener('blur', (e) => {
+  if (!(itemNoPopup.open || pasteNotifyPopUp.open)) {
+    /* HIDE THE INFO DROPDOWN IF OPEN */
+    if (
+      window.getComputedStyle(customerNameContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)'
+    ) {
+      infoButtonClick();
     }
-    /* SET WINDOW SIZE */
-    setTimeout(() => {
-      tableWindow.setSize(150, 55);
 
-      setTimeout(() => {
-        shrunkContainer.style.visibility = 'visible';
-        shrunkContainer.style.opacity = '1';
-        logoCircle.style.transform = 'rotate(360deg)';
+    setTimeout(() => {
+      /* SCROLLS THE TABLE DOWN TO STOP FREEZING ON UNHIDE */
+      if (window.getComputedStyle(tableContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)') {
+        /* GET THE WINDOW SIZE FOR WHEN UNHIDING */
+        windowState = tableWindow.getSize();
+        Container.scrollTo(0, [windowState[1]]);
+        tableContainer.style.transform = 'scaleY(0)';
         setTimeout(() => {
-          minLogoBar.style.transform = 'scaleX(1)';
+          border.style.transform = 'scaleX(0)';
         }, 300);
-      }, 500);
-    }, 500);
-  }, 200);
-});
-
-unhideBtn.addEventListener('click', (e) => {
-  soundClick.play();
-  setTimeout(() => {
-    minLogoBar.style.transform = 'scaleX(0)';
-    setTimeout(() => {
-      logoCircle.style.transform = 'rotate(0)';
-
-      shrunkContainer.style.opacity = '0';
+      }
+      /* SET WINDOW SIZE */
       setTimeout(() => {
-        shrunkContainer.style.visibility = 'hidden';
-        tableWindow.setSize(360, windowState[1]);
+        tableWindow.setSize(70, 70);
         setTimeout(() => {
-          border.style.transform = 'scaleX(1)';
-          setTimeout(() => {
-            tableContainer.style.transform = 'scaleY(1)';
-            /* SCROLLS TABLE TO TOP TO STOP FREEZING BUG */
-            Container.scrollTo(0, 0);
-          }, 200);
-        }, 200);
-      }, 300);
-    }, 300);
-  }, 200);
+          shrunkContainer.style.visibility = 'visible';
+          shrunkContainer.style.opacity = '1';
+          logoCircle.style.transform = 'rotate(360deg)';
+        }, 500);
+      }, 500);
+    }, 200);
+  }
 });
 
-/* CLOSE BUTTON MINI BAR */
-minCloseBtn.addEventListener('click', (e) => {
-  soundClick.play();
-  ipcRenderer.send('global-shortcuts-unregister', null);
+logoCircle.addEventListener('mouseover', (e) => {
+  logoCircle.style.transform = 'rotate(0)';
+  shrunkContainer.style.opacity = '0';
   setTimeout(() => {
-    tableWindow.close();
-  }, 200);
+    shrunkContainer.style.visibility = 'hidden';
+    tableWindow.setSize(windowState[0], windowState[1]);
+    setTimeout(() => {
+      border.style.transform = 'scaleX(1)';
+      setTimeout(() => {
+        tableContainer.style.transform = 'scaleY(1)';
+        /* SCROLLS TABLE TO TOP TO STOP FREEZING BUG */
+        Container.scrollTo(0, 0);
+      }, 200);
+    }, 200);
+  }, 300);
 });
 
 /* LISTEN FOR ESCAPE KEY TO CLOSE SELE POPUP */
@@ -569,7 +549,7 @@ ipcRenderer.on('table-window', (e, message) => {
   customerNumber.innerText = message.customerNumber;
   customerNumbervalue = message.customerNumber;
   /* SET TITLE OF BAR */
-  minLogoBar.title = customerName.innerText;
+  // minLogoBar.title = customerName.innerText;
   pricelistNumber = message.pricelistNumber;
 });
 

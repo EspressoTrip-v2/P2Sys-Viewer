@@ -9,11 +9,15 @@ const {
   dialog,
   screen,
   clipboard,
+  Notification,
   globalShortcut,
 } = require('electron');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const spawnSync = require('child_process').spawnSync;
+const { StringDecoder } = require('string_decoder');
+const decoder = new StringDecoder('utf-8');
+const windowStateKeeper = require('electron-window-state');
 
 /* GET WORKING DIRECTORY */
 let dir;
@@ -47,6 +51,24 @@ const {
 
 const { updater } = require(`${dir}/updater.js`);
 
+/* TEST POWERSHELL FUNCTION */
+function testPowerShell() {
+  /* TEST POWERSHELL FUNCTIONALITY AND ENSURE IT HAS BEEN RUN ONCE TO ADD IT TO THE CACHE */
+  if (process.platform === 'win32') {
+    let testSpawn = spawnSync('powershell', ['Get-Date'], { shell: true });
+    let error = decoder.write(testSpawn.stderr);
+    if (error) {
+      let notification = new Notification({
+        title: 'POWERSHELL ERROR',
+        body:
+          'Powershell is required for the inserting of data into the ERP. Please contact your administrator as inserting of product data might not work correctly.',
+        icon: `${dir}/renderer/icons/error.png`,
+      });
+      notification.show();
+    }
+  }
+}
+
 /* WINDOW VARIABLES */
 let customerSearchWindow,
   tray,
@@ -55,7 +77,8 @@ let customerSearchWindow,
   loadingWindow,
   tableWindow,
   dbLoaderWindow,
-  updateWindow;
+  updateWindow,
+  tableWindowState;
 
 /* GLOBAL VARIABLES */
 let customerNumberName,
@@ -289,23 +312,50 @@ function createTray() {
 /* WINDOW CREATION FUNCTIONS */
 //////////////////////////////
 
+/* WINDOW STATES FUNCTION */
+////////////////////////////
+function windowStates() {
+  /* GET SCREEN SIZE */
+  let res = screen.getPrimaryDisplay().size;
+  screenHeight = res.height;
+  screenWidth = res.width;
+
+  /* SET TABLE WINDOW STATE */
+  tableWindowState = windowStateKeeper({
+    defaultWidth: 320,
+    defaultHeight: 800,
+    file: 'tableWindowState.json',
+  });
+
+  customerWindowState = windowStateKeeper({
+    defaultWidth: 215,
+    defaultHeight: 325,
+    file: 'customerWindowState.json',
+  });
+}
+
 /* CREATE CUSTOMER SEARCH WINDOW */
 function createCustomerSearchWindow() {
   createTray();
   customerSearchWindow = new BrowserWindow({
-    height: 350,
-    width: 235,
+    height: customerWindowState.height,
+    width: customerWindowState.width,
+    x: customerWindowState.x,
+    y: customerWindowState.y,
+    maxHeight: 400,
+    maxWidth: 264,
+    minHeight: 200,
+    minWidth: 132,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     center: true,
     frame: false,
     spellCheck: false,
-    // resizable: false,
     maximizable: false,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -315,6 +365,9 @@ function createCustomerSearchWindow() {
 
   /* LOAD HTML */
   customerSearchWindow.loadFile(`${dir}/renderer/startPage/startPage.html`);
+
+  /* MANAGE WINDOW STATE */
+  customerWindowState.manage(customerSearchWindow);
 
   /* CLOSE LOADING WINDOW SHOW CUSTOMER WINDOW */
   customerSearchWindow.webContents.once('did-finish-load', () => {
@@ -351,10 +404,21 @@ function createCustomerSearchWindow() {
 function createCustomerNameWindow(message) {
   customerNameWindow = new BrowserWindow({
     parent: customerSearchWindow,
-    height: 350,
-    width: 225,
-    x: message.dimensions[0] - 225,
-    y: message.dimensions[1],
+    height: customerWindowState.height,
+    width: customerWindowState.width,
+    /* CHECK TO SEE IF STATE X/Y IS AVAILABLE */
+    x:
+      typeof customerWindowState.x !== 'undefined'
+        ? customerWindowState.x - customerWindowState.width
+        : message.dimensions[0] - customerWindowState.width,
+    y:
+      typeof customerWindowState.y !== 'undefined'
+        ? customerWindowState.y
+        : message.dimensions[1],
+    maxHeight: 400,
+    maxWidth: 264,
+    minHeight: 200,
+    minWidth: 132,
     autoHideMenuBar: true,
     backgroundColor: '#00FFFFFF',
     frame: false,
@@ -366,7 +430,7 @@ function createCustomerNameWindow(message) {
     fullscreenable: false,
     skipTaskbar: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -405,7 +469,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -424,17 +488,12 @@ function createLoadingWindow() {
 
 /* TABLE WINDOW */
 function createTableWindow(message) {
-  let height;
-  if (screenHeight > 830) {
-    height = 800;
-  } else if (screenHeight <= 830) {
-    height = screenHeight - 80;
-  }
   tableWindow = new BrowserWindow({
-    height: height,
-    maxHeight: 880,
-    maxWidth: 360,
-    width: 360,
+    x: tableWindowState.x,
+    y: tableWindowState.y,
+    width: tableWindowState.width,
+    height: tableWindowState.height,
+    maxWidth: 400,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     alwaysOnTop: true,
@@ -445,7 +504,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -475,6 +534,9 @@ function createTableWindow(message) {
     tableWindow.show();
   });
 
+  /* MANGE WINDOW STATE */
+  tableWindowState.manage(tableWindow);
+
   //   DEV TOOLS
   // tableWindow.webContents.openDevTools();
 
@@ -503,7 +565,7 @@ function createDbLoaderWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -540,7 +602,7 @@ function createUpdateWindow() {
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
-      // devTools: false,
+      devTools: false,
       enableRemoteModule: true,
     },
     icon: `${dir}/renderer/icons/updateTemplate.png`,
@@ -565,10 +627,12 @@ app.on('ready', () => {
   /* SET VERSION VARIABLE */
   version = app.getVersion();
 
-  /* GET SCREEN SIZE */
-  let res = screen.getPrimaryDisplay().size;
-  screenHeight = res.height;
-  screenWidth = res.width;
+  /* SET WINDOW STATES */
+  windowStates();
+
+  /* POWERSHELL TEST */
+  testPowerShell();
+
   setTimeout(() => {
     mongooseConnect();
 
@@ -665,15 +729,15 @@ if (process.platform === 'win32') {
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
     let itemNoPaste = [
-        '$key=New-Object -ComObject wscript.shell;',
-        '$key.SendKeys("^{v}")::SendWait;',
-        ' $key.SendKeys("{ENTER}");',
-        ' $key.SendKeys("{ENTER}")',
+        '$keya=New-Object -ComObject wscript.shell;',
+        '$keya.SendKeys("^{v}")::SendWait;',
+        ' $keya.SendKeys("{ENTER}");',
+        ' $keya.SendKeys("{ENTER}")',
       ],
       itemPriceListPaste = [
-        '$key=New-Object -ComObject wscript.shell;',
-        ' $key.SendKeys("^{v}")::SendWait;',
-        ' $key.SendKeys("{ENTER}")',
+        '$keyb=New-Object -ComObject wscript.shell;',
+        ' $keyb.SendKeys("^{v}")::SendWait;',
+        ' $keyb.SendKeys("{ENTER}")',
       ];
     if (itemNo) {
       clipboard.writeText(itemNo);
@@ -689,15 +753,16 @@ if (process.platform === 'win32') {
     }
   }
   function pasteItemValue() {
-    let itemValuePaste = [
-      '$key=New-Object -ComObject wscript.shell;',
-      ' $key.SendKeys("^{v}");',
-      ' $key.SendKeys("{ENTER}")',
-    ];
+    /* CHANGED TO ENTERING THE VALUE AS PASTING DOES NOT WORK */
     if (itemValue) {
       clipboard.writeText(itemValue);
+      let itemValuePaste = [
+        '$keyc=New-Object -ComObject wscript.shell;',
+        `$keyc.SendKeys("${itemValue}")::SendWait;`,
+        ' $keyc.SendKeys("{ENTER}")',
+      ];
       setTimeout(() => {
-        spawnSync('powershell', [itemValuePaste]);
+        spawnSync('powershell', itemValuePaste);
       }, 200);
     }
   }

@@ -62,17 +62,17 @@ body {
 }
 
 #dim {
-  padding-left: 25px;
+  padding-left: 5vw;
 }
 #length {
-  padding-left: 30px;
+  padding-left: 8vw;
 }
 #treated {
-  padding: 0 5px;
+  padding: 0 1vw;
 }
 
 #untreated {
-  padding: 0 5px;
+  padding: 0 1vw;
 }
 
 .dimensions {
@@ -82,14 +82,14 @@ body {
   justify-content: center;
   align-items: flex-start;
   align-content: center;
-  height: 22px;
-  left: 15px;
+  height: 2.5vh;
+  left: 4vw;
 }
 
 th {
   position: sticky;
   top: 0;
-  font-size: 11px;
+  font-size: 3.5vw;
   padding: 5px 0;
   background-color: var(--sec-blue);
   color: #fff;
@@ -103,11 +103,12 @@ th {
 
 .price-entries-untreated {
   position: relative;
-  left: 15px;
+  left: 5vw;
   border: 2px solid transparent;
   border-radius: 200px;
-  height: 22px;
-  width: 50px;
+  height: 2.5vh;
+  width: 15vw;
+  padding: 1vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -132,11 +133,12 @@ th {
 
 .price-entries-treated {
   position: relative;
-  left: 7px;
+  left: 2vw;
   border: 2px solid transparent;
   border-radius: 200px;
-  height: 22px;
-  width: 50px;
+  height: 2.5vh;
+  width: 15vw;
+  padding: 1vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -170,18 +172,18 @@ th {
 
 .table-entries {
   position: relative;
-  left: 15px;
+  left: 4vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 22px;
+  height: 2.5vh;
 }
 
 td {
-  font-size: 12px;
-  padding: 2px 0;
+  font-size: 3.5vw;
+  padding: 0.5vh 0;
 }
 
 tbody {
@@ -229,8 +231,8 @@ header {
   justify-content: space-evenly;
   justify-items: center;
   align-items: center;
-  height: 30px;
-  width: 330px;
+  height: 10vw;
+  width: 98vw;
   background-color: var(--sec-blue);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -255,7 +257,6 @@ header {
   justify-content: center;
   align-items: center;
   align-content: center;
-  padding: 0 5px;
   border-radius: 10px;
   transition: transform 0.3s, opacity 0.5s 0.5s;
 }
@@ -270,7 +271,7 @@ header {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  padding: 0 5px;
+  padding: 0 1vw;
 }
 
 #customer-name {
@@ -285,7 +286,7 @@ header {
   outline: none;
   text-transform: uppercase;
   overflow-y: auto;
-  padding: 0 5px;
+  padding: 0 1vw;
 }
 
 /* Scrollbar Customization for Table */
@@ -307,9 +308,9 @@ header {
   position: absolute;
   left: 0;
   display: flex;
-  width: 160px;
+  width: 65vw;
   right: 0;
-  height: 30px;
+  height: 8vw;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
@@ -319,12 +320,12 @@ header {
 
 #customer-number {
   display: flex;
-  position: relative;
+  position: absolute;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
-  font-size: 12px;
+  font-size: 3.5vw;
   font-weight: bold;
 }
 
@@ -333,8 +334,8 @@ header {
   color: var(--text-color);
   margin: 0;
   display: flex;
-  height: 23px;
-  width: 100px;
+  height: 8vw;
+  width: 25vw;
   justify-content: center;
   flex-direction: column;
   align-content: center;
@@ -347,15 +348,15 @@ header {
   transform-origin: top;
   transform: scaleY(0);
   position: absolute;
+  font-size: 3.5vw;
   z-index: 2;
   width: 100%;
-  height: 60px;
-  padding: 0 2px;
-  padding-bottom: 2px;
+  height: 20vw;
+  padding: 0 0.5vw;
+  padding-bottom: 0.3vh;
   background-color: var(--sec-blue);
   margin: 0;
   display: flex;
-  font-size: 12px;
   justify-content: space-evenly;
   flex-direction: column;
   align-content: center;
@@ -382,7 +383,7 @@ header {
   position: relative;
   overflow: auto;
   max-height: 100%;
-  width: 330px;
+  width: 98vw;
 }
 
 /* Scrollbar Customization for Table */
@@ -415,79 +416,16 @@ header {
 
 /* BUTTONS */
 
-#hide {
-  position: absolute;
-  z-index: 1;
-  right: 65px;
-  overflow: hidden;
-  border: 2px solid #fff;
-  background-color: var(--button-green);
-  font-weight: bolder;
-  padding: 2px 5px;
-  width: 40px;
-  height: 25px;
-  color: #fff;
-  border-radius: 200px;
-  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
-}
-#hide:hover {
-  animation: button-hover 0.2s linear 1 forwards;
-}
-#hide:active {
-  animation: button-hover 0.2s linear 1 reverse;
-}
-#hide-logo {
-  position: absolute;
-  height: 20px;
-  padding: 1px;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  fill: #fff;
-}
-
-#unhide {
-  position: absolute;
-  left: 2px;
-  z-index: 1;
-  border: 2px solid #fff;
-  background-color: var(--button-green);
-  font-weight: bolder;
-  padding: 2px 5px;
-  width: 40px;
-  height: 25px;
-  color: #fff;
-  border-radius: 200px;
-  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
-}
-
-#unhide:hover {
-  animation: button-hover 0.2s linear 1 forwards;
-}
-#unhide:active {
-  animation: button-hover 0.2s linear 1 reverse;
-}
-#unhide-logo {
-  position: absolute;
-  height: 20px;
-  padding: 1px;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  fill: #fff;
-}
-
 #info {
   position: absolute;
-  right: 125px;
+  right: 17vw;
   z-index: 1;
   overflow: hidden;
   border: 2px solid #fff;
   background-color: var(--button-gold);
   font-weight: bolder;
-  width: 40px;
-  height: 25px;
-  padding: 2px 5px;
+  width: 14vw;
+  height: 8vw;
   color: #fff;
   border-radius: 200px;
 }
@@ -499,28 +437,27 @@ header {
 }
 #info-logo {
   position: absolute;
-  height: 20px;
-  padding: 1px;
-  top: 0px;
-  left: 0;
-  width: 100%;
+  top: 0.4vw;
+  left: 3.5vw;
+  height: 6vw;
+  width: 6vw;
   fill: #fff;
+  padding: 0.5vw 0;
 }
 
 .close {
   position: absolute;
   z-index: 1;
-  right: 4px;
+  right: 1vw;
   overflow: hidden;
   border: 2px solid #fff;
   background-color: var(--button-red);
   font-weight: bolder;
-  padding: 2px 5px;
-  width: 40px;
-  height: 25px;
+  width: 14vw;
+  height: 8vw;
   color: #fff;
   border-radius: 200px;
-  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow 0.5s;
+  transition: background-color 0.5s, border 0.5s, color 0.5s, box-shadow;
 }
 
 #close:hover {
@@ -531,12 +468,12 @@ header {
 }
 .close-logo {
   position: absolute;
-  height: 20px;
-  padding: 1px;
-  top: 0px;
-  left: 0;
-  width: 100%;
+  top: 0.4vw;
+  left: 3.5vw;
+  height: 6vw;
+  width: 6vw;
   fill: #fff;
+  padding: 0.5vw 0;
 }
 
 #close-b {
@@ -550,10 +487,10 @@ header {
 }
 
 #grab {
-  position: absolute;
-  left: 5px;
-  width: 20px;
-  height: 20px;
+  position: relative;
+  left: -57vw;
+  width: 6vw;
+  height: 6vw;
 }
 
 #grab-logo {
@@ -590,10 +527,20 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  -webkit-app-region: drag;
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
+  -webkit-user-select: none;
   transition: transform 0.3s;
+  animation: logo-flash 1s ease-in-out infinite alternate;
 }
+
+@keyframes logo-flash {
+  from {
+    box-shadow: 1px 1px 15px 0px dodgerblue;
+  }
+  to {
+    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
+  }
+}
+
 #logo {
   position: absolute;
   height: 35px;
@@ -615,6 +562,7 @@ header {
 #product-itemno-popup {
   position: absolute;
   border-radius: 8px;
+  max-height: 50vh;
   overflow: auto;
   padding: 0px;
   align-items: center;
@@ -636,16 +584,16 @@ header {
   justify-content: center;
   align-items: center;
   align-content: center;
-  padding: 5px 2px;
+  padding: 0.5vh 1vw;
 }
 
 #itemno-header {
   position: relative;
   width: 100%;
   color: #fff;
-  font-size: 12px;
+  font-size: 3.5vw;
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 0.5vh 4vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -657,8 +605,8 @@ header {
 }
 .size {
   position: relative;
-  font-size: 12px;
-  padding: 5px 0;
+  font-size: 3.5vw;
+  padding: 0.7vh 0;
   width: 100%;
   border-radius: 5px;
   display: flex;
@@ -679,8 +627,8 @@ header {
   position: relative;
   width: 100%;
   color: #fff;
-  font-size: 12px;
-  padding: 3px 0;
+  font-size: 3.5vw;
+  padding: 0.5vh 0;
   font-weight: bold;
   border: 2px solid #fff;
   border-bottom-left-radius: 8px;
@@ -696,11 +644,11 @@ header {
   position: absolute;
   top: 5vh;
   border-radius: 200px;
-  padding: 6px;
+  padding: 1vh 1vw;
   border: 2px solid var(--text-color);
   background-color: #fff;
-  width: 110px;
-  height: 35px;
+  width: 30vw;
+  height: 12vw;
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 #copied[open] {
@@ -709,31 +657,36 @@ header {
 
 #copied-text {
   position: absolute;
-  right: 10px;
-  top: 7px;
-  font-size: 15px;
-  font-weight: bolder;
+  top: 30%;
+  left: 37%;
+  font-size: 4vw;
+  font-weight: bold;
   color: var(--text-color);
 }
 #copied-logo {
   position: absolute;
-  left: 10px;
-  top: 3px;
-  width: 25px;
+  left: 10%;
+  width: 25%;
+  top: 18%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
 }
+#copied-logo svg {
+  width: 100%;
+  height: auto;
+}
 
 #blur {
   display: block;
   visibility: hidden;
   position: absolute;
-  width: 100%;
+  top: 0vh;
+  width: 97vw;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 15px;
   backdrop-filter: blur(2px);
   transition: visibility 0.3s;
 }
@@ -745,13 +698,13 @@ header {
   display: inline-block;
   border: 2px solid var(--text-color);
   border-radius: 5px;
-  padding: 4px 2px;
-  margin-right: 2px;
+  padding: 1vh 3vw;
+  margin-right: 1vw;
 }
 #itemno-popup {
   display: flex;
-  position: relative;
-  bottom: 20px;
+  bottom: 24vw;
+  position: absolute;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -761,8 +714,8 @@ header {
 
 #itemprice-popup {
   display: flex;
-  position: relative;
-  bottom: 20px;
+  bottom: 10vw;
+  position: absolute;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -771,11 +724,10 @@ header {
 }
 #paste-notification-popup {
   position: absolute;
-  z-index: 3;
-  width: 200px;
-  height: 195px;
+  width: 55vw;
+  height: 60vw;
   text-align: justify;
-  font-size: 12px;
+  font-size: 3.5vw;
   border-radius: 8px;
   border: 2px solid var(--main);
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
@@ -785,19 +737,19 @@ header {
 }
 #paste-notification-popup p {
   position: relative;
-  font-size: 12px;
-  bottom: 10px;
+  font-size: 3.4vw;
+  bottom: 0.8vh;
 }
 #paste-notification-popup h3 {
   position: relative;
-  font-size: 12px;
-  top: -10px;
+  font-size: 3.5vw;
+  top: -1.5vh;
 }
 #paste-notification-yes {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 20px;
+  top: 1vh;
+  right: 2vw;
+  width: 5.5vw;
   border-radius: 50%;
   background-color: #fff;
 }
@@ -817,14 +769,19 @@ header {
 
 #never-show {
   position: absolute;
-  font-size: 10px;
-  right: 10px;
+  font-size: 2.8vw;
+  right: 2vw;
   color: var(--main);
-  bottom: 10px;
-  padding: 2px 5px;
+  bottom: 1vh;
+  padding: 0.4vh 1vw;
   text-decoration: none;
   border: 1px solid var(--main);
   border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 #never-show:hover {
   animation: button-hover 0.2s linear 1 forwards;

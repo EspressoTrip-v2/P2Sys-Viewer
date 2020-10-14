@@ -34,6 +34,7 @@ if (!localStorage.getItem('notifications')) {
 
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
+window.search = customerSearchWindow;
 
 /* GLOBAL VARIABLES */
 let customerNumberName,
@@ -109,12 +110,10 @@ const fillCustomerPrices = () => {
     customerNumberList.innerHTML = '';
     customerNumber = Object.keys(customerPrices);
     customerNumber.forEach((el) => {
-      if (el !== '@EXMILL') {
-        let html = `
+      let html = `
             <dl class="cusnum" id="${el}">${el}</dl>
             `;
-        customerNumberList.insertAdjacentHTML('beforeend', html);
-      }
+      customerNumberList.insertAdjacentHTML('beforeend', html);
     });
 
     addListListeners();
@@ -253,6 +252,7 @@ ipcRenderer.on('database', async (e, message) => {
   });
   customerPrices = await message.customerPrices;
   delete customerPrices['_id'];
+  delete customerPrices['@EXMILL'];
   /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
   fillCustomerPrices();
 

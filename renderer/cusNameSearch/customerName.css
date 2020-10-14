@@ -42,7 +42,7 @@ html {
 }
 
 main {
-  margin-top: 5px;
+  margin-top: 1.5vh;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -50,9 +50,9 @@ main {
   background-color: #fff;
   border: 2px solid #fff;
   border-radius: 10px;
-  padding: 0px 3px;
-  width: 195px;
-  height: 220px;
+  padding: 0px 1vw;
+  width: 91vw;
+  height: 65vh;
 }
 
 header {
@@ -63,15 +63,15 @@ header {
   background-color: var(--sec-blue);
   border: 2px solid var(--sec-blue);
   border-radius: 10px;
-  height: 40px;
-  width: 195px;
+  height: 13vh;
+  width: 92vw;
 }
 #whitcher-logo-container {
   position: absolute;
   z-index: 1;
   background-color: #fff;
   width: 100%;
-  height: 60px;
+  height: 15vh;
   border-radius: 50%;
   display: flex;
   box-shadow: 0px 6px 8px 0px rgba(50, 50, 50, 0.4);
@@ -84,7 +84,7 @@ header {
 #whitcher-logo {
   position: relative;
   height: auto;
-  width: 170px;
+  width: 70vw;
   -webkit-user-drag: none;
   -webkit-app-region: drag;
 }
@@ -116,25 +116,24 @@ body {
   align-items: center;
   align-content: center;
   height: 100%;
-  width: 220px;
   filter: drop-shadow(1px 2px 4px #636363);
   transition: opacity 0.3s;
 }
 
 footer {
   position: relative;
-  width: 195px;
-  margin-top: 5px;
+  width: 92vw;
+  margin-top: 1.5vh;
 }
 
 .customer-name {
   flex-direction: column;
   justify-content: center;
   justify-items: center;
-  padding: 3px 5px;
+  padding: 1vh 1vw;
   text-align: center;
-  font-size: 12px;
-  margin-top: 3px;
+  font-size: 6vw;
+  margin-top: 1vh;
   background-color: #fff;
   border: 1px solid #fff;
   border-radius: 5px;
@@ -153,10 +152,10 @@ footer {
   justify-content: center;
   justify-items: center;
   text-align: center;
-  font-size: 12px;
+  font-size: 6vw;
   font-weight: bold;
-  margin-top: 3px;
-  padding: 3px 5px;
+  margin-top: 1vh;
+  padding: 1vh 1vw;
   background-color: var(--sec-blue);
   border: 1px solid var(--sec-blue);
   border-radius: 5px;
@@ -167,7 +166,6 @@ footer {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  height: 67vh;
   overflow-y: auto;
 }
 #container-background::-webkit-scrollbar {
@@ -188,19 +186,18 @@ footer {
   background-color: var(--sec-blue);
   border: 2px solid var(--sec-blue);
   border-radius: 10px;
-  height: 40px;
+  height: 13vh;
 }
 
 #customer-search {
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 6vw;
   position: relative;
   border: 2px solid #fff;
   border-radius: 50px;
   text-align: center;
-  font-weight: bolder;
-  width: 175px;
-  height: 25px;
+  width: 80vw;
+  height: 7vh;
   color: var(--text-color);
   transition: filter 0.5s;
 }
