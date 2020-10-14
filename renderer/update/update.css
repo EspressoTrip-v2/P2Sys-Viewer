@@ -111,7 +111,7 @@ body {
   width: calc(var(--width, 0) * 1%);
   min-width: 0.5rem;
   max-width: calc(100% - 4px);
-  background-color: var(--progress);
+  background-color: var(--button-green-hover);
   border-radius: 1em;
 }
 #progress::after {

@@ -729,15 +729,15 @@ if (process.platform === 'win32') {
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
     let itemNoPaste = [
-        '$key=New-Object -ComObject wscript.shell;',
-        '$key.SendKeys("^{v}")::SendWait;',
-        ' $key.SendKeys("{ENTER}");',
-        ' $key.SendKeys("{ENTER}")',
+        '$keya=New-Object -ComObject wscript.shell;',
+        '$keya.SendKeys("^{v}")::SendWait;',
+        ' $keya.SendKeys("{ENTER}");',
+        ' $keya.SendKeys("{ENTER}")',
       ],
       itemPriceListPaste = [
-        '$key=New-Object -ComObject wscript.shell;',
-        ' $key.SendKeys("^{v}")::SendWait;',
-        ' $key.SendKeys("{ENTER}")',
+        '$keyb=New-Object -ComObject wscript.shell;',
+        ' $keyb.SendKeys("^{v}")::SendWait;',
+        ' $keyb.SendKeys("{ENTER}")',
       ];
     if (itemNo) {
       clipboard.writeText(itemNo);
@@ -753,15 +753,16 @@ if (process.platform === 'win32') {
     }
   }
   function pasteItemValue() {
-    let itemValuePaste = [
-      '$key=New-Object -ComObject wscript.shell;',
-      ' $key.SendKeys("^{v}");',
-      ' $key.SendKeys("{ENTER}")',
-    ];
+    /* CHANGED TO ENTERING THE VALUE AS PASTING DOES NOT WORK */
     if (itemValue) {
       clipboard.writeText(itemValue);
+      let itemValuePaste = [
+        '$keyc=New-Object -ComObject wscript.shell;',
+        `$keyc.SendKeys("${itemValue}")::SendWait;`,
+        ' $keyc.SendKeys("{ENTER}")',
+      ];
       setTimeout(() => {
-        spawnSync('powershell', [itemValuePaste]);
+        spawnSync('powershell', itemValuePaste);
       }, 200);
     }
   }
