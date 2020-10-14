@@ -82,10 +82,10 @@ button:focus {
   justify-content: center;
   align-self: center;
   align-items: center;
-  height: 310px;
-  width: 210px;
+  height: 95vh;
+  width: 92vw;
   border: 2px solid #fff;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: #fff;
   transition: visibility 0.3s, opacity 0.3s 0.3s;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
@@ -93,29 +93,27 @@ button:focus {
 #check-background {
   display: flex;
   position: relative;
-  width: 195px;
-  height: 225px;
-  top: 0;
+  width: 85vw;
+  height: 65vh;
+  top: 2vh;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2vh;
-  padding: 2vh;
   background-color: var(--sec-blue);
   border: 2px solid var(--sec-blue);
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 #customer-search-container {
   position: relative;
-  bottom: 5px;
+  bottom: 1vh;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
   justify-items: center;
-  width: 175px;
-  height: 35px;
+  width: 78vw;
+  height: 10vh;
   border-radius: 5px;
 }
 #customer-search-container img {
@@ -127,11 +125,11 @@ button:focus {
 
 #customer-search {
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 6vw;
   width: 100%;
   text-align: center;
   border-radius: 200px;
-  height: 25px;
+  height: 7vh;
   border: 2px solid #fff;
   color: var(--text-color);
   transition: filter 0.5s;
@@ -154,17 +152,17 @@ button:focus {
 
 #customer-number-list {
   position: relative;
-  bottom: 10px;
-  width: 180px;
+  bottom: 2vh;
+  width: 78vw;
   background-color: #fff;
   border: 2px solid var(--sec-blue);
-  border-radius: 10px;
-  height: 120px;
-  padding: 2px;
+  border-radius: 8px;
+  height: 38vh;
+  padding: 1vw;
 }
 #customer-list {
   width: 100%;
-  height: 112px;
+  height: 35vh;
   overflow: auto;
   background-position: center;
   background-size: contain;
@@ -190,13 +188,13 @@ button:focus {
 
 .cusnum {
   text-align: center;
-  font-size: 12px;
+  font-size: 6vw;
   background-color: #fff;
   border: 1px solid #fff;
   margin: 0;
-  margin-top: 3px;
+  margin-top: 1vh;
   border-radius: 5px;
-  padding: 3px 0;
+  padding: 1vh 0;
   color: var(--text-color);
 }
 
@@ -206,21 +204,21 @@ button:focus {
 }
 
 .cusnum-clicked {
-  position: relative;
   background-color: var(--sec-blue);
   color: #fff;
   border: 1px solid var(--sec-blue);
   text-align: center;
-  padding: 3px 0;
-  font-size: 12px;
+  padding: 1vh 0;
+  font-size: 6vw;
   font-weight: bold;
   border-radius: 5px;
   margin: 0;
+  margin-top: 1vh;
 }
 
 #p2s-logo {
   position: absolute;
-  top: -3px;
+  bottom: 77vh;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -231,28 +229,28 @@ button:focus {
 #p2s-logo img {
   position: relative;
   top: 0;
-  left: 2px;
-  height: 50px;
+  left: 0;
+  height: 18vh;
 }
 #p2s-logo::after {
   content: 'Viewer';
-  top: -1px;
-  right: -3px;
+  top: 0vh;
+  right: 0vw;
   position: relative;
   font-family: Forelle;
-  font-size: 35px;
+  font-size: 18vw;
   color: var(--text-color);
 }
 
 #button-container {
   position: relative;
-  top: 5px;
+  top: 1vh;
   display: inline-flex;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
   justify-items: center;
-  width: 225px;
+  width: 98vw;
 }
 
 /* BUTTONS */
@@ -265,9 +263,9 @@ button:focus {
   align-items: center;
   font-weight: bolder;
   border-radius: 200px;
-  padding: 5px 0;
+  padding: 1.5vh 0;
   color: #fff;
-  font-size: 12px;
+  font-size: 6vw;
   text-align: center;
   font-weight: bolder;
   transition: background-color 0.5s, border 0.5s, color 0.5s;
@@ -276,18 +274,18 @@ button:focus {
 .btn-exit {
   position: relative;
   display: flex;
-  left: 25px;
+  left: 10vw;
   justify-content: center;
   align-items: center;
   font-weight: bolder;
   border-radius: 200px;
-  width: 80px;
+  width: 38vw;
   background-color: var(--button-red);
   color: #fff;
   border: 2px solid #fff;
-  font-size: 12px;
+  font-size: 6vw;
   text-align: center;
-  padding: 5px 0;
+  padding: 1.5vh 0;
   font-weight: bolder;
   transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
@@ -301,14 +299,14 @@ button:focus {
 
 #check-view-btn {
   position: relative;
-  right: 25px;
+  right: 10vw;
   display: none;
   text-align: center;
   background-color: var(--button-green);
   color: #fff;
   border: 2px solid #fff;
-  width: 80px;
-  padding: 5px 0;
+  width: 38vw;
+  padding: 1.5vh 0;
   transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
 #check-view-btn:hover {
@@ -321,29 +319,29 @@ button:focus {
 #disabled {
   position: relative;
   display: flex;
-  font-size: 12px;
-  right: 25px;
+  font-size: 6vw;
+  right: 10vw;
   justify-content: center;
   align-items: center;
-  padding: 5px 0px;
+  padding: 1vh 0px;
   font-weight: bold;
   border-radius: 200px;
   height: auto;
-  width: 80px;
+  width: 38vw;
   color: #fff;
   background-color: var(--button-disabled);
   border: 2px solid #fff;
 }
 
 #assist-box {
-  bottom: 2px;
+  bottom: 0;
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   justify-items: center;
   width: 100%;
-  height: 30px;
+  height: 11vh;
 }
 
 #assist-btn {
@@ -351,10 +349,10 @@ button:focus {
   justify-self: center;
   align-self: center;
   padding: 0;
-  width: 30px;
-  height: 30px;
+  width: 15vw;
+  height: 10vh;
   background-color: #fff;
-  border: 2px solid var(--button-green);
+  border: 2px solid var(--sec-blue);
   border-radius: 50%;
 }
 
@@ -370,13 +368,13 @@ button:focus {
     transform: scale(1);
   }
   to {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 
 #logo-assist {
-  width: 18px;
-  top: 2px;
+  width: 8vw;
+  top: 1vh;
   position: absolute;
 }
 
@@ -388,21 +386,18 @@ button:focus {
 .grab-search {
   display: block;
   position: absolute;
-  width: 20px;
-  top: 5px;
-  left: 5px;
+  width: 10vw;
+  top: 2vh;
+  left: 2vw;
   -webkit-app-region: drag;
-}
-.grab-search:hover {
-  cursor: move;
 }
 
 #minimize-search {
   position: absolute;
   transform: scale(1);
-  top: 5px;
-  right: 8px;
-  width: 15px;
+  top: 3vh;
+  right: 4vw;
+  width: 8vw;
   height: auto;
   outline: none;
   fill: var(--main);
@@ -410,7 +405,7 @@ button:focus {
 }
 
 #minimize-search:hover {
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 
 #minimize-search:active {

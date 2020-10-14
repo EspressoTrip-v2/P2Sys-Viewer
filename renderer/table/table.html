@@ -30,19 +30,6 @@
 
           </button>
 
-          <button id="hide" title="Retract table">
-
-
-            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="hide-logo">
-              <g transform="translate(0 511) scale(.1 -.1)">
-                <path d="m426.7 4356.7v-653.3h9146.6v1306.6h-9146.6v-653.3z" />
-                <path
-                  d="m4011.8 1079.8-971.8-1296.5h1306.6v-4573.3h1306.7v4573.4h1306.7l-971.8 1296.5c-534.9 712.5-980 1296.5-988.2 1296.5-8.2-0.1-453.3-584.1-988.2-1296.6z" />
-              </g>
-            </svg>
-
-          </button>
-
           <button class='close' id="close" title="Close table">
 
             <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" class="close-logo">
@@ -53,14 +40,14 @@
             </svg>
 
           </button>
+          <div id="customer-number-container">
 
+            <span id="customer-number"></span>
+          </div>
 
           <div id="move-container">
 
-            <div id="customer-number-container">
 
-              <span id="customer-number"></span>
-            </div>
             <div id="grab">
 
               <svg viewBox="0 0 1000 1000" id="grab-logo">
@@ -84,44 +71,24 @@
 
         </table>
       </div>
+
+    </div>
+    <div id="blur">
+
     </div>
 
     </main>
+
   </div>
   <div id="shrunk-container">
     <div id="logo-circle">
       <img src="../icons/loader.png" alt="" id="logo">
     </div>
-    <div id="min-logo">
-      <button id="unhide">
-
-        <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="unhide-logo">
-          <g transform="translate(0 511) scale(.1 -.1)">
-            <path
-              d="m4346.7 2723.3v-2286.6h-1306.7l971.8-1296.5c534.9-712.5 980-1296.5 988.2-1296.5s453.2 583.9 988.2 1296.5l971.8 1296.5h-1306.6v4573.3h-1306.7v-2286.7z" />
-            <path d="m426.7-4136.7v-653.3h9146.6v1306.6h-9146.6v-653.3z" />
-          </g>
-        </svg>
-
-      </button>
-      <button class='close' id="close-b">
-
-        <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" class="close-logo">
-          <path
-            d="m961.8 825.6-787.3-787.3c-37.5-37.5-98.5-37.5-136.1 0s-37.5 98.6 0 136.1l787.3 787.3c37.5 37.5 98.6 37.5 136.1 0 37.6-37.5 37.6-98.5 0-136.1z" />
-          <path
-            d="m961.8 38.3c-37.5-37.5-98.5-37.5-136.1 0l-787.5 787.3c-37.5 37.5-37.5 98.6 0 136.1s98.6 37.5 136.1 0l787.3-787.3c37.8-37.6 37.8-98.6 0.2-136.1z" />
-        </svg>
-
-      </button>
-    </div>
   </div>
 
   </div>
   </div>
-  <div id="blur">
 
-  </div>
   <dialog id="product-itemno-popup">
     <div id="itemno-header">SELECT PRODUCT</div>
     <div id="itemno">
