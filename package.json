@@ -1,6 +1,6 @@
 {
   "name": "P2Sys-Viewer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "P2Sys Viewer for P2Sys Main App",
   "main": "main.js",
   "scripts": {
@@ -21,7 +21,8 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-window-state": "^5.0.3",
-    "mongoose": "^5.10.0"
+    "mongoose": "^5.10.0",
+    "nodemailer": "^6.4.14"
   },
   "build": {
     "appId": "com.JDevSoftware.P2Sys-Viewer",

@@ -31,6 +31,10 @@ if (!localStorage.getItem('notifications')) {
     })
   );
 }
+/* SET MONITORFLAG OBJECT IF DOES NOT EXIST */
+if (!localStorage.getItem('monitorflag')) {
+  localStorage.setItem('monitorflag', true);
+}
 
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
@@ -41,7 +45,10 @@ let customerNumberName,
   customerPrices,
   customerNameNumber,
   customerPricelistNumber,
-  numbersDivItems;
+  numbersDivItems,
+  localStorageArr,
+  curCustomerName,
+  curCustomerNumber;
 
 //////////////////
 /* DOM ELEMENTS */
@@ -60,12 +67,22 @@ let customerFindBtn = document.getElementById('assist-btn'),
 ///////////////
 /* FUNCTIONS */
 ///////////////
-
+/* RESET THE LIST OF CUSTOMER NUMBERS TO REMOVE CLICKS */
 function resetList() {
   numbersDivItems.forEach((el) => {
     el.style.display = 'block';
     el.setAttribute('class', 'cusnum');
   });
+}
+
+/* SET THE LOCAL STORAGE ARRAY FOR INCORRECT PRICES */
+function localStoragePrices() {
+  if (!localStorage.getItem('incorrect-prices')) {
+    localStorage.setItem('incorrect-prices', '[]');
+    localStorageArr = [];
+  } else {
+    localStorageArr = JSON.parse(localStorage.getItem('incorrect-prices'));
+  }
 }
 
 /////////////////////////////////
@@ -155,6 +172,9 @@ const fillCustomerPrices = () => {
   });
   customerSearchHtmlDisplay.style.opacity = '1';
   customerSearchWindow.focus();
+
+  /* LOCAL STORAGE FUNCTION */
+  localStoragePrices();
 };
 
 /////////////////////
@@ -180,6 +200,15 @@ checkViewBtn.addEventListener('click', (e) => {
     customerNumber: customerSearchInput.value.toUpperCase(),
     pricelistNumber: customerPricelistNumber[customerSearchInput.value.toUpperCase()],
   };
+  let monitorFlag = localStorage.getItem('monitorflag');
+  /* SEND THE INCORRECT PRICING ARRAY TO THE MAIN PROCESS */
+  let pricingObj = {
+    localStorageArr,
+    curCustomerName: customerName,
+    curCustomerNumber: customerSearchInput.value.toUpperCase(),
+    monitorFlag,
+  };
+  ipcRenderer.send('incorrect-prices', pricingObj);
 
   if (customerSearchWindow.getChildWindows()[0]) {
     customerSearchWindow.getChildWindows()[0].close();
@@ -190,6 +219,7 @@ checkViewBtn.addEventListener('click', (e) => {
 
   customerSearchHtmlDisplay.style.opacity = '0';
 
+  /* SEND CSTOMER DETAILS TO OPEN TABLE */
   setTimeout(() => {
     ipcRenderer.send('table-window', message);
     customerSearchWindow.hide();
@@ -274,4 +304,10 @@ ipcRenderer.on('create-download-window', (e, message) => {
 /* MESSAGE TO SEND PERCENTAGE DOWNLOADED */
 ipcRenderer.on('update-progress', (e, message) => {
   ipcRenderer.send('update-progress', message);
+});
+
+/* UPDATE THE LOCAL STORAGE ARRAY WITH ANY PRICING ERRORS */
+ipcRenderer.on('incorrect-prices', (e, message) => {
+  let mesString = JSON.stringify(message);
+  localStorage.setItem('incorrect-prices', mesString);
 });

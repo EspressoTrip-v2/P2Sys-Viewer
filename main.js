@@ -51,6 +51,8 @@ const {
 
 const { updater } = require(`${dir}/updater.js`);
 
+const { sendMail } = require(`${dir}/email.js`);
+
 /* TEST POWERSHELL FUNCTION */
 function testPowerShell() {
   /* TEST POWERSHELL FUNCTIONALITY AND ENSURE IT HAS BEEN RUN ONCE TO ADD IT TO THE CACHE */
@@ -90,7 +92,12 @@ let customerNumberName,
   productCodes,
   itemValue,
   itemNo,
-  itemPricelist;
+  itemPricelist,
+  localStorageArr,
+  curCustomerName,
+  curCustomerNumber,
+  sageValue,
+  monitorFlag;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -191,16 +198,19 @@ function logfileFunc(message) {
 
 /* CONNECT TO DATABASE */
 function mongooseConnect() {
+  /* TEST DATABASE */
+  connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.z0sd1.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+  /* AC WHITCHER DATABASE */
+  // connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
   mongoose
-    .connect(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-      {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-      }
-    )
+    .connect(connectionString, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+    })
     .catch((err) => {
       /* CHECK IF IT EXISTS */
       fs.existsSync('errorlog.txt')
@@ -355,7 +365,7 @@ function createCustomerSearchWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -430,7 +440,7 @@ function createCustomerNameWindow(message) {
     fullscreenable: false,
     skipTaskbar: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -469,7 +479,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -504,7 +514,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -565,7 +575,7 @@ function createDbLoaderWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -602,7 +612,7 @@ function createUpdateWindow() {
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false,
+      // devTools: false,
       enableRemoteModule: true,
     },
     icon: `${dir}/renderer/icons/updateTemplate.png`,
@@ -728,38 +738,85 @@ if (process.platform === 'win32') {
   /* WINDOWS CHILD PROCESS FOR KEYSTROKES */
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
-    let itemNoPaste = [
-        '$keya=New-Object -ComObject wscript.shell;',
-        '$keya.SendKeys("^{v}")::SendWait;',
-        ' $keya.SendKeys("{ENTER}");',
-        ' $keya.SendKeys("{ENTER}")',
-      ],
-      itemPriceListPaste = [
-        '$keyb=New-Object -ComObject wscript.shell;',
-        ' $keyb.SendKeys("^{v}")::SendWait;',
-        ' $keyb.SendKeys("{ENTER}")',
-      ];
     if (itemNo) {
-      clipboard.writeText(itemNo);
+      let itemNoPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+          'Sleep .2;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep 1.5;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+        ],
+        itemPriceListPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+          'Sleep .2;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .5;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep 1.5;',
+          '[System.Windows.Forms.SendKeys]::SendWait("^c");',
+        ];
+      /* FILL ITEM NUMBER IN ORDER */
+      spawnSync('powershell', itemNoPaste);
       setTimeout(() => {
-        spawnSync('powershell', itemNoPaste);
-        setTimeout(() => {
-          clipboard.writeText(itemPricelist);
+        /* FILL PRICELIST IN ORDER */
+        spawnSync('powershell', itemPriceListPaste);
+        if (monitorFlag) {
           setTimeout(() => {
-            spawnSync('powershell', itemPriceListPaste);
-          }, 200);
-        }, 100);
+            sageValue = parseInt(clipboard.readText());
+            setTimeout(() => {
+              /* CHECK TO SEE IF IT IS A PRICE LIST ENTRY PROBLEM */
+              if (isNaN(sageValue) || sageValue <= 2) {
+                if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                  sendMail(
+                    false,
+                    curCustomerName,
+                    curCustomerNumber,
+                    itemNo,
+                    sageValue,
+                    itemValue
+                  );
+                  localStorageArr.push(curCustomerNumber);
+                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                }
+                /* COMPARE PRICELIST VALUE TO SAGE VALUE */
+              } else if (sageValue !== parseInt(itemValue)) {
+                if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                  sendMail(
+                    true,
+                    curCustomerName,
+                    curCustomerNumber,
+                    itemNo,
+                    sageValue,
+                    itemValue
+                  );
+                  localStorageArr.push(curCustomerNumber);
+                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                  /* IF VALUES ARE EQUAL CHECK TO SEE IF THE CUSTOMER NUMBER IS IN THE ARR AND REMOVE IT */
+                }
+              } else if (sageValue === parseInt(itemValue)) {
+                let idx = localStorageArr.indexOf(curCustomerNumber);
+                if (idx !== -1) {
+                  localStorageArr.splice(idx, 1);
+                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                }
+              }
+            }, 200);
+          }, 1000);
+        }
       }, 200);
     }
   }
   function pasteItemValue() {
     /* CHANGED TO ENTERING THE VALUE AS PASTING DOES NOT WORK */
     if (itemValue) {
-      clipboard.writeText(itemValue);
       let itemValuePaste = [
-        '$keyc=New-Object -ComObject wscript.shell;',
-        `$keyc.SendKeys("${itemValue}")::SendWait;`,
-        ' $keyc.SendKeys("{ENTER}")',
+        '$wshell=New-Object -ComObject wscript.shell;',
+        ' Add-Type -AssemblyName System.Windows.Forms;',
+        `[System.Windows.Forms.SendKeys]::SendWait('${itemValue}');`,
       ];
       setTimeout(() => {
         spawnSync('powershell', itemValuePaste);
@@ -816,4 +873,12 @@ ipcMain.on('global-shortcuts-register', (e, message) => {
 /* UN REGISTER GLOBAL SHORTCUTS */
 ipcMain.on('global-shortcuts-unregister', (e, message) => {
   globalShortcut.unregisterAll();
+});
+
+/* GET THE INCORRECT PRICING ARRAY FROM TABLE AND CUSTOMER DETAILS */
+ipcMain.on('incorrect-prices', (e, message) => {
+  localStorageArr = message.localStorageArr;
+  curCustomerName = message.curCustomerName;
+  curCustomerNumber = message.curCustomerNumber;
+  monitorFlag = message.monitorFlag;
 });
