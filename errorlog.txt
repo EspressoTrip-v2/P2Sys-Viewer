@@ -1,2 +1,0 @@
-Fri Oct 16 2020 11:16:24 GMT+0200 (South Africa Standard Time) -> Update error: Error: ENOENT: no such file or directory, open '/mnt/DATA-B/P2sys App/P2Sys Viewer/dev-app-update.yml'
-Fri Oct 16 2020 11:16:24 GMT+0200 (South Africa Standard Time) -> Update error: Error: ENOENT: no such file or directory, open '/mnt/DATA-B/P2sys App/P2Sys Viewer/dev-app-update.yml'

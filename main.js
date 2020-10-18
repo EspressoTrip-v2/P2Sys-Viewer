@@ -80,7 +80,10 @@ let customerSearchWindow,
   tableWindow,
   dbLoaderWindow,
   updateWindow,
-  tableWindowState;
+  tableWindowState,
+  customerWindowState,
+  connectionString,
+  muteAllFag;
 
 /* GLOBAL VARIABLES */
 let customerNumberName,
@@ -89,6 +92,7 @@ let customerNumberName,
   screenWidth,
   screenHeight,
   version,
+  iconImage,
   productCodes,
   itemValue,
   itemNo,
@@ -97,7 +101,9 @@ let customerNumberName,
   curCustomerName,
   curCustomerNumber,
   sageValue,
-  monitorFlag;
+  monitorFlag,
+  defaultPriceFlag = false,
+  incorrectPriceFlag = false;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -541,6 +547,9 @@ function createTableWindow(message) {
     if (loadingWindow) {
       loadingWindow.close();
     }
+
+    tableWindow.webContents.send('mute-all', muteAllFag);
+
     tableWindow.show();
   });
 
@@ -739,75 +748,131 @@ if (process.platform === 'win32') {
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
     if (itemNo) {
-      let itemNoPaste = [
+      let itemNoPaste;
+
+      if (defaultPriceFlag) {
+        let defaultPrice;
+        if (itemNo[itemNo.length - 1] === 'T') {
+          defaultPrice = 1;
+        } else {
+          defaultPrice = 2;
+        }
+        itemNoPaste = [
           '$wshell=New-Object -ComObject wscript.shell;',
           ' Add-Type -AssemblyName System.Windows.Forms;',
           `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
-          'Sleep .2;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep 1.5;',
+          'Sleep .8;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-        ],
-        itemPriceListPaste = [
-          '$wshell=New-Object -ComObject wscript.shell;',
-          ' Add-Type -AssemblyName System.Windows.Forms;',
-          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
-          'Sleep .2;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${defaultPrice}');`,
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
           'Sleep .5;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep 1.5;',
+          'Sleep .2;',
+          `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
+        ];
+      } else if (incorrectPriceFlag) {
+        itemNoPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .8;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .5;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
+          `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
+        ];
+      } else {
+        itemNoPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .8;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .5;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
           '[System.Windows.Forms.SendKeys]::SendWait("^c");',
         ];
+      }
+
       /* FILL ITEM NUMBER IN ORDER */
       spawnSync('powershell', itemNoPaste);
-      setTimeout(() => {
-        /* FILL PRICELIST IN ORDER */
-        spawnSync('powershell', itemPriceListPaste);
-        if (monitorFlag) {
+
+      if (monitorFlag === 'true') {
+        setTimeout(() => {
+          sageValueString = clipboard.readText().replace(',', '');
+          sageValue = parseInt(sageValueString);
           setTimeout(() => {
-            sageValue = parseInt(clipboard.readText());
-            setTimeout(() => {
-              /* CHECK TO SEE IF IT IS A PRICE LIST ENTRY PROBLEM */
-              if (isNaN(sageValue) || sageValue <= 2) {
-                if (localStorageArr.indexOf(curCustomerNumber) === -1) {
-                  sendMail(
-                    false,
-                    curCustomerName,
-                    curCustomerNumber,
-                    itemNo,
-                    sageValue,
-                    itemValue
-                  );
-                  localStorageArr.push(curCustomerNumber);
-                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
-                }
-                /* COMPARE PRICELIST VALUE TO SAGE VALUE */
-              } else if (sageValue !== parseInt(itemValue)) {
-                if (localStorageArr.indexOf(curCustomerNumber) === -1) {
-                  sendMail(
-                    true,
-                    curCustomerName,
-                    curCustomerNumber,
-                    itemNo,
-                    sageValue,
-                    itemValue
-                  );
-                  localStorageArr.push(curCustomerNumber);
-                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
-                  /* IF VALUES ARE EQUAL CHECK TO SEE IF THE CUSTOMER NUMBER IS IN THE ARR AND REMOVE IT */
-                }
-              } else if (sageValue === parseInt(itemValue)) {
-                let idx = localStorageArr.indexOf(curCustomerNumber);
-                if (idx !== -1) {
-                  localStorageArr.splice(idx, 1);
-                  customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+            /* CHECK TO SEE IF IT IS A PRICE LIST ENTRY PROBLEM */
+            if (isNaN(sageValue) || sageValue <= 2) {
+              if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                sendMail(
+                  false,
+                  curCustomerName,
+                  curCustomerNumber,
+                  itemNo,
+                  sageValue,
+                  itemValue
+                );
+                localStorageArr.push(curCustomerNumber);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
+                let answer = dialog.showMessageBoxSync(customerSearchWindow, {
+                  type: 'question',
+                  message: 'PRICE-LIST ERROR',
+                  icon: `${dir}/renderer/icons/error.png`,
+                  detail: `It seems that the price-list you have entered can not be found. Would you like Viewer to enter the default price-list and fill in all the correct pricing for this order?`,
+                  buttons: ['YES', 'NO'],
+                });
+                if (answer === 0) {
+                  defaultPriceFlag = true;
                 }
               }
-            }, 200);
-          }, 1000);
-        }
-      }, 200);
+              /* COMPARE PRICELIST VALUE TO SAGE VALUE */
+            } else if (sageValue !== parseInt(itemValue)) {
+              if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                sendMail(
+                  true,
+                  curCustomerName,
+                  curCustomerNumber,
+                  itemNo,
+                  sageValue,
+                  itemValue
+                );
+                localStorageArr.push(curCustomerNumber);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
+                let answer = dialog.showMessageBoxSync(customerSearchWindow, {
+                  type: 'question',
+                  message: 'INCORRECT PRICE FOUND',
+                  icon: `${dir}/renderer/icons/error.png`,
+                  detail:
+                    'An incorrect price was detected. Would you like Viewer to fill in all the correct pricing for this order?',
+                  buttons: ['YES', 'NO'],
+                });
+                if (answer === 0) {
+                  incorrectPriceFlag = true;
+                }
+                /* IF VALUES ARE EQUAL CHECK TO SEE IF THE CUSTOMER NUMBER IS IN THE ARR AND REMOVE IT */
+              }
+            } else if (sageValue === parseInt(itemValue)) {
+              let idx = localStorageArr.indexOf(curCustomerNumber);
+              if (idx !== -1) {
+                localStorageArr.splice(idx, 1);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+              }
+            }
+          }, 200);
+        }, 1000);
+      }
     }
   }
   function pasteItemValue() {
@@ -868,6 +933,7 @@ ipcMain.on('global-shortcuts-register', (e, message) => {
   globalShortcut.register('F2', () => {
     pasteItemValue();
   });
+  clipboard.clear();
 });
 
 /* UN REGISTER GLOBAL SHORTCUTS */
@@ -881,4 +947,24 @@ ipcMain.on('incorrect-prices', (e, message) => {
   curCustomerName = message.curCustomerName;
   curCustomerNumber = message.curCustomerNumber;
   monitorFlag = message.monitorFlag;
+});
+
+/* MUTE ALL SOUNDS */
+ipcMain.on('mute-all', (e, message) => {
+  muteAllFag = message;
+});
+
+/* RESET THE FLAGS FOR AUTO ENTER OF PRICES WHEN TABLE IS CLOSED */
+ipcMain.on('reset-flags', (e, message) => {
+  incorrectPriceFlag = false;
+  defaultPriceFlag = false;
+});
+
+/* ACTIVATE AUTO PRICE FOR ADMIN */
+ipcMain.on('autoprice', (e, message) => {
+  if (message === 1) {
+    incorrectPriceFlag = true;
+  } else {
+    incorrectPriceFlag = false;
+  }
 });

@@ -1,8 +1,6 @@
+'use strict';
 /* MODULES */
 const { ipcRenderer, remote } = require('electron');
-const windowStateKeeper = require('electron-window-state');
-
-('use strict');
 
 /* GET WORKING DIRECTORY */
 let dir;
@@ -76,11 +74,6 @@ let productDict = {
   R29: '076228',
 };
 
-/* GET SCREEN SIZE */
-let res = remote.screen.getPrimaryDisplay().size;
-screenHeight = res.height;
-screenWidth = res.width;
-
 //////////////////
 /* DOM ELEMENTS */
 //////////////////
@@ -105,7 +98,8 @@ let table = document.getElementById('table'),
   typeFlagText = document.getElementById('type-flag'),
   pasteNotifyPopUp = document.getElementById('paste-notification-popup'),
   pasteNotifyPopUpYes = document.getElementById('paste-notification-yes'),
-  neverShowBtn = document.getElementById('never-show');
+  neverShowBtn = document.getElementById('never-show'),
+  audioTag = Array.from(document.getElementsByTagName('audio'));
 
 /* GET LOCALSTORAGE OBJECT */
 /////////////////////////////
@@ -204,7 +198,7 @@ function makeRangeString(idCell, arr, type, and = [], excl = [], odds = false) {
   if (!odds) {
     /* CREATE RANGE OF SIZES IN 300 INCREMENTS*/
     for (let i = arr[0]; i <= arr[arr.length - 1]; i += 300) {
-      iString = i.toString();
+      let iString = i.toString();
       if (iString.length < 4) {
         iString = '0' + iString;
       }
@@ -447,6 +441,7 @@ function fillTable(json) {
       soundPopup.play();
     }, 1000);
   }
+  tableWindow.focus();
 }
 
 /////////////////////
@@ -476,6 +471,7 @@ infoBtn.addEventListener('click', (e) => {
 closeBtn.addEventListener('click', (e) => {
   soundClick.play();
   ipcRenderer.send('global-shortcuts-unregister', null);
+  ipcRenderer.send('reset-flags', null);
   setTimeout(() => {
     tableWindow.close();
   }, 200);
@@ -569,4 +565,17 @@ ipcRenderer.on('products', (e, message) => {
       untreated: message.s5076Untreated,
     },
   };
+});
+
+/* MUTE ALL AUDIO MESSAGE */
+ipcRenderer.on('mute-all', (e, message) => {
+  if (message) {
+    audioTag.forEach((el) => {
+      el.muted = true;
+    });
+  } else {
+    audioTag.forEach((el) => {
+      el.muted = false;
+    });
+  }
 });
