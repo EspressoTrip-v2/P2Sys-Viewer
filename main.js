@@ -205,10 +205,10 @@ function logfileFunc(message) {
 /* CONNECT TO DATABASE */
 function mongooseConnect() {
   /* TEST DATABASE */
-  connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.z0sd1.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+  // connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.z0sd1.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
   /* AC WHITCHER DATABASE */
-  // connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+  connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
   mongoose
     .connect(connectionString, {
@@ -344,8 +344,8 @@ function windowStates() {
   });
 
   customerWindowState = windowStateKeeper({
-    defaultWidth: 215,
-    defaultHeight: 325,
+    defaultWidth: 200,
+    defaultHeight: 255,
     file: 'customerWindowState.json',
   });
 }
@@ -358,10 +358,10 @@ function createCustomerSearchWindow() {
     width: customerWindowState.width,
     x: customerWindowState.x,
     y: customerWindowState.y,
-    maxHeight: 400,
-    maxWidth: 264,
-    minHeight: 200,
-    minWidth: 132,
+    maxHeight: 350,
+    maxWidth: 275,
+    minHeight: 175,
+    minWidth: 135,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     center: true,
@@ -684,6 +684,10 @@ ipcMain.on('dock-select', (e, message) => {
 ipcMain.on('table-window', (e, message) => {
   createLoadingWindow();
   createTableWindow(message);
+  clipboard.clear();
+  itemNo = undefined;
+  itemValue = undefined;
+  itemPricelist = undefined;
 });
 
 /* CLOSE TABLE WINDOW */
@@ -753,9 +757,9 @@ if (process.platform === 'win32') {
       if (defaultPriceFlag) {
         let defaultPrice;
         if (itemNo[itemNo.length - 1] === 'T') {
-          defaultPrice = 1;
-        } else {
           defaultPrice = 2;
+        } else {
+          defaultPrice = 1;
         }
         itemNoPaste = [
           '$wshell=New-Object -ComObject wscript.shell;',
@@ -826,10 +830,10 @@ if (process.platform === 'win32') {
                 customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
                 /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
                 let answer = dialog.showMessageBoxSync(customerSearchWindow, {
-                  type: 'question',
+                  type: 'error',
                   message: 'PRICE-LIST ERROR',
                   icon: `${dir}/renderer/icons/error.png`,
-                  detail: `It seems that the price-list you have entered can not be found. Would you like Viewer to enter the default price-list and fill in all the correct pricing for this order?`,
+                  detail: `It seems that the price-list you have entered might not be on file. Would you like Viewer to use the default price-lists and also fill in all the correct pricing for this customer order?`,
                   buttons: ['YES', 'NO'],
                 });
                 if (answer === 0) {
@@ -851,11 +855,11 @@ if (process.platform === 'win32') {
                 customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
                 /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
                 let answer = dialog.showMessageBoxSync(customerSearchWindow, {
-                  type: 'question',
+                  type: 'error',
                   message: 'INCORRECT PRICE FOUND',
                   icon: `${dir}/renderer/icons/error.png`,
                   detail:
-                    'An incorrect price was detected. Would you like Viewer to fill in all the correct pricing for this order?',
+                    'An incorrect price was detected. Would you like Viewer to fill in all the correct pricing for this customer order?',
                   buttons: ['YES', 'NO'],
                 });
                 if (answer === 0) {
@@ -933,7 +937,15 @@ ipcMain.on('global-shortcuts-register', (e, message) => {
   globalShortcut.register('F2', () => {
     pasteItemValue();
   });
-  clipboard.clear();
+});
+
+/* DEFAULT PRICELIST CHECK */
+ipcMain.on('default-price', (e, message) => {
+  /* CHECK TO SEE IF A REGIONAL PRICE LIST IS USED */
+  if (message[0] === '@') {
+    defaultPriceFlag = true;
+    monitorFlag = false;
+  }
 });
 
 /* UN REGISTER GLOBAL SHORTCUTS */

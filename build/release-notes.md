@@ -1,14 +1,12 @@
-P2SYS-VIEWER VERSION 1.1.0
+P2SYS-VIEWER VERSION 1.1.1
 
 Changelog:
 
-Entirely new design and functionality.
-
+- Monitoring algorithm for prices on paste.
+- Ability to turn off monitoring with admin password.
+- Ability to force auto enter pricing when monitor is off.
+- Ability to mute all sounds.
+- Email notification sent if pricing error detected.
+- Auto fill prices if using a regional price-list.
 - Improved redesigned UI.
-- New logos.
 - Smaller footprint on low resolution screens.
-- New hide function, no buttons to click.
-- State monitoring of windows.
-- New copy of product numbers.
-- Global assignment of data to F1 and F2 keys.
-- Auto populate of ERP on paste.

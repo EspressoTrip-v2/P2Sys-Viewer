@@ -96,7 +96,7 @@ button:focus {
   height: 95vh;
   width: 92vw;
   border: 2px solid #fff;
-  border-radius: 8px;
+  border-radius: 3px;
   background-color: #fff;
   transition: visibility 0.3s, opacity 0.3s 0.3s;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
@@ -104,76 +104,52 @@ button:focus {
 #check-background {
   display: flex;
   position: relative;
-  width: 85vw;
-  height: 96vw;
-  top: 3vw;
+  width: 92vw;
+  height: 72vw;
+  bottom: 4vw;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--sec-blue);
-  border: 2px solid var(--sec-blue);
-  border-radius: 8px;
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 #customer-search-container {
   position: relative;
-  bottom: 1vw;
+  top: 2.5vw;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
   justify-items: center;
-  width: 80vw;
   height: 15vw;
-  border-radius: 5px;
-}
-#customer-search-container img {
-  width: auto;
-  height: 22px;
-  margin-right: 5px;
-  margin-left: 3px;
 }
 
 #customer-search {
+  outline: none;
   text-transform: uppercase;
   font-size: 6vw;
-  width: 100%;
+  border: 1px solid var(--button-disabled);
+  width: 90vw;
   text-align: center;
-  border-radius: 200px;
   height: 11vw;
-  border: 2px solid #fff;
   color: var(--text-color);
-  transition: filter 0.5s;
+  transition: box-shadow 0.5s;
 }
 
 #customer-search:focus {
   outline: none;
-  filter: drop-shadow(2px 4px 6px black);
-
-  animation: flash 1s steps(2, end) infinite;
-}
-@keyframes flash {
-  from {
-    border: 2px solid #fff;
-  }
-  to {
-    border: 2px solid #fdcb6e;
-  }
+  z-index: 3;
+  box-shadow: 0px 3px 10px 0px rgba(50, 50, 50, 0.3);
 }
 
 #customer-number-list {
   position: relative;
-  bottom: 2vw;
-  width: 80vw;
+  width: 90vw;
   background-color: #fff;
-  border: 2px solid var(--sec-blue);
-  border-radius: 8px;
-  height: 57vw;
-  padding: 1vw;
+  border: 1px solid var(--button-disabled);
+  height: 50vw;
 }
 #customer-list {
   width: 100%;
-  height: 53vw;
+  height: 48vw;
   overflow: auto;
   background-position: center;
   background-size: contain;
@@ -201,11 +177,9 @@ button:focus {
   text-align: center;
   font-size: 6vw;
   background-color: #fff;
-  border: 1px solid #fff;
   margin: 0;
-  margin-top: 1vh;
-  border-radius: 5px;
-  padding: 1vh 0;
+  margin-top: 1vw;
+  padding: 2vw 0;
   color: var(--text-color);
 }
 
@@ -219,17 +193,17 @@ button:focus {
   color: #fff;
   border: 1px solid var(--sec-blue);
   text-align: center;
-  padding: 1vh 0;
+  padding: 2vw 0;
   font-size: 6vw;
   font-weight: bold;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   margin: 0;
-  margin-top: 1vh;
+  margin-top: 1vw;
 }
 
 #p2s-logo {
   position: absolute;
-  bottom: 77vh;
+  bottom: 96vw;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -237,15 +211,16 @@ button:focus {
   width: fit-content;
   -webkit-app-region: drag;
 }
+
 #p2s-logo img {
   position: relative;
-  top: 0;
+  bottom: 0;
   left: 0;
-  height: 18vh;
+  height: 26vw;
 }
 #p2s-logo::after {
   content: 'Viewer';
-  top: 0vh;
+  top: 0.4vw;
   right: 0vw;
   position: relative;
   font-family: Forelle;
@@ -254,15 +229,16 @@ button:focus {
 }
 
 #button-container {
-  position: relative;
-  top: 1vh;
+  position: absolute;
+  bottom: 12.5vw;
   display: inline-flex;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
   justify-items: center;
-  width: 80vw;
-  height: 15vw;
+  width: 92vw;
+  padding: 0vw 1vw;
+  height: 14vw;
 }
 
 /* BUTTONS */
@@ -274,7 +250,7 @@ button:focus {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-  border-radius: 200px;
+
   padding: 1vw 0;
   color: #fff;
   font-size: 6vw;
@@ -289,11 +265,11 @@ button:focus {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-  border-radius: 200px;
-  width: 35vw;
+
+  width: 50vw;
   background-color: var(--button-red);
   color: #fff;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   font-size: 6vw;
   text-align: center;
   padding: 1vw 0;
@@ -302,10 +278,10 @@ button:focus {
 }
 
 .btn-exit:hover {
-  animation: button-hover 0.2s ease 1 forwards;
+  background-color: var(--button-red-hover);
 }
 .btn-exit:active {
-  animation: button-hover 0.2s ease 1 reverse;
+  transform: scale(0.9);
 }
 
 #check-view-btn {
@@ -315,19 +291,19 @@ button:focus {
   text-align: center;
   background-color: var(--button-green);
   color: #fff;
-  border: 2px solid #fff;
-  width: 35vw;
+  border: 1px solid #fff;
+  width: 50vw;
   padding: 1vw 0;
   transition: background-color 0.5s, border 0.5s, color 0.5s;
 }
 #check-view-btn:hover {
-  animation: button-hover 0.2s ease 1 forwards;
+  background-color: var(--button-green-hover);
 }
 #check-view-btn:active {
-  animation: button-hover 0.2s ease 1 reverse;
+  transform: scale(0.9);
 }
 
-#disabled {
+#assist-btn {
   position: relative;
   display: flex;
   font-size: 6vw;
@@ -336,16 +312,23 @@ button:focus {
   align-items: center;
   padding: 1vh 0px;
   font-weight: bold;
-  border-radius: 200px;
+
   height: auto;
-  width: 35vw;
+  width: 50vw;
   color: #fff;
-  background-color: var(--button-disabled);
-  border: 2px solid #fff;
+  background-color: var(--sec-blue);
+  border: 1px solid #fff;
 }
-#disabled-logo {
-  position: relative;
-  width: 8vw;
+#logo-assist {
+  width: 9vw;
+  position: absolute;
+}
+
+#assist-btn:hover {
+  background-color: var(--sec-blue-hover);
+}
+#assist-btn:active {
+  transform: scale(0.9);
 }
 
 #assist-box {
@@ -355,11 +338,11 @@ button:focus {
   flex-direction: column;
   justify-content: center;
   justify-items: center;
-  width: 100%;
-  height: 18vw;
+  width: 92vw;
+  height: 10vw;
 }
 
-#assist-btn {
+/* #assist-btn {
   text-align: center;
   justify-self: center;
   align-self: center;
@@ -369,25 +352,12 @@ button:focus {
   background-color: #fff;
   border: 2px solid var(--sec-blue);
   border-radius: 50%;
-}
-
-#assist-btn:hover {
-  animation: button-hover 0.2s ease 1 forwards;
-}
-#assist-btn:active {
-  animation: button-hover 0.2s ease 1 reverse;
-}
-
-#logo-assist {
-  width: 8vw;
-  top: 1vh;
-  position: absolute;
-}
+} */
 
 #monitor-eye {
   position: absolute;
-  width: 8vw;
-  right: 4vw;
+  width: 9vw;
+  right: 2vw;
 }
 
 #eye {
@@ -396,9 +366,9 @@ button:focus {
 
 #mute {
   position: absolute;
-  width: 8vw;
+  width: 9vw;
   height: auto;
-  left: 4vw;
+  left: 2vw;
 }
 #mute-logo {
   position: relative;
@@ -408,8 +378,8 @@ button:focus {
   position: absolute;
   visibility: hidden;
   height: auto;
-  width: 6vw;
-  right: 15vw;
+  width: 7vw;
+  right: 12vw;
 }
 #price-logo {
   position: relative;
@@ -428,22 +398,12 @@ button:focus {
 /* WINDOW CONTROLS CSS */
 /* ////////////////// */
 
-/* Max and Grab icons */
-.grab-search {
-  display: block;
-  position: absolute;
-  width: 10vw;
-  top: 2vh;
-  left: 2vw;
-  -webkit-app-region: drag;
-}
-
 #minimize-search {
   position: absolute;
   transform: scale(1);
-  top: 3vh;
-  right: 4vw;
-  width: 8vw;
+  top: -1vw;
+  right: 2vw;
+  width: 5vw;
   height: auto;
   outline: none;
   fill: var(--main);
@@ -473,13 +433,12 @@ button:focus {
 #admin-popup {
   position: absolute;
   width: 75vw;
-  height: 45vw;
+  height: 30vw;
   z-index: 3;
   text-align: justify;
   font-size: 6vw;
-  border-radius: 10px;
   background-color: var(--sec-blue);
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
 }
 #admin-container {
@@ -494,12 +453,11 @@ button:focus {
 #password {
   position: absolute;
   outline: none;
-  top: 15vw;
-  width: 65vw;
+  top: 9vw;
+  width: 74vw;
   font-size: 6vw;
   padding: 1vw;
   text-align: center;
-  border-radius: 5px;
   border: 1px solid #fff;
 }
 #message {
@@ -516,9 +474,8 @@ button:focus {
 }
 #admin-container h3 {
   position: absolute;
-  top: -2vw;
+  top: -5vw;
   font-size: 6vw;
-  width: 100%;
   color: #fff;
   font-weight: bold;
   display: flex;
@@ -527,17 +484,16 @@ button:focus {
 }
 #admin-yes {
   position: absolute;
-  bottom: 5vw;
-  left: 4vw;
+  bottom: 0;
+  left: 0;
   text-decoration: none;
-  font-size: 4vw;
+  font-size: 6vw;
   font-weight: bold;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   color: #fff;
   background-color: var(--button-green);
-  width: 30vw;
+  width: 37vw;
   padding: 1vw;
-  border-radius: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -546,25 +502,24 @@ button:focus {
 }
 
 #admin-yes:hover {
-  animation: button-hover 0.2s ease 1 forwards;
+  background-color: var(--button-green-hover);
 }
 #admin-yes:active {
-  animation: button-hover 0.2s ease 1 reverse;
+  transform: scale(0.9);
 }
 
 #admin-no {
   position: absolute;
-  bottom: 5vw;
-  right: 4vw;
+  bottom: 0;
+  right: 0;
   text-decoration: none;
-  font-size: 4vw;
+  font-size: 6vw;
   font-weight: bold;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   color: #fff;
   background-color: var(--button-red);
-  width: 30vw;
+  width: 37vw;
   padding: 1vw;
-  border-radius: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -573,10 +528,10 @@ button:focus {
 }
 
 #admin-no:hover {
-  animation: button-hover 0.2s ease 1 forwards;
+  background-color: var(--button-red-hover);
 }
 #admin-no:active {
-  animation: button-hover 0.2s ease 1 reverse;
+  transform: scale(0.9);
 }
 
 #wrong-container {
@@ -594,13 +549,13 @@ button:focus {
 
 #wrong-popup {
   position: absolute;
-  top: 30vw;
+  font-size: 6vw;
+  top: 15vw;
   z-index: 3;
-  height: 15vw;
+  height: 13vw;
   width: 75vw;
-  border: 2px solid #ffff;
+  border: 1px solid #ffff;
   background-color: var(--button-red);
-  border-radius: 10px;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
 }
 
@@ -617,14 +572,5 @@ button:focus {
   }
   100% {
     transform: scale(1);
-  }
-}
-
-@keyframes button-hover {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1);
   }
 }

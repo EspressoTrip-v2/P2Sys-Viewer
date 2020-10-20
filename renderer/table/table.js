@@ -547,6 +547,8 @@ ipcRenderer.on('table-window', (e, message) => {
   /* SET TITLE OF BAR */
   // minLogoBar.title = customerName.innerText;
   pricelistNumber = message.pricelistNumber;
+  /* SEND THE CUSTOMER NUMBER TO BE EVALUATED FOR DEFAULT PRICELIST */
+  ipcRenderer.send('default-price', customerNumber.innerText);
 });
 
 /* MESSAGE PRODUCT NUMBER VARIABLES */

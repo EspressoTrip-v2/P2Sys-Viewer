@@ -26,7 +26,6 @@ function fillCustomerNameNumber() {
   (() => {
     customers.forEach((el) => {
       if (customerPricesKeys.includes(customerNameNumber[el.toUpperCase()])) {
-        console.log(el.toUpperCase());
         let html = `<div title="${
           customerNameNumber[el.toLocaleUpperCase()]
         }" class="customer-name">${el.toUpperCase()}</div>`;

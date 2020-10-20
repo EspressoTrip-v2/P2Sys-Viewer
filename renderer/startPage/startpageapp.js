@@ -69,7 +69,7 @@ let customerNumberName,
 let customerFindBtn = document.getElementById('assist-btn'),
   checkExitBtn = document.getElementById('check-exit-btn'),
   checkViewBtn = document.getElementById('check-view-btn'),
-  checkDisabledBtn = document.getElementById('disabled'),
+  checkSearchCustomerBtn = document.getElementById('assist-btn'),
   customerSearchInput = document.getElementById('customer-search'),
   customerNumberList = document.getElementById('customer-list'),
   soundClick = document.getElementById('click'),
@@ -119,13 +119,15 @@ function checkMonitorEye() {
     monitorEye.title = 'Monitor On';
     /* HIDE AUTO PRICE BUTTON */
     priceBtn.style.visibility = 'hidden';
+    priceBtn.title = 'Auto price off';
+    ipcRenderer.send('autoprice', 0);
   } else {
     monitorEye.style.animation = 'none';
     monitorEye.style.fill = 'var(--button-red)';
     monitorEye.title = 'Monitor Off';
     /* SHOW ATO PRICE BUTTON */
     priceBtn.style.visibility = 'visible';
-    priceLogo.style.fill = '#5a5959';
+    priceLogo.style.fill = 'darkgrey';
   }
 }
 
@@ -140,7 +142,7 @@ function checkMuteFlag() {
       el.muted = true;
     });
     muteLogo.style.fill = 'var(--button-green)';
-    muteBtn.title = 'Turn sound on';
+    muteBtn.title = 'Sound Off';
     ipcRenderer.send('mute-all', true);
   } else {
     /* SET THE FLAG TO TRUE AND TURN OFF ALL SOUND */
@@ -149,8 +151,8 @@ function checkMuteFlag() {
       el.muted = false;
     });
     soundClick.play();
-    muteLogo.style.fill = '#5a5959';
-    muteBtn.title = 'Turn sound off';
+    muteLogo.style.fill = 'darkgrey';
+    muteBtn.title = 'Sound On';
     ipcRenderer.send('mute-all', false);
   }
 }
@@ -181,7 +183,7 @@ const fillCustomerPrices = () => {
 
         // RESET ALL THE BUTTONS TO DEFAULT
         checkViewBtn.style.display = 'none';
-        checkDisabledBtn.style.display = 'flex';
+        checkSearchCustomerBtn.style.display = 'flex';
 
         // SET THE ELEMENT CLICKED TO A GLOBAL VARIABLE
         target = e.target;
@@ -229,18 +231,18 @@ const fillCustomerPrices = () => {
         .setAttribute('class', 'cusnum-clicked');
 
       checkViewBtn.style.display = 'flex';
-      checkDisabledBtn.style.display = 'none';
+      checkSearchCustomerBtn.style.display = 'none';
     } else if (
       !Object.keys(customerPrices).includes(customerSearchInput.value.toUpperCase()) &&
       count === Object.keys(customerPrices).length
     ) {
       customerNumberList.style.backgroundImage = `url("${dir}/renderer/icons/cancel.png")`;
       checkViewBtn.style.display = 'none';
-      checkDisabledBtn.style.display = 'flex';
+      checkSearchCustomerBtn.style.display = 'flex';
     } else {
       customerNumberList.style.backgroundImage = 'none';
       checkViewBtn.style.display = 'none';
-      checkDisabledBtn.style.display = 'flex';
+      checkSearchCustomerBtn.style.display = 'flex';
     }
   });
   customerSearchHtmlDisplay.style.opacity = '1';
@@ -269,14 +271,15 @@ muteBtn.addEventListener('click', (e) => {
 /* AUTO PRICE BUTTON */
 priceBtn.addEventListener('click', (e) => {
   soundClick.play();
-  console.log(window.getComputedStyle(priceLogo).fill);
-  if (window.getComputedStyle(priceLogo).fill === 'rgb(90, 89, 89)') {
+  if (window.getComputedStyle(priceLogo).fill === 'rgb(169, 169, 169)') {
     /* SEND MESSAGE TO SWITCH ICCORECT PRICE TAG */
     ipcRenderer.send('autoprice', 1);
     priceLogo.style.fill = 'var(--button-green)';
+    priceBtn.title = 'Auto price on';
   } else {
     ipcRenderer.send('autoprice', 0);
-    priceLogo.style.fill = '#5a5959';
+    priceLogo.style.fill = 'darkgrey';
+    priceBtn.title = 'Auto price off';
   }
 });
 
