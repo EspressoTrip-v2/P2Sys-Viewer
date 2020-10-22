@@ -1,7 +1,8 @@
-P2SYS-VIEWER VERSION 1.1.1
+P2SYS-VIEWER VERSION 1.1.2
 
 Changelog:
 
+- Monitor timing for forst paste.
 - Monitoring algorithm for prices on paste.
 - Ability to turn off monitoring with admin password.
 - Ability to force auto enter pricing when monitor is off.
