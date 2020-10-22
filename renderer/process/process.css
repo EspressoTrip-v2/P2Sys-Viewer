@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+}
+
+html {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+#process {
+  font-size: 15px;
+  font-weight: bold;
+}

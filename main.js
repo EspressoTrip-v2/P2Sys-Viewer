@@ -51,6 +51,8 @@ const {
 
 const { updater } = require(`${dir}/updater.js`);
 
+const { sendMail } = require(`${dir}/email.js`);
+
 /* TEST POWERSHELL FUNCTION */
 function testPowerShell() {
   /* TEST POWERSHELL FUNCTIONALITY AND ENSURE IT HAS BEEN RUN ONCE TO ADD IT TO THE CACHE */
@@ -77,8 +79,7 @@ let customerSearchWindow,
   loadingWindow,
   tableWindow,
   dbLoaderWindow,
-  updateWindow,
-  tableWindowState;
+  updateWindow;
 
 /* GLOBAL VARIABLES */
 let customerNumberName,
@@ -87,10 +88,22 @@ let customerNumberName,
   screenWidth,
   screenHeight,
   version,
+  iconImage,
   productCodes,
   itemValue,
   itemNo,
-  itemPricelist;
+  itemPricelist,
+  localStorageArr,
+  curCustomerName,
+  curCustomerNumber,
+  sageValue,
+  monitorFlag,
+  defaultPriceFlag = false,
+  incorrectPriceFlag = false,
+  tableWindowState,
+  customerWindowState,
+  connectionString,
+  muteAllFag;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -191,16 +204,19 @@ function logfileFunc(message) {
 
 /* CONNECT TO DATABASE */
 function mongooseConnect() {
+  /* TEST DATABASE */
+  // connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.z0sd1.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+  /* AC WHITCHER DATABASE */
+  connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
   mongoose
-    .connect(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-      {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-      }
-    )
+    .connect(connectionString, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+    })
     .catch((err) => {
       /* CHECK IF IT EXISTS */
       fs.existsSync('errorlog.txt')
@@ -328,8 +344,8 @@ function windowStates() {
   });
 
   customerWindowState = windowStateKeeper({
-    defaultWidth: 215,
-    defaultHeight: 325,
+    defaultWidth: 200,
+    defaultHeight: 255,
     file: 'customerWindowState.json',
   });
 }
@@ -342,10 +358,10 @@ function createCustomerSearchWindow() {
     width: customerWindowState.width,
     x: customerWindowState.x,
     y: customerWindowState.y,
-    maxHeight: 400,
-    maxWidth: 264,
-    minHeight: 200,
-    minWidth: 132,
+    maxHeight: 350,
+    maxWidth: 275,
+    minHeight: 175,
+    minWidth: 135,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     center: true,
@@ -531,6 +547,9 @@ function createTableWindow(message) {
     if (loadingWindow) {
       loadingWindow.close();
     }
+
+    tableWindow.webContents.send('mute-all', muteAllFag);
+
     tableWindow.show();
   });
 
@@ -665,6 +684,10 @@ ipcMain.on('dock-select', (e, message) => {
 ipcMain.on('table-window', (e, message) => {
   createLoadingWindow();
   createTableWindow(message);
+  clipboard.clear();
+  itemNo = undefined;
+  itemValue = undefined;
+  itemPricelist = undefined;
 });
 
 /* CLOSE TABLE WINDOW */
@@ -724,42 +747,169 @@ ipcMain.on('update-progress', (e, message) => {
   }
 });
 
+let pasteCount;
 if (process.platform === 'win32') {
   /* WINDOWS CHILD PROCESS FOR KEYSTROKES */
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
-    let itemNoPaste = [
-        '$keya=New-Object -ComObject wscript.shell;',
-        '$keya.SendKeys("^{v}")::SendWait;',
-        ' $keya.SendKeys("{ENTER}");',
-        ' $keya.SendKeys("{ENTER}")',
-      ],
-      itemPriceListPaste = [
-        '$keyb=New-Object -ComObject wscript.shell;',
-        ' $keyb.SendKeys("^{v}")::SendWait;',
-        ' $keyb.SendKeys("{ENTER}")',
-      ];
     if (itemNo) {
-      clipboard.writeText(itemNo);
-      setTimeout(() => {
-        spawnSync('powershell', itemNoPaste);
+      let itemNoPaste;
+      if (defaultPriceFlag) {
+        let defaultPrice;
+        if (itemNo[itemNo.length - 1] === 'T') {
+          defaultPrice = 2;
+        } else {
+          defaultPrice = 1;
+        }
+        itemNoPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .3;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          `[System.Windows.Forms.SendKeys]::SendWait('${defaultPrice}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
+          `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
+        ];
+      } else if (incorrectPriceFlag) {
+        itemNoPaste = [
+          '$wshell=New-Object -ComObject wscript.shell;',
+          ' Add-Type -AssemblyName System.Windows.Forms;',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .3;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
+          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+          'Sleep .2;',
+          `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
+        ];
+      } else {
+        if (pasteCount === 0) {
+          console.log('PasteCount 0');
+          itemNoPaste = [
+            '$wshell=New-Object -ComObject wscript.shell;',
+            ' Add-Type -AssemblyName System.Windows.Forms;',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .8;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .8;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .6;',
+            '[System.Windows.Forms.SendKeys]::SendWait("^c");',
+          ];
+          pasteCount = 1;
+        } else {
+          console.log('PasteCount 1');
+          itemNoPaste = [
+            '$wshell=New-Object -ComObject wscript.shell;',
+            ' Add-Type -AssemblyName System.Windows.Forms;',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .3;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .2;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .6;',
+            '[System.Windows.Forms.SendKeys]::SendWait("^c");',
+          ];
+        }
+      }
+
+      /* FILL ITEM NUMBER IN ORDER */
+      spawnSync('powershell', itemNoPaste);
+      if (monitorFlag === 'true') {
         setTimeout(() => {
-          clipboard.writeText(itemPricelist);
+          sageValueString = clipboard.readText().replace(',', '');
+          console.log(sageValueString);
+          sageValue = parseInt(sageValueString);
+          console.log(sageValue);
+
           setTimeout(() => {
-            spawnSync('powershell', itemPriceListPaste);
+            /* CHECK TO SEE IF IT IS A PRICE LIST ENTRY PROBLEM */
+            if (isNaN(sageValue) || sageValue <= 2) {
+              console.log('No VAlue');
+              if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                sendMail(
+                  false,
+                  curCustomerName,
+                  curCustomerNumber,
+                  itemNo,
+                  sageValue,
+                  itemValue
+                );
+                localStorageArr.push(curCustomerNumber);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
+                let answer = dialog.showMessageBoxSync(customerSearchWindow, {
+                  type: 'error',
+                  message: 'PRICE-LIST ERROR',
+                  icon: `${dir}/renderer/icons/error.png`,
+                  detail: `It seems that the price-list you have entered might not be on file. Would you like Viewer to use the default price-lists and also fill in all the correct pricing for this customer order?`,
+                  buttons: ['YES', 'NO'],
+                });
+                if (answer === 0) {
+                  defaultPriceFlag = true;
+                }
+              }
+              /* COMPARE PRICELIST VALUE TO SAGE VALUE */
+            } else if (sageValue !== parseInt(itemValue)) {
+              console.log('Unequal Value');
+              if (localStorageArr.indexOf(curCustomerNumber) === -1) {
+                sendMail(
+                  true,
+                  curCustomerName,
+                  curCustomerNumber,
+                  itemNo,
+                  sageValue,
+                  itemValue
+                );
+                localStorageArr.push(curCustomerNumber);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+                /* ASK IF USER WOULD LIKE THE PRICELIST AUTOMATICALLY ENTERED */
+                let answer = dialog.showMessageBoxSync(customerSearchWindow, {
+                  type: 'error',
+                  message: 'INCORRECT PRICE FOUND',
+                  icon: `${dir}/renderer/icons/error.png`,
+                  detail:
+                    'An incorrect price was detected. Would you like Viewer to fill in all the correct pricing for this customer order?',
+                  buttons: ['YES', 'NO'],
+                });
+                if (answer === 0) {
+                  incorrectPriceFlag = true;
+                }
+                /* IF VALUES ARE EQUAL CHECK TO SEE IF THE CUSTOMER NUMBER IS IN THE ARR AND REMOVE IT */
+              }
+            } else if (sageValue === parseInt(itemValue)) {
+              let idx = localStorageArr.indexOf(curCustomerNumber);
+              if (idx !== -1) {
+                localStorageArr.splice(idx, 1);
+                customerSearchWindow.webContents.send('incorrect-prices', localStorageArr);
+              }
+            }
           }, 200);
-        }, 100);
-      }, 200);
+        }, 1000);
+      }
     }
   }
   function pasteItemValue() {
     /* CHANGED TO ENTERING THE VALUE AS PASTING DOES NOT WORK */
     if (itemValue) {
-      clipboard.writeText(itemValue);
       let itemValuePaste = [
-        '$keyc=New-Object -ComObject wscript.shell;',
-        `$keyc.SendKeys("${itemValue}")::SendWait;`,
-        ' $keyc.SendKeys("{ENTER}")',
+        '$wshell=New-Object -ComObject wscript.shell;',
+        ' Add-Type -AssemblyName System.Windows.Forms;',
+        `[System.Windows.Forms.SendKeys]::SendWait('${itemValue}');`,
       ];
       setTimeout(() => {
         spawnSync('powershell', itemValuePaste);
@@ -805,6 +955,7 @@ ipcMain.on('paste-variables', (e, message) => {
 
 /* REGISTER GLOBAL SHORTCUTS */
 ipcMain.on('global-shortcuts-register', (e, message) => {
+  pasteCount = 0;
   globalShortcut.register('F1', () => {
     pasteItemNo();
   });
@@ -813,7 +964,44 @@ ipcMain.on('global-shortcuts-register', (e, message) => {
   });
 });
 
+/* DEFAULT PRICELIST CHECK */
+ipcMain.on('default-price', (e, message) => {
+  /* CHECK TO SEE IF A REGIONAL PRICE LIST IS USED */
+  if (message[0] === '@') {
+    defaultPriceFlag = true;
+    monitorFlag = false;
+  }
+});
+
 /* UN REGISTER GLOBAL SHORTCUTS */
 ipcMain.on('global-shortcuts-unregister', (e, message) => {
   globalShortcut.unregisterAll();
+});
+
+/* GET THE INCORRECT PRICING ARRAY FROM TABLE AND CUSTOMER DETAILS */
+ipcMain.on('incorrect-prices', (e, message) => {
+  localStorageArr = message.localStorageArr;
+  curCustomerName = message.curCustomerName;
+  curCustomerNumber = message.curCustomerNumber;
+  monitorFlag = message.monitorFlag;
+});
+
+/* MUTE ALL SOUNDS */
+ipcMain.on('mute-all', (e, message) => {
+  muteAllFag = message;
+});
+
+/* RESET THE FLAGS FOR AUTO ENTER OF PRICES WHEN TABLE IS CLOSED */
+ipcMain.on('reset-flags', (e, message) => {
+  incorrectPriceFlag = false;
+  defaultPriceFlag = false;
+});
+
+/* ACTIVATE AUTO PRICE FOR ADMIN */
+ipcMain.on('autoprice', (e, message) => {
+  if (message === 1) {
+    incorrectPriceFlag = true;
+  } else {
+    incorrectPriceFlag = false;
+  }
 });

@@ -1,3 +1,5 @@
+'use strict';
+
 /* MODULES */
 ////////////
 const { remote, ipcRenderer, shell } = require('electron');
@@ -31,6 +33,20 @@ if (!localStorage.getItem('notifications')) {
     })
   );
 }
+/* SET MONITORFLAG OBJECT IF DOES NOT EXIST */
+if (!localStorage.getItem('monitorflag')) {
+  localStorage.setItem('monitorflag', true);
+}
+
+/* SET MUTE FLAG OBJECT IF DOES NOT EXIST */
+if (!localStorage.getItem('muteflag')) {
+  localStorage.setItem('muteflag', true);
+}
+
+/* SET MUTE FLAG OBJECT IF DOES NOT EXIST */
+if (!localStorage.getItem('priceenter')) {
+  localStorage.setItem('priceenter', false);
+}
 
 /* GET CURRENT WINDOW */
 let customerSearchWindow = remote.getCurrentWindow();
@@ -41,7 +57,10 @@ let customerNumberName,
   customerPrices,
   customerNameNumber,
   customerPricelistNumber,
-  numbersDivItems;
+  numbersDivItems,
+  localStorageArr,
+  customerNumber,
+  target;
 
 //////////////////
 /* DOM ELEMENTS */
@@ -50,22 +69,96 @@ let customerNumberName,
 let customerFindBtn = document.getElementById('assist-btn'),
   checkExitBtn = document.getElementById('check-exit-btn'),
   checkViewBtn = document.getElementById('check-view-btn'),
-  checkDisabledBtn = document.getElementById('disabled'),
+  checkSearchCustomerBtn = document.getElementById('assist-btn'),
   customerSearchInput = document.getElementById('customer-search'),
   customerNumberList = document.getElementById('customer-list'),
   soundClick = document.getElementById('click'),
+  soundPopup = document.getElementById('pop'),
+  soundError = document.getElementById('error'),
+  soundAccept = document.getElementById('accept'),
   customerSearchHtmlDisplay = document.getElementById('check-customer'),
-  minimizeBtn = document.getElementById('minimize-search');
+  minimizeBtn = document.getElementById('minimize-search'),
+  monitorEye = document.getElementById('monitor-eye'),
+  blur = document.getElementById('blur'),
+  monitorPasswordPopup = document.getElementById('admin-popup'),
+  passwordYes = document.getElementById('admin-yes'),
+  passwordNo = document.getElementById('admin-no'),
+  password = document.getElementById('password'),
+  wrongPasswordPopup = document.getElementById('wrong-popup'),
+  audioTag = Array.from(document.getElementsByTagName('audio')),
+  muteBtn = document.getElementById('mute'),
+  muteLogo = document.getElementById('mute-logo'),
+  priceBtn = document.getElementById('price'),
+  priceLogo = document.getElementById('price-logo');
 
 ///////////////
 /* FUNCTIONS */
 ///////////////
-
+/* RESET THE LIST OF CUSTOMER NUMBERS TO REMOVE CLICKS */
 function resetList() {
   numbersDivItems.forEach((el) => {
     el.style.display = 'block';
     el.setAttribute('class', 'cusnum');
   });
+}
+
+/* SET THE LOCAL STORAGE ARRAY FOR INCORRECT PRICES */
+function localStoragePrices() {
+  if (!localStorage.getItem('incorrect-prices')) {
+    localStorage.setItem('incorrect-prices', '[]');
+    localStorageArr = [];
+  } else {
+    localStorageArr = JSON.parse(localStorage.getItem('incorrect-prices'));
+  }
+}
+
+/* FUNCTION CHECK THE MONITOR EYE FLAG */
+function checkMonitorEye() {
+  if (localStorage.getItem('monitorflag') === 'true') {
+    monitorEye.style.animation = 'eye-on 1s ease-in-out infinite alternate';
+    monitorEye.title = 'Monitor On';
+    /* HIDE AUTO PRICE BUTTON */
+    priceBtn.style.visibility = 'hidden';
+    priceBtn.title = 'Auto price off';
+    ipcRenderer.send('autoprice', 0);
+  } else {
+    monitorEye.style.animation = 'none';
+    monitorEye.style.fill = 'var(--button-red)';
+    monitorEye.title = 'Monitor Off';
+    /* SHOW ATO PRICE BUTTON */
+    priceBtn.style.visibility = 'visible';
+    priceLogo.style.fill = 'darkgrey';
+  }
+}
+
+checkMonitorEye();
+
+/* FUNCTION CHECK THE MUTE FLAG */
+function checkMuteFlag() {
+  if (localStorage.getItem('muteflag') === 'false') {
+    /* SET FLAG TO FALSE AND TURN OFF ALL SOUND */
+    localStorage.setItem('muteflag', false);
+    audioTag.forEach((el) => {
+      el.muted = true;
+    });
+    muteLogo.style.fill = 'var(--button-green)';
+    muteBtn.title = 'Sound Off';
+    ipcRenderer.send('mute-all', true);
+  } else {
+    /* SET THE FLAG TO TRUE AND TURN OFF ALL SOUND */
+    localStorage.setItem('muteflag', true);
+    audioTag.forEach((el) => {
+      el.muted = false;
+    });
+    soundClick.play();
+    muteLogo.style.fill = 'darkgrey';
+    muteBtn.title = 'Sound On';
+    ipcRenderer.send('mute-all', false);
+  }
+}
+
+if (localStorage.getItem('muteflag') === 'false') {
+  checkMuteFlag();
 }
 
 /////////////////////////////////
@@ -90,11 +183,10 @@ const fillCustomerPrices = () => {
 
         // RESET ALL THE BUTTONS TO DEFAULT
         checkViewBtn.style.display = 'none';
-        checkDisabledBtn.style.display = 'flex';
+        checkSearchCustomerBtn.style.display = 'flex';
 
         // SET THE ELEMENT CLICKED TO A GLOBAL VARIABLE
         target = e.target;
-        searchValue = target.id;
         // CLEAR ANY EXISTING CLICKED ELEMENTS THAT WERE PREVIOUSLY CLICKED
         clearList();
         // SET THE CLICKED CLASS ON THE SELECTED ELEMENT
@@ -139,33 +231,115 @@ const fillCustomerPrices = () => {
         .setAttribute('class', 'cusnum-clicked');
 
       checkViewBtn.style.display = 'flex';
-      checkDisabledBtn.style.display = 'none';
+      checkSearchCustomerBtn.style.display = 'none';
     } else if (
       !Object.keys(customerPrices).includes(customerSearchInput.value.toUpperCase()) &&
       count === Object.keys(customerPrices).length
     ) {
       customerNumberList.style.backgroundImage = `url("${dir}/renderer/icons/cancel.png")`;
       checkViewBtn.style.display = 'none';
-      checkDisabledBtn.style.display = 'flex';
+      checkSearchCustomerBtn.style.display = 'flex';
     } else {
       customerNumberList.style.backgroundImage = 'none';
       checkViewBtn.style.display = 'none';
-      checkDisabledBtn.style.display = 'flex';
+      checkSearchCustomerBtn.style.display = 'flex';
     }
   });
   customerSearchHtmlDisplay.style.opacity = '1';
   customerSearchWindow.focus();
+
+  /* LOCAL STORAGE FUNCTION */
+  localStoragePrices();
 };
 
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
+/* MUTE SOUNDS BUTTON */
+muteBtn.addEventListener('click', (e) => {
+  setTimeout(() => {
+    if (localStorage.getItem('muteflag') === 'true') {
+      localStorage.setItem('muteflag', false);
+      checkMuteFlag();
+    } else {
+      localStorage.setItem('muteflag', true);
+      checkMuteFlag();
+    }
+  }, 300);
+});
+
+/* AUTO PRICE BUTTON */
+priceBtn.addEventListener('click', (e) => {
+  soundClick.play();
+  if (window.getComputedStyle(priceLogo).fill === 'rgb(169, 169, 169)') {
+    /* SEND MESSAGE TO SWITCH ICCORECT PRICE TAG */
+    ipcRenderer.send('autoprice', 1);
+    priceLogo.style.fill = 'var(--button-green)';
+    priceBtn.title = 'Auto price on';
+  } else {
+    ipcRenderer.send('autoprice', 0);
+    priceLogo.style.fill = 'darkgrey';
+    priceBtn.title = 'Auto price off';
+  }
+});
+
 /* CLOSE BUTTON */
 checkExitBtn.addEventListener('click', (e) => {
   soundClick.play();
   setTimeout(() => {
     ipcRenderer.send('close-win', null);
   }, 300);
+});
+
+/* MONITOR EYE BUTTON */
+monitorEye.addEventListener('click', () => {
+  soundPopup.play();
+  /* SET BLUR */
+  blur.style.visibility = 'visible';
+  blur.style.backdropFilter = 'blur(4px)';
+  /* SHOW POPUP */
+  monitorPasswordPopup.show();
+});
+
+passwordYes.addEventListener('click', (e) => {
+  soundClick.play();
+  if (password.value === process.env.ADMIN_PASSWORD) {
+    if (localStorage.getItem('monitorflag') === 'true') {
+      localStorage.setItem('monitorflag', 'false');
+      checkMonitorEye();
+      /* SET BLUR */
+      blur.style.visibility = 'hidden';
+      blur.style.backdropFilter = 'none';
+      password.value = '';
+      /* SHOW POPUP */
+      monitorPasswordPopup.close();
+      soundAccept.play();
+    } else {
+      localStorage.setItem('monitorflag', 'true');
+      checkMonitorEye();
+      /* SET BLUR */
+      blur.style.visibility = 'hidden';
+      blur.style.backdropFilter = 'none';
+      password.value = '';
+      /* SHOW POPUP */
+      monitorPasswordPopup.close();
+      soundAccept.play();
+    }
+  } else {
+    wrongPasswordPopup.show();
+    soundError.play();
+    setTimeout(() => {
+      wrongPasswordPopup.close();
+    }, 1000);
+  }
+});
+
+passwordNo.addEventListener('click', (e) => {
+  soundClick.play();
+  monitorPasswordPopup.close();
+  blur.style.visibility = 'hidden';
+  blur.style.backdropFilter = 'none';
+  password.value = '';
 });
 
 /* VIEW BUTTON */
@@ -180,6 +354,15 @@ checkViewBtn.addEventListener('click', (e) => {
     customerNumber: customerSearchInput.value.toUpperCase(),
     pricelistNumber: customerPricelistNumber[customerSearchInput.value.toUpperCase()],
   };
+  let monitorFlag = localStorage.getItem('monitorflag');
+  /* SEND THE INCORRECT PRICING ARRAY TO THE MAIN PROCESS */
+  let pricingObj = {
+    localStorageArr,
+    curCustomerName: customerName,
+    curCustomerNumber: customerSearchInput.value.toUpperCase(),
+    monitorFlag,
+  };
+  ipcRenderer.send('incorrect-prices', pricingObj);
 
   if (customerSearchWindow.getChildWindows()[0]) {
     customerSearchWindow.getChildWindows()[0].close();
@@ -190,6 +373,7 @@ checkViewBtn.addEventListener('click', (e) => {
 
   customerSearchHtmlDisplay.style.opacity = '0';
 
+  /* SEND CSTOMER DETAILS TO OPEN TABLE */
   setTimeout(() => {
     ipcRenderer.send('table-window', message);
     customerSearchWindow.hide();
@@ -274,4 +458,10 @@ ipcRenderer.on('create-download-window', (e, message) => {
 /* MESSAGE TO SEND PERCENTAGE DOWNLOADED */
 ipcRenderer.on('update-progress', (e, message) => {
   ipcRenderer.send('update-progress', message);
+});
+
+/* UPDATE THE LOCAL STORAGE ARRAY WITH ANY PRICING ERRORS */
+ipcRenderer.on('incorrect-prices', (e, message) => {
+  let mesString = JSON.stringify(message);
+  localStorage.setItem('incorrect-prices', mesString);
 });
