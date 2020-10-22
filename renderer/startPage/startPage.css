@@ -93,7 +93,7 @@ button:focus {
   justify-content: center;
   align-self: center;
   align-items: center;
-  height: 95vh;
+  height: 122vw;
   width: 92vw;
   border: 2px solid #fff;
   border-radius: 3px;
@@ -437,7 +437,6 @@ button:focus {
   z-index: 3;
   text-align: justify;
   font-size: 6vw;
-  background-color: var(--sec-blue);
   border: 1px solid #fff;
   box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
 }
@@ -474,13 +473,17 @@ button:focus {
 }
 #admin-container h3 {
   position: absolute;
-  top: -5vw;
+  top: -7vw;
   font-size: 6vw;
   color: #fff;
   font-weight: bold;
   display: flex;
+  width: 75vw;
+  height: 9vw;
+  padding: 1vw;
   flex-direction: row;
   justify-content: center;
+  background-color: var(--sec-blue);
 }
 #admin-yes {
   position: absolute;

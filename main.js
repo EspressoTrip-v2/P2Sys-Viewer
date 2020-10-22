@@ -79,11 +79,7 @@ let customerSearchWindow,
   loadingWindow,
   tableWindow,
   dbLoaderWindow,
-  updateWindow,
-  tableWindowState,
-  customerWindowState,
-  connectionString,
-  muteAllFag;
+  updateWindow;
 
 /* GLOBAL VARIABLES */
 let customerNumberName,
@@ -103,7 +99,11 @@ let customerNumberName,
   sageValue,
   monitorFlag,
   defaultPriceFlag = false,
-  incorrectPriceFlag = false;
+  incorrectPriceFlag = false,
+  tableWindowState,
+  customerWindowState,
+  connectionString,
+  muteAllFag;
 
 /* ICON FILE */
 if (process.platform === 'win32') {
@@ -371,7 +371,7 @@ function createCustomerSearchWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -446,7 +446,7 @@ function createCustomerNameWindow(message) {
     fullscreenable: false,
     skipTaskbar: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -485,7 +485,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -520,7 +520,7 @@ function createTableWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -584,7 +584,7 @@ function createDbLoaderWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -621,7 +621,7 @@ function createUpdateWindow() {
     transparent: true,
     webPreferences: {
       nodeIntegration: true,
-      // devTools: false,
+      devTools: false,
       enableRemoteModule: true,
     },
     icon: `${dir}/renderer/icons/updateTemplate.png`,
@@ -747,13 +747,13 @@ ipcMain.on('update-progress', (e, message) => {
   }
 });
 
+let pasteCount;
 if (process.platform === 'win32') {
   /* WINDOWS CHILD PROCESS FOR KEYSTROKES */
   /* POWERSHELL MUST BE IN PATH */
   function pasteItemNo() {
     if (itemNo) {
       let itemNoPaste;
-
       if (defaultPriceFlag) {
         let defaultPrice;
         if (itemNo[itemNo.length - 1] === 'T') {
@@ -766,11 +766,11 @@ if (process.platform === 'win32') {
           ' Add-Type -AssemblyName System.Windows.Forms;',
           `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .8;',
+          'Sleep .3;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
           `[System.Windows.Forms.SendKeys]::SendWait('${defaultPrice}');`,
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .5;',
+          'Sleep .2;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
           'Sleep .2;',
           `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
@@ -781,42 +781,65 @@ if (process.platform === 'win32') {
           ' Add-Type -AssemblyName System.Windows.Forms;',
           `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .8;',
+          'Sleep .3;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
           `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .5;',
+          'Sleep .2;',
           '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
           'Sleep .2;',
           `[System.Windows.Forms.SendKeys]::SendWait("${itemValue}");`,
         ];
       } else {
-        itemNoPaste = [
-          '$wshell=New-Object -ComObject wscript.shell;',
-          ' Add-Type -AssemblyName System.Windows.Forms;',
-          `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
-          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .8;',
-          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
-          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .5;',
-          '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
-          'Sleep .2;',
-          '[System.Windows.Forms.SendKeys]::SendWait("^c");',
-        ];
+        if (pasteCount === 0) {
+          console.log('PasteCount 0');
+          itemNoPaste = [
+            '$wshell=New-Object -ComObject wscript.shell;',
+            ' Add-Type -AssemblyName System.Windows.Forms;',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .8;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .8;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .6;',
+            '[System.Windows.Forms.SendKeys]::SendWait("^c");',
+          ];
+          pasteCount = 1;
+        } else {
+          console.log('PasteCount 1');
+          itemNoPaste = [
+            '$wshell=New-Object -ComObject wscript.shell;',
+            ' Add-Type -AssemblyName System.Windows.Forms;',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemNo}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .3;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            `[System.Windows.Forms.SendKeys]::SendWait('${itemPricelist}');`,
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .2;',
+            '[System.Windows.Forms.SendKeys]::SendWait("{TAB}");',
+            'Sleep .6;',
+            '[System.Windows.Forms.SendKeys]::SendWait("^c");',
+          ];
+        }
       }
 
       /* FILL ITEM NUMBER IN ORDER */
       spawnSync('powershell', itemNoPaste);
-
       if (monitorFlag === 'true') {
         setTimeout(() => {
           sageValueString = clipboard.readText().replace(',', '');
+          console.log(sageValueString);
           sageValue = parseInt(sageValueString);
+          console.log(sageValue);
+
           setTimeout(() => {
             /* CHECK TO SEE IF IT IS A PRICE LIST ENTRY PROBLEM */
             if (isNaN(sageValue) || sageValue <= 2) {
+              console.log('No VAlue');
               if (localStorageArr.indexOf(curCustomerNumber) === -1) {
                 sendMail(
                   false,
@@ -842,6 +865,7 @@ if (process.platform === 'win32') {
               }
               /* COMPARE PRICELIST VALUE TO SAGE VALUE */
             } else if (sageValue !== parseInt(itemValue)) {
+              console.log('Unequal Value');
               if (localStorageArr.indexOf(curCustomerNumber) === -1) {
                 sendMail(
                   true,
@@ -931,6 +955,7 @@ ipcMain.on('paste-variables', (e, message) => {
 
 /* REGISTER GLOBAL SHORTCUTS */
 ipcMain.on('global-shortcuts-register', (e, message) => {
+  pasteCount = 0;
   globalShortcut.register('F1', () => {
     pasteItemNo();
   });
