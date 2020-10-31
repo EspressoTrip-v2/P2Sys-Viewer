@@ -641,22 +641,33 @@ function createUpdateWindow() {
 
 /* START THE LOADER */
 app.on('ready', () => {
-  /* SET APP NAME FOR WINDOWS NOTIFICATIONS*/
-  app.setAppUserModelId('P2Sys-Viewer');
-  /* SET VERSION VARIABLE */
-  version = app.getVersion();
+  /* CHECK TO SEE IF APP ALREADY RUNNING */
+  if (!app.requestSingleInstanceLock()) {
+    dialog.showMessageBoxSync({
+      type: 'error',
+      title: 'APP ALREADY RUNNING',
+      message: 'Viewer is already running, please check the taskbar.',
+      buttons: ['OK'],
+    });
+    app.quit();
+  } else {
+    /* SET APP NAME FOR WINDOWS NOTIFICATIONS*/
+    app.setAppUserModelId('P2Sys-Viewer');
+    /* SET VERSION VARIABLE */
+    version = app.getVersion();
 
-  /* SET WINDOW STATES */
-  windowStates();
+    /* SET WINDOW STATES */
+    windowStates();
 
-  /* POWERSHELL TEST */
-  testPowerShell();
+    /* POWERSHELL TEST */
+    testPowerShell();
 
-  setTimeout(() => {
-    mongooseConnect();
+    setTimeout(() => {
+      mongooseConnect();
 
-    createDbLoaderWindow();
-  }, 300);
+      createDbLoaderWindow();
+    }, 300);
+  }
 });
 
 /* QUIT APP WHEN ALL WINDOWS ARE CLOSED */
