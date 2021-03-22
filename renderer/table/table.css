@@ -1,24 +1,28 @@
 /* Set main colors */
 :root {
   --main: #000;
+  --main-hover: rgb(46, 45, 45);
+  --main-light: rgba(46, 45, 45, 0.08);
   --sec-blue: #05899c;
-  --sec-blue-hover: #08d1ee;
+  --sec-blue-hover: #036b7a;
   --scrollbar-track: rgba(5, 136, 156, 0.1);
 
   --button-red: #d63031;
-  --button-red-hover: #de5b5b;
+  --button-red-hover: #a52626;
 
   --button-green: #00b894;
-  --button-green-hover: #00daaf;
+  --button-green-hover: #038369;
   --button-gold: #fe7c04;
-  --button-gold-hover: #ce6301;
+  --auto: rgba(254, 125, 4, 0.08);
+  --man: rgba(0, 184, 147, 0.08);
+
+  --button-gold-hover: #bd5d03;
 
   --hover-blue: rgba(5, 136, 156, 0.5);
-  --hover-gold: rgba(206, 100, 1, 0.5);
-  --opaque-grey: rgba(178, 190, 195, 0.5);
-
+  --hover-gold: rgb(254, 124, 4, 0.5);
   --button-disabled: #b2bec3;
   --text-color: #2d3436;
+  --dark-green: rgb(3, 146, 3);
 }
 
 /* Fonts */
@@ -32,7 +36,7 @@
 *::after {
   box-sizing: border-box;
   -webkit-user-select: none;
-  color: var(--text-color);
+  -webkit-user-drag: none;
 }
 button {
   outline: none;
@@ -97,7 +101,7 @@ th {
   top: 0;
   font-size: 3.5vw;
   padding: 5px 0;
-  background-color: var(--sec-blue);
+  background-color: #000;
   color: #fff;
   z-index: 1;
 }
@@ -111,6 +115,7 @@ th {
   position: relative;
   left: 5vw;
   border: 1px solid transparent;
+  border-radius: 3px;
   height: 3vh;
   width: 15vw;
   padding: 1vw;
@@ -139,6 +144,7 @@ th {
   left: 2vw;
   border: 1px solid transparent;
   height: 3vh;
+  border-radius: 3px;
   width: 15vw;
   padding: 1vw;
   display: flex;
@@ -231,11 +237,11 @@ header {
   justify-content: space-evenly;
   justify-items: center;
   align-items: center;
-  height: 8vw;
+  height: 3vh;
   width: 98vw;
   background-color: #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
 
@@ -257,7 +263,7 @@ header {
   justify-content: center;
   align-items: center;
   align-content: center;
-  border-radius: 10px;
+  border-radius: 3px;
   transition: transform 0.3s, opacity 0.5s 0.5s;
 }
 
@@ -294,14 +300,8 @@ header {
   width: 2px;
 }
 
-#customer-name::-webkit-scrollbar-track {
-  background-color: var(scrollbar-track);
-}
-
 #customer-name::-webkit-scrollbar-thumb {
-  background-color: var(--sec-blue);
-  border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(62, 108, 168, 0.5);
+  background-color: #d1d1d1;
 }
 
 #move-container {
@@ -310,7 +310,7 @@ header {
   display: flex;
   width: 60vw;
   right: 0;
-  height: 8vw;
+  height: 3vh;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
@@ -331,17 +331,17 @@ header {
 
 #customer-number-container {
   position: absolute;
-  color: var(--text-color);
+  color: #000;
   margin: 0;
   display: flex;
-  height: 7.5vw;
+  height: 2.8vh;
   width: 25vw;
   justify-content: center;
   flex-direction: column;
   align-content: center;
   align-items: center;
   background-color: #fff;
-  border: 1px solid var(--button-disabled);
+  border: 1px solid #e2e2e2;
   border-radius: 3px;
 }
 
@@ -389,17 +389,12 @@ header {
 
 /* Scrollbar Customization for Table */
 #container::-webkit-scrollbar {
-  width: 2px;
-}
-
-#container::-webkit-scrollbar-track {
-  background-color: var(--scrollbar-track);
+  width: 0.5vw;
 }
 
 #container::-webkit-scrollbar-thumb {
-  background-color: var(--sec-blue);
-  border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(62, 108, 168, 0.5);
+  height: 1vh;
+  background-color: #000;
 }
 
 /* floating column names */
@@ -421,26 +416,18 @@ header {
   position: absolute;
   right: 18vw;
   z-index: 1;
-  overflow: hidden;
   border: 1px solid #fff;
   background-color: var(--button-gold);
-  font-weight: bolder;
   width: 18vw;
-  height: 8vw;
+  height: 3vh;
   color: #fff;
+  font-size: 4vw;
 }
 #info:hover {
   background-color: var(--button-gold-hover);
 }
 #info:active {
   transform: scale(0.9);
-}
-#info-logo {
-  position: relative;
-  height: 7vw;
-  width: 7vw;
-  fill: #fff;
-  padding: 1vw 0;
 }
 
 .close {
@@ -449,12 +436,12 @@ header {
   right: 0vw;
   overflow: hidden;
   border: 1px solid #fff;
-  border-top-right-radius: 5px;
+  border-top-right-radius: 3px;
   background-color: var(--button-red);
-  font-weight: bolder;
   width: 18vw;
-  height: 8vw;
+  height: 3vh;
   color: #fff;
+  font-size: 4vw;
 }
 
 #close:hover {
@@ -463,24 +450,17 @@ header {
 #close:active {
   transform: scale(0.9);
 }
-.close-logo {
-  position: relative;
-  height: 7vw;
-  width: 7vw;
-  fill: #fff;
-  padding: 1vw 0;
-}
 
 #grab {
   position: relative;
   left: -40vw;
-  width: 6vw;
-  height: 6vw;
+  width: 5vw;
+  height: 5vw;
 }
 
 #grab-logo {
   position: relative;
-  fill: var(--text-color);
+  fill: #000;
 }
 
 #min-logo {
@@ -504,8 +484,8 @@ header {
   z-index: 1;
   transform: rotate(0);
   background-color: #fff;
-  width: 45px;
-  height: 45px;
+  width: 60vw;
+  height: 60vh;
   border-radius: 50%;
   border: 1px solid #fff;
   display: flex;
@@ -546,13 +526,13 @@ header {
 
 #product-itemno-popup {
   position: absolute;
-  border-radius: 5px;
+  border-radius: 3px;
   max-height: 50vh;
   overflow: auto;
   padding: 0px;
   align-items: center;
   align-content: center;
-  border: 1px solid var(--button-disabled);
+  border: 1px solid #d1d1d1;
   background-color: #fff;
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
 }
@@ -584,8 +564,8 @@ header {
   justify-content: center;
   align-items: center;
   border: 2px solid #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   align-content: center;
   background-color: var(--sec-blue);
 }
@@ -625,16 +605,39 @@ header {
   align-content: center;
 }
 
+#keys {
+  display: none;
+  position: absolute;
+  bottom: 1vh;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 98vw;
+  height: 3vh;
+  z-index: 2;
+  font-size: 4vw;
+  font-weight: bold;
+}
+
+#key-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  position: absolute;
+  width: 96vw;
+}
+
 #copied {
   position: absolute;
-  top: 5vh;
+  top: 10vh;
   border-radius: 3px;
-  border: 1px solid var(--text-color);
-  background-color: #fff;
+  border: 1px solid #fff;
+  background-color: var(--sec-blue);
   width: 30vw;
   height: 10vw;
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.5);
 }
+
 #copied[open] {
   animation: popup-notify 0.3s linear 1 forwards;
 }
@@ -645,7 +648,7 @@ header {
   left: 34%;
   font-size: 4.5vw;
   font-weight: bold;
-  color: var(--text-color);
+  color: #fff;
 }
 #copied-logo {
   position: absolute;
@@ -661,6 +664,7 @@ header {
 #copied-logo svg {
   width: 100%;
   height: auto;
+  fill: #fff;
 }
 
 #blur {
@@ -675,18 +679,6 @@ header {
   transition: visibility 0.3s;
 }
 
-/* PASTE NOTIFICATION*/
-
-#f2,
-#f1 {
-  display: inline-block;
-  border: 1px solid var(--text-color);
-  border-radius: 3px;
-  padding: 1vh 3vw;
-  margin-right: 1vw;
-  background-color: #fff;
-  filter: invert(1);
-}
 #itemno-popup {
   display: flex;
   bottom: 24vw;
@@ -707,50 +699,6 @@ header {
   align-items: center;
   align-content: center;
   width: 100%;
-}
-#paste-notification-popup {
-  position: absolute;
-  width: 55vw;
-  height: 60vw;
-  text-align: justify;
-  font-size: 4vw;
-  border-radius: 5px;
-  border: 1px solid var(--main);
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
-}
-#paste-notification-popup[open] {
-  animation: popup-notify 0.3s linear 1 forwards;
-}
-#paste-notification-popup p {
-  position: relative;
-  font-size: 3.4vw;
-  bottom: 0.8vh;
-}
-#paste-notification-popup h3 {
-  position: relative;
-  font-size: 3.5vw;
-  top: -1.5vh;
-}
-#paste-notification-yes {
-  position: absolute;
-  top: 1vh;
-  right: 2vw;
-  width: 5.5vw;
-  border-radius: 50%;
-  background-color: #fff;
-}
-#paste-notification-yes svg {
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  border-radius: 50%;
-}
-
-#paste-notification-yes :hover {
-  transform: scale(1.1);
-}
-#paste-notification-yes :active {
-  transform: scale(1);
 }
 
 #never-show {

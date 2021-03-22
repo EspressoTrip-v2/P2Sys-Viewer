@@ -40,11 +40,11 @@ exports.sendMail = async (typemail, customername, customernumber, itemno, prices
   };
 
   if (typemail) {
-    text = `IMPORTANT VIEWER NOTIFICATION!\n\nThis is an automated notification email.\n\nViewer has noticed during order creation that the Sage system price-list for ${customername} does not match the price on file.\n\nLast item entered ${itemno}:\n Sage Price = R${pricesys}\nViewer Price =  R${price}\n\nPlease urgently correct the pricing to avoid any errors in the future.\n\nKind regards,\nP2Sys Team.`;
-    subject = `INCORRECT PRICING FOR ${customernumber}`;
+    text = `IMPORTANT VIEWER NOTIFICATION!\n\nThis is an automated notification email.\n\nViewer has noticed during order creation that the Sage system price-list for ${customername} does not match the price on file.\n\nLast item entered ${itemno}:\n Sage Price = R${pricesys}\nViewer Price =  R${price}\n\nPlease urgently correct the pricing to avoid any errors in the future.\n\nKind regards,\nP2Sys Viewer.`;
+    subject = `Incorrect pricing for ${customernumber}`;
   } else {
-    text = `IMPORTANT VIEWER NOTIFICATION!\n\nThis is an automated notification email.\n\nViewer has encountered an error during order creation for ${customername}. It seems there is no Sage price-list allocated to customer number ${customernumber}, else Sage had an error processing the request.\n\nIf the problem has already been resolved, please ignore this notification.\n\nKind regards,\nP2Sys Team.`;
-    subject = `PRICE LIST ERROR ${customernumber}`;
+    text = `IMPORTANT VIEWER NOTIFICATION!\n\nThis is an automated notification email.\n\nViewer has encountered an error during order creation for ${customername}. It seems there is no Sage price-list allocated to customer number ${customernumber}, else Sage had an error processing the request.\n\nIf the problem has already been resolved, please ignore this notification.\n\nKind regards,\nP2Sys Viewer.`;
+    subject = `Price list error for ${customernumber}`;
   }
 
   let message = {
@@ -58,9 +58,9 @@ exports.sendMail = async (typemail, customername, customernumber, itemno, prices
   let mailTransport = nodemailer.createTransport(mailTransportObject);
 
   let notification = new Notification({
-    title: 'PRICING NOTIFICATION SENT',
+    title: 'Pricing notification sent',
     body: `Notification about pricing for ${customername} has been sent for review.`,
-    icon: `${dir}/renderer/icons/info.png`,
+    icon: `${dir}/renderer/icons/converter-logo.png`,
   });
   mailTransport.sendMail(message, (err, info) => {
     notification.show();
