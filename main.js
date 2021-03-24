@@ -20,24 +20,10 @@ const decoder = new StringDecoder('utf-8');
 
 /* GET WORKING DIRECTORY */
 let dir;
-function envFileChange() {
-  let fileName = `${process.cwd()}/resources/app.asar`;
-  /* LOCAL MODULES */
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = fileName.replace(pattern, '/');
-  } else dir = fileName;
-}
-
 if (!process.env.NODE_ENV) {
-  envFileChange();
+  dir = `${process.cwd()}\\resources\\app.asar`;
 } else {
   dir = process.cwd();
-
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = dir.replace(pattern, '/');
-  }
 }
 
 let appData = `${process.env.APPDATA}\\P2Sys-Viewer`;
@@ -204,10 +190,10 @@ function notifyMain(message) {
 /* CONNECT TO DATABASE */
 function mongooseConnect(message) {
   /* TEST DATABASE */
-  connectionString = `mongodb+srv://${message.username}:${message.password}@cluster0.z0sd1.mongodb.net/acwhitcher?retryWrites=true&w=majority`;
+  // connectionString = `mongodb+srv://${message.username}:${message.password}@cluster0.z0sd1.mongodb.net/acwhitcher?retryWrites=true&w=majority`;
 
   /* AC WHITCHER DATABASE */
-  // connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.61lij.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+  connectionString = `mongodb+srv://${message.username}:${message.password}@cluster0.e7vid.mongodb.net/acwhitcher?retryWrites=true&w=majority`;
 
   mongoose
     .connect(connectionString, {
@@ -297,6 +283,15 @@ function createTray() {
   tray.setContextMenu(trayMenu);
 }
 
+async function getCustomerNamesReload() {
+  try {
+    customerNumberNameResult = await queryCustomerName(null, true, notifyMain);
+  } catch (err) {
+    logFileFunc(err.stack);
+  }
+  convertNumberName();
+}
+
 /* CREATE NAME NUMBER JSON FOR SEARCH WINDOW */
 function convertNumberName() {
   let newObjA = {};
@@ -332,7 +327,7 @@ function createCustomerSearchWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -384,7 +379,7 @@ function createCustomerNameWindow(message) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
@@ -430,7 +425,7 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
@@ -445,9 +440,6 @@ function createLoadingWindow() {
     loadingWindow.moveTop();
   });
 
-  //   LOAD DEV TOOLS
-  // loadingWindow.webContents.openDevTools();
-
   //   EVENT LISTENER FOR CLOSING
   loadingWindow.on('closed', () => {
     loadingWindow = null;
@@ -461,18 +453,16 @@ function createTableWindow(message) {
     height: Math.floor(screenWidth * 0.52),
     maxWidth: Math.floor(screenWidth * 0.26),
     maxHeight: Math.floor(screenHeight),
-    // maxWidth: 400,
     backgroundColor: '#00FFFFFF',
     autoHideMenuBar: true,
     alwaysOnTop: true,
     maximizable: false,
     frame: false,
     center: true,
-    // show: false,
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       worldSafeExecuteJavaScript: true,
@@ -503,15 +493,14 @@ function createTableWindow(message) {
     tableWindow.webContents.send('mute-all', muteAllFag);
   });
 
-  //   DEV TOOLS
-  // tableWindow.webContents.openDevTools();
-
   //   CLOSING EVENT LISTENER
   tableWindow.on('closed', () => {
-    customerSearchWindow.webContents.send('expand-window', null);
-    setTimeout(() => {
-      customerSearchWindow.show();
-    }, 500);
+    if (customerSearchWindow) {
+      setTimeout(() => {
+        customerSearchWindow.show();
+        customerSearchWindow.webContents.send('expand-window', null);
+      }, 500);
+    }
     tableWindow = null;
   });
 }
@@ -532,7 +521,7 @@ function createUpdateInfo() {
     skipTaskbar: true,
     resizable: false,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
@@ -542,9 +531,6 @@ function createUpdateInfo() {
 
   //   Load html page
   updateInfoWindow.loadFile(`${dir}/renderer/updateInfo/updateInfo.html`);
-
-  //   Load dev tools
-  // updateInfoWindow.webContents.openDevTools();
 
   //   Event listener for closing
   updateInfoWindow.on('closed', () => {
@@ -568,7 +554,7 @@ function createPasswordGenerateWindow() {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
@@ -585,9 +571,6 @@ function createPasswordGenerateWindow() {
       loadingWindow.close();
     }
   });
-
-  //   Load dev tools
-  // passwordGenerate.webContents.openDevTools();
 
   //   Event listener for closing
   passwordGenerate.on('closed', () => {
@@ -611,7 +594,7 @@ function createPasswordEnterWindow(hash) {
     spellCheck: false,
     transparent: true,
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
@@ -630,9 +613,6 @@ function createPasswordEnterWindow(hash) {
     passwordEnter.webContents.send('hash', hash);
   });
 
-  //   Load dev tools
-  // passwordEnter.webContents.openDevTools();
-
   //   Event listener for closing
   passwordEnter.on('closed', () => {
     passwordEnter = null;
@@ -640,10 +620,10 @@ function createPasswordEnterWindow(hash) {
 }
 
 function checkPassword() {
-  if (!fs.existsSync(`${appData}/ps_bin.dat`)) {
+  if (!fs.existsSync(`${appData}/ps_bin`)) {
     createPasswordGenerateWindow();
-  } else if (fs.existsSync(`${appData}/ps_bin.dat`)) {
-    fs.readFile(`${appData}/ps_bin.dat`, 'utf8', (err, data) => {
+  } else if (fs.existsSync(`${appData}/ps_bin`)) {
+    fs.readFile(`${appData}/ps_bin`, 'utf8', (err, data) => {
       createPasswordEnterWindow(JSON.parse(data).hash);
     });
   }
@@ -1020,4 +1000,15 @@ ipcMain.on('update-progress', (e, message) => {
 
 ipcMain.on('close-app', (e, message) => {
   app.exit();
+});
+
+ipcMain.on('table-close-timeout', (e, message) => {
+  if (tableWindow) {
+    tableWindow.close();
+  }
+
+  if (customerSearchWindow) {
+    getCustomerNamesReload();
+    customerSearchWindow.webContents.send('start-reset-timeout', null);
+  }
 });

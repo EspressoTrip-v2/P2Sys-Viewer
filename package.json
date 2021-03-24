@@ -61,6 +61,7 @@
     },
     "nsis": {
       "shortcutName": "Viewer",
+      "deleteAppDataOnUninstall": false,
       "perMachine": true,
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,

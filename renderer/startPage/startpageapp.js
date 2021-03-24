@@ -6,22 +6,10 @@ const { remote, ipcRenderer } = require('electron');
 
 /* GET WORKING DIRECTORY */
 let dir;
-function envFileChange() {
-  let fileName = `${process.cwd()}/resources/app.asar`;
-  /* LOCAL MODULES */
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = fileName.replace(pattern, '/');
-  } else dir = fileName;
-}
 if (!process.env.NODE_ENV) {
-  envFileChange();
+  dir = `${process.cwd()}\\resources\\app.asar`;
 } else {
   dir = process.cwd();
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = dir.replace(pattern, '/');
-  }
 }
 
 /* SET NOTIFICATIONS OBJECT IF DOES NOT EXIST */
@@ -61,6 +49,7 @@ let customerPrices,
   customerName,
   jsonFile,
   customerNumberNameJson,
+  resetTimeOut,
   target;
 
 //////////////////
@@ -93,11 +82,24 @@ let customerFindBtn = document.getElementById('assist-btn'),
   priceBtn = document.getElementById('price'),
   onlineWarning = document.getElementById('connection-container'),
   closeAppBtn = document.getElementById('connection-close'),
-  priceLogo = document.getElementById('price-logo');
+  priceLogo = document.getElementById('price-logo'),
+  downloadContainer = document.getElementById('download-notif');
 
 ///////////////
 /* FUNCTIONS */
 ///////////////
+
+/* TIMEOUT FUNCTION */
+function resetTimeOutFunc() {
+  resetTimeOut = setTimeout(() => {
+    ipcRenderer.send('restart-app', null);
+  }, 300000);
+}
+
+function resetTimeOutReset() {
+  clearTimeout(resetTimeOut);
+}
+
 /* RESET THE LIST OF CUSTOMER NUMBERS TO REMOVE CLICKS */
 function resetList() {
   customerNumbersSearchList.forEach((el) => {
@@ -285,6 +287,16 @@ localStoragePrices();
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
+window.addEventListener('mouseenter', () => {
+  resetTimeOutReset();
+  resetTimeOutFunc();
+});
+
+window.addEventListener('mouseout', () => {
+  resetTimeOutReset();
+  resetTimeOutFunc();
+});
+
 /* MUTE SOUNDS BUTTON */
 muteBtn.addEventListener('click', (e) => {
   setTimeout(() => {
@@ -414,6 +426,7 @@ checkViewBtn.addEventListener('click', (e) => {
   setTimeout(() => {
     ipcRenderer.send('table-window', message);
     customerSearchWindow.hide();
+    clearTimeout(resetTimeOut);
   }, 500);
 });
 
@@ -448,11 +461,6 @@ minimizeBtn.addEventListener('click', (e) => {
   }, 300);
 });
 
-/* 
-jsonFile
-customerName
-customerNumber
-priceListNumber */
 /* GET PRICE-LIST FROM DATABASE */
 async function getPriceList(customerNumber) {
   // Get the price list number
@@ -484,12 +492,6 @@ ipcRenderer.on('dock-select', (e, message) => {
   customerSearchInput.dispatchEvent(new Event('keyup'));
 });
 
-// /* CREATE WINDOW LISTENER */
-// ipcRenderer.on('database', async (e, message) => {
-//   /* POPULATE THE LIST WITH THE CUSTOMER NUMBERS */
-//   fillCustomerPrices();
-// });
-
 /* MESSAGE TO EXPAND WINDOW AFTER TABLE CLOSED */
 ipcRenderer.on('expand-window', (e, message) => {
   customerSearchHtmlDisplay.style.opacity = '1';
@@ -519,6 +521,7 @@ ipcRenderer.on('populate-list', (e, message) => {
 
 ipcRenderer.on('send-customers', (e, message) => {
   customerNumberNameJson = message;
+  resetTimeOutFunc();
 });
 
 /* COMMUNICATION FOR CUSTOMER DOCK */
@@ -551,4 +554,28 @@ ipcRenderer.on('connection-lost', (e) => {
 });
 ipcRenderer.on('connection-found', (e) => {
   onlineWarning.style.visibility = 'hidden';
+});
+
+function showUpdateNotify() {
+  downloadContainer.style.visibility = 'visible';
+}
+
+function hideUpdateNotify() {
+  downloadContainer.style.visibility = 'hidden';
+}
+
+ipcRenderer.on('start-update', (e, message) => {
+  showUpdateNotify();
+  ipcRenderer.send('open-update-window', null);
+});
+
+ipcRenderer.on('download-complete', (e, message) => {
+  hideUpdateNotify();
+  ipcRenderer.send('close-update-window', null);
+});
+
+ipcRenderer.on('start-reset-timeout', (e, message) => {
+  showLoading();
+  populateList();
+  resetTimeOutFunc();
 });

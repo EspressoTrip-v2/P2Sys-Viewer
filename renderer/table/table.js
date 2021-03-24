@@ -4,22 +4,10 @@ const { ipcRenderer, remote } = require('electron');
 
 /* GET WORKING DIRECTORY */
 let dir;
-function envFileChange() {
-  let fileName = `${process.cwd()}/resources/app.asar`;
-  /* LOCAL MODULES */
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = fileName.replace(pattern, '/');
-  } else dir = fileName;
-}
 if (!process.env.NODE_ENV) {
-  envFileChange();
+  dir = `${process.cwd()}\\resources\\app.asar`;
 } else {
   dir = process.cwd();
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = dir.replace(pattern, '/');
-  }
 }
 
 /* LOCAL IMPORTS */
@@ -29,7 +17,12 @@ const { tablePopulate } = require(`${dir}/renderer/table/tablePopulate.js`);
 let tableWindow = remote.getCurrentWindow();
 
 /* GLOBAL VARIABLES */
-let customerNumbervalue, productObject, productValue, windowState, priceListNumber;
+let customerNumbervalue,
+  productObject,
+  productValue,
+  windowState,
+  priceListNumber,
+  resetTimeOut;
 
 /* CREATE ROW LOOKUP FOR PRODUCT NUMBERS */
 let productDict = {
@@ -442,14 +435,16 @@ infoBtn.addEventListener('click', (e) => {
   infoButtonClick();
 });
 
+function closeBtnEvent() {
+  ipcRenderer.send('global-shortcuts-unregister', null);
+  ipcRenderer.send('reset-flags', null);
+  ipcRenderer.send('table-close-timeout', null);
+}
+
 /* CLOSE BUTTON */
 closeBtn.addEventListener('click', (e) => {
   soundClick.play();
-  ipcRenderer.send('global-shortcuts-unregister', null);
-  ipcRenderer.send('reset-flags', null);
-  setTimeout(() => {
-    tableWindow.close();
-  }, 200);
+  closeBtnEvent();
 });
 
 /* HIDE BUTTON */
@@ -509,6 +504,26 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
+/* TIMEOUT FUNCTION */
+function resetTimeOutFunc() {
+  resetTimeOut = setTimeout(() => {
+    closeBtnEvent();
+  }, 300000);
+}
+
+function resetTimeOutReset() {
+  clearTimeout(resetTimeOut);
+}
+window.addEventListener('mouseenter', (e) => {
+  resetTimeOutReset();
+  resetTimeOutFunc();
+});
+
+window.addEventListener('mouseout', (e) => {
+  resetTimeOutReset();
+  resetTimeOutFunc();
+});
+
 ///////////////////
 /* IPC LISTENERS */
 ///////////////////
@@ -519,10 +534,10 @@ ipcRenderer.on('table-window', (e, message) => {
   customerNumber.innerText = message.customerNumber;
   customerNumbervalue = message.customerNumber;
   /* SET TITLE OF BAR */
-  // minLogoBar.title = customerName.innerText;
   priceListNumber = message.priceListNumber;
   /* SEND THE CUSTOMER NUMBER TO BE EVALUATED FOR DEFAULT PRICELIST */
   ipcRenderer.send('default-price', customerNumber.innerText);
+  resetTimeOutFunc();
 });
 
 /* MESSAGE PRODUCT NUMBER VARIABLES */

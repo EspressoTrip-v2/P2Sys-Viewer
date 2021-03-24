@@ -67,7 +67,7 @@ function generateHash() {
         hash,
       };
 
-      fs.writeFile(`${appData}/ps_bin.dat`, JSON.stringify(obj), (err) => {
+      fs.writeFile(`${appData}/ps_bin`, JSON.stringify(obj), (err) => {
         runCountDown();
       });
     });
