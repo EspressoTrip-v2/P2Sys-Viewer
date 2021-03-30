@@ -1,6 +1,5 @@
-P2Sys Viewer version 2.0.1
+P2Sys Viewer version 2.0.3
 
 Changelog:
 
-- Redesign of database access.
-- UI changes
+- Removed timer function

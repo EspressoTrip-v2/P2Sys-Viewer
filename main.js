@@ -251,6 +251,9 @@ db.on('disconnected', () => {
       incorrectPriceFlag = false;
       defaultPriceFlag = false;
     }
+    if (customerNameWindow) {
+      customerNameWindow.close();
+    }
     customerSearchWindow.webContents.send('connection-lost', null);
   }
 });
@@ -262,6 +265,10 @@ db.on('error', () => {
       globalShortcut.unregisterAll();
       incorrectPriceFlag = false;
       defaultPriceFlag = false;
+    }
+
+    if (customerNameWindow) {
+      customerNameWindow.close();
     }
     customerSearchWindow.webContents.send('connection-lost', null);
   }
@@ -358,9 +365,6 @@ function createCustomerSearchWindow() {
   /* EVENT LISTENER FOR CLOSING */
   customerSearchWindow.on('closed', () => {
     customerSearchWindow = null;
-    if (!updateInfoWindow) {
-      app.quit();
-    }
   });
 }
 
@@ -662,7 +666,7 @@ app.on('ready', () => {
 
 /* QUIT APP WHEN ALL WINDOWS ARE CLOSED */
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  app.quit();
 });
 
 ///////////////////
@@ -696,7 +700,12 @@ ipcMain.on('close-win', (e, message) => {
   if (tableWindow) {
     tableWindow.close();
   }
-  customerSearchWindow.close();
+
+  if (updateInfoWindow) {
+    customerSearchWindow.hide();
+  } else {
+    customerSearchWindow.close();
+  }
 });
 
 /* CLOSE DOCK WINDOW */
@@ -948,8 +957,15 @@ ipcMain.on('close-window-dock', (e, message) => {
 
 /* UPDATE DOWNLOADED */
 ipcMain.on('close-update-window', (e, message) => {
-  if (updateInfoWindow) {
-    updateInfoWindow.close();
+  if (!customerSearchWindow.isVisible() && !tableWindow) {
+    if (updateInfoWindow) {
+      updateInfoWindow.close();
+    }
+    customerSearchWindow.close();
+  } else {
+    if (updateInfoWindow) {
+      updateInfoWindow.close();
+    }
   }
 });
 
@@ -959,7 +975,7 @@ ipcMain.on('dock-sec', (e, message) => {
 });
 
 ipcMain.on('close-app', (e, message) => {
-  app.exit();
+  app.quit();
 });
 
 ipcMain.on('restart-app', (e, message) => {
@@ -985,13 +1001,6 @@ ipcMain.on('open-update-window', (e, message) => {
 });
 
 /* UPDATE DOWNLOADED */
-ipcMain.on('close-update-window', (e, message) => {
-  if (updateInfoWindow) {
-    updateInfoWindow.close();
-  }
-});
-
-/* UPDATE DOWNLOADED */
 ipcMain.on('update-progress', (e, message) => {
   if (updateInfoWindow) {
     updateInfoWindow.webContents.send('update-percent', message);
@@ -1009,6 +1018,5 @@ ipcMain.on('table-close-timeout', (e, message) => {
 
   if (customerSearchWindow) {
     getCustomerNamesReload();
-    customerSearchWindow.webContents.send('start-reset-timeout', null);
   }
 });

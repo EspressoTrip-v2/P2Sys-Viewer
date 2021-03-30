@@ -444,7 +444,9 @@ function closeBtnEvent() {
 /* CLOSE BUTTON */
 closeBtn.addEventListener('click', (e) => {
   soundClick.play();
-  closeBtnEvent();
+  setTimeout(() => {
+    closeBtnEvent();
+  }, 200);
 });
 
 /* HIDE BUTTON */
@@ -504,26 +506,6 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
-/* TIMEOUT FUNCTION */
-function resetTimeOutFunc() {
-  resetTimeOut = setTimeout(() => {
-    closeBtnEvent();
-  }, 300000);
-}
-
-function resetTimeOutReset() {
-  clearTimeout(resetTimeOut);
-}
-window.addEventListener('mouseenter', (e) => {
-  resetTimeOutReset();
-  resetTimeOutFunc();
-});
-
-window.addEventListener('mouseout', (e) => {
-  resetTimeOutReset();
-  resetTimeOutFunc();
-});
-
 ///////////////////
 /* IPC LISTENERS */
 ///////////////////
@@ -537,7 +519,6 @@ ipcRenderer.on('table-window', (e, message) => {
   priceListNumber = message.priceListNumber;
   /* SEND THE CUSTOMER NUMBER TO BE EVALUATED FOR DEFAULT PRICELIST */
   ipcRenderer.send('default-price', customerNumber.innerText);
-  resetTimeOutFunc();
 });
 
 /* MESSAGE PRODUCT NUMBER VARIABLES */

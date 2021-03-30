@@ -89,17 +89,6 @@ let customerFindBtn = document.getElementById('assist-btn'),
 /* FUNCTIONS */
 ///////////////
 
-/* TIMEOUT FUNCTION */
-function resetTimeOutFunc() {
-  resetTimeOut = setTimeout(() => {
-    ipcRenderer.send('restart-app', null);
-  }, 300000);
-}
-
-function resetTimeOutReset() {
-  clearTimeout(resetTimeOut);
-}
-
 /* RESET THE LIST OF CUSTOMER NUMBERS TO REMOVE CLICKS */
 function resetList() {
   customerNumbersSearchList.forEach((el) => {
@@ -287,15 +276,6 @@ localStoragePrices();
 /////////////////////
 /* EVENT LISTENERS */
 /////////////////////
-window.addEventListener('mouseenter', () => {
-  resetTimeOutReset();
-  resetTimeOutFunc();
-});
-
-window.addEventListener('mouseout', () => {
-  resetTimeOutReset();
-  resetTimeOutFunc();
-});
 
 /* MUTE SOUNDS BUTTON */
 muteBtn.addEventListener('click', (e) => {
@@ -396,6 +376,7 @@ passwordNo.addEventListener('click', (e) => {
 checkViewBtn.addEventListener('click', (e) => {
   soundClick.play();
   showLoading();
+
   /* ADD POPULATION CODE FOR TABLE */
   let message = {
     jsonFile,
@@ -403,6 +384,7 @@ checkViewBtn.addEventListener('click', (e) => {
     customerNumber,
     priceListNumber,
   };
+
   let monitorFlag = localStorage.getItem('monitorflag');
   /* SEND THE INCORRECT PRICING ARRAY TO THE MAIN PROCESS */
   let pricingObj = {
@@ -426,7 +408,6 @@ checkViewBtn.addEventListener('click', (e) => {
   setTimeout(() => {
     ipcRenderer.send('table-window', message);
     customerSearchWindow.hide();
-    clearTimeout(resetTimeOut);
   }, 500);
 });
 
@@ -521,7 +502,6 @@ ipcRenderer.on('populate-list', (e, message) => {
 
 ipcRenderer.on('send-customers', (e, message) => {
   customerNumberNameJson = message;
-  resetTimeOutFunc();
 });
 
 /* COMMUNICATION FOR CUSTOMER DOCK */
@@ -572,10 +552,4 @@ ipcRenderer.on('start-update', (e, message) => {
 ipcRenderer.on('download-complete', (e, message) => {
   hideUpdateNotify();
   ipcRenderer.send('close-update-window', null);
-});
-
-ipcRenderer.on('start-reset-timeout', (e, message) => {
-  showLoading();
-  populateList();
-  resetTimeOutFunc();
 });
