@@ -19,6 +19,7 @@
 * {
   box-sizing: border-box;
   -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 /* Fonts */
 @font-face {
@@ -37,7 +38,6 @@ html {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-size: 18px;
   background-color: transparent;
 }
 
@@ -51,8 +51,8 @@ main {
   border: 2px solid #fff;
   border-radius: 3px;
   width: 92vw;
-  height: 60vh;
-  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+  height: 62vh;
+  box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.5);
 }
 
 header {
@@ -64,7 +64,7 @@ header {
   border-radius: 3px;
   height: 19vh;
   width: 92vw;
-  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.5);
 }
 #whitcher-logo-container {
   position: absolute;
@@ -82,7 +82,7 @@ header {
 #whitcher-logo {
   position: relative;
   height: auto;
-  width: 70vw;
+  width: 90vw;
   -webkit-user-drag: none;
   -webkit-app-region: drag;
 }
@@ -104,7 +104,7 @@ body {
 
 #border {
   position: relative;
-  opacity: 0;
+  visibility: hidden;
   padding: 0;
   top: 0;
   margin: 0 50px;
@@ -114,7 +114,6 @@ body {
   align-items: center;
   align-content: center;
   height: 100%;
-  transition: opacity 0.3s;
 }
 
 footer {
@@ -122,7 +121,7 @@ footer {
   width: 92vw;
   border-radius: 3px;
   margin-top: 1.5vh;
-  box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.5);
 }
 
 .customer-name {
@@ -165,7 +164,6 @@ footer {
 }
 #container-background::-webkit-scrollbar-thumb {
   height: 3px;
-  background-color: var(--sec-blue);
 }
 
 #customer-search-container {
@@ -203,7 +201,7 @@ footer {
   justify-content: center;
   justify-items: center;
   width: 90vw;
-  border: 1px solid var(--button-disabled);
+  border: 1px solid #d1d1d1;
 }
 
 #customer-list-container {
@@ -213,22 +211,4 @@ footer {
   justify-content: center;
   align-content: center;
   background-color: #fff;
-}
-
-/* loader icon */
-#loader {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-items: center;
-  align-items: center;
-  background-color: #fff;
-  width: 270px;
-  height: 563px;
-  top: 21px;
-  margin: 5rem auto;
-  align-self: center;
-  border: 2px solid var(--main);
-  border-radius: 8px;
 }

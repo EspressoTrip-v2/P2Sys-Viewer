@@ -1,5 +1,5 @@
-P2SYS-VIEWER VERSION 1.1.3
+P2Sys Viewer version 2.0.3
 
 Changelog:
 
-- Stopped multi instances of viewer.
+- Removed timer function

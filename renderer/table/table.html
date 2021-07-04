@@ -21,25 +21,9 @@
       <!-- ///// -->
       <main>
         <header id="header">
-          <button id="info" title="Show customer name">
+          <button id="info" title="Show customer name">Info</button>
 
-            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="info-logo">
-              <path
-                d="m722.7 856.4v89.1c0 12.1-4.4 22.5-13.2 31.3s-19.3 13.2-31.3 13.2h-356.4c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-89.1c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h44.5v-267.4h-44.5c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-89.1c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h267.3c12.1 0 22.5 4.4 31.3 13.2s13.2 19.3 13.2 31.3v400.9h44.5c12.1 0 22.5 4.4 31.3 13.2 8.9 8.9 13.3 19.3 13.3 31.4zm-89.1-801.9v133.6c0 12.1-4.4 22.5-13.2 31.3s-19.3 13.2-31.3 13.2h-178.2c-12.1 0-22.5-4.4-31.3-13.2s-13.2-19.3-13.2-31.3v-133.6c0-12.1 4.4-22.5 13.2-31.3s19.3-13.2 31.3-13.2h178.2c12.1 0 22.5 4.4 31.3 13.2s13.2 19.3 13.2 31.3z" />
-            </svg>
-
-          </button>
-
-          <button class='close' id="close" title="Close">
-
-            <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" class="close-logo">
-              <path
-                d="m961.8 825.6-787.3-787.3c-37.5-37.5-98.5-37.5-136.1 0s-37.5 98.6 0 136.1l787.3 787.3c37.5 37.5 98.6 37.5 136.1 0 37.6-37.5 37.6-98.5 0-136.1z" />
-              <path
-                d="m961.8 38.3c-37.5-37.5-98.5-37.5-136.1 0l-787.5 787.3c-37.5 37.5-37.5 98.6 0 136.1s98.6 37.5 136.1 0l787.3-787.3c37.8-37.6 37.8-98.6 0.2-136.1z" />
-            </svg>
-
-          </button>
+          <button class='close' id="close" title="Close">Back</button>
           <div id="customer-number-container">
 
             <span id="customer-number"></span>
@@ -90,7 +74,7 @@
   </div>
 
   <dialog id="product-itemno-popup">
-    <div id="itemno-header">SELECT PRODUCT</div>
+    <div id="itemno-header">Select Product</div>
     <div id="itemno">
 
       <!-- Test -->
@@ -123,32 +107,13 @@
     </div>
     <div id="copied-text">COPIED</div>
   </dialog>
-  <!-- PASTE ITEMS KEY DESCRIPTION NOTIFICATION -->
-  <dialog id="paste-notification-popup">
-    <h3>IMPORTANT:</h3>
-    <p>
-      Product details will be mapped to specific keys on selection.
-      <br>
-      <br>
-    <div id="itemno-popup">
-      <div id="f1"><b>F1</b></div>: &nbsp; ITEM NUMBER
-    </div>
-    <br>
-    <div id="itemprice-popup">
-      <div id="f2"><b>F2</b></div>: &nbsp; ITEM PRICE
-    </div>
-    </p>
-    <a href="#" id="paste-notification-yes" title="Continue">
-      <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1e3 1e3" id="paste-notification-yes-logo">
-        <path
-          d="m765.1 392.2-296.9 298.8c-7.3 7.4-17.5 12-28.7 12s-21.4-4.6-28.7-12l-161.7-148.5c-7.3-7.4-11.9-17.6-11.9-28.9 0-22.6 18.2-40.8 40.6-40.8 11.2 0 21.3 4.6 28.7 12l133 119.7 268.2-270c7.3-7.4 17.5-12 28.7-12 22.4 0 40.6 18.3 40.6 40.8 0 11.3-4.6 21.5-11.9 28.9z" />
-        <path
-          d="m500 10c-270.6 0-490 219.4-490 490s219.4 490 490 490 490-219.4 490-490-219.4-490-490-490zm0 909c-231.4 0-419-187.6-419-419s187.6-419 419-419 419 187.6 419 419-187.6 419-419 419z" />
-      </svg>
 
-    </a>
-    <a href="#" id="never-show">NEVER SHOW AGAIN</a>
-  </dialog>
+  <div id="keys">
+    <div id="key-text">
+      <div>F1 -> Insert all</div>
+      <div>F2 -> Insert price</div>
+    </div>
+  </div>
 
 </body>
 

@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron');
 
 /* GLOBAL VARIABLES */
 //////////////////////
-let customerNameNumber, customerPrices;
+let customerNameNumberJson, customerPricesNumbersArr;
 
 ///////////////////
 /* DOM ELEMENTS */
@@ -12,51 +12,69 @@ let customerNameNumber, customerPrices;
 let customerListContainer = document.getElementById('customer-list-container'),
   searchDock = document.getElementById('customer-search'),
   soundClick = document.getElementById('click'),
+  audioTag = Array.from(document.getElementsByTagName('audio')),
   border = document.getElementById('border');
 
 ///////////////
 /* FUNCTIONS */
 ///////////////
-function fillCustomerNameNumber() {
+/* FUNCTION CHECK THE MUTE FLAG */
+let storage = JSON.parse(localStorage.getItem('notifications'));
+function checkMuteFlag() {
+  if (!storage.muteflag) {
+    /* SET FLAG TO FALSE AND TURN OFF ALL SOUND */
+    storage.muteflag = false;
+    localStorage.setItem('notifications', JSON.stringify(storage));
+    audioTag.forEach((el) => {
+      el.muted = true;
+    });
+  } else {
+    /* SET THE FLAG TO TRUE AND TURN OFF ALL SOUND */
+    storage.muteflag = true;
+    localStorage.setItem('notifications', JSON.stringify(storage));
+    audioTag.forEach((el) => {
+      el.muted = false;
+    });
+  }
+}
+
+if (!storage.muteflag) {
+  checkMuteFlag();
+}
+
+function fillCustomerNameNumberJson() {
   /* POPULATE LIST OF CUSTOMERS */
   ///////////////////////////////
 
-  let customers = Object.keys(customerNameNumber),
-    customerPricesKeys = Object.keys(customerPrices);
+  let customerNames = Object.keys(customerNameNumberJson);
   (() => {
-    customers.forEach((el) => {
-      if (customerPricesKeys.includes(customerNameNumber[el.toUpperCase()])) {
+    customerNames.forEach((el) => {
+      if (customerPricesNumbersArr.includes(customerNameNumberJson[el.toUpperCase()])) {
         let html = `<div title="${
-          customerNameNumber[el.toLocaleUpperCase()]
+          customerNameNumberJson[el.toLocaleUpperCase()]
         }" class="customer-name">${el.toUpperCase()}</div>`;
         customerListContainer.insertAdjacentHTML('beforeend', html);
       }
     });
   })();
+
   ////////////////////////////////////////
   /* DOM ELEMENTS AFTER GENERATED HTML */
   //////////////////////////////////////
-
   let customerNameLists = Array.from(document.getElementsByClassName('customer-name'));
 
   //////////////////////
   /* EVENT LISTENERS */
   ////////////////////
-  /* SEND CUSTOMER NUMBER TO SECWINDOW */
   customerNameLists.forEach((el) => {
     el.addEventListener('click', (e) => {
       soundClick.play();
-      let number = customerNameNumber[e.target.innerText];
-      // send ipc
-      ipcRenderer.send('dock-select', number);
-
-      // Clear any existing highlighted number in case of reclick
-      customerNameLists.forEach((el) => {
-        el.setAttribute('class', 'customer-name');
-      });
-
-      // set the highlight on current clicked item
-      el.setAttribute('class', 'customer-name-clicked');
+      setTimeout(() => {
+        let number = customerNameNumberJson[e.target.innerText];
+        // send ipc
+        ipcRenderer.send('dock-sec', number);
+        ipcRenderer.send('close-window-dock', null);
+      }, 300);
     });
   });
 
@@ -71,7 +89,7 @@ function fillCustomerNameNumber() {
       el.style.display = elMatch ? 'block' : 'none';
     });
   });
-  border.style.opacity = '1';
+  border.style.visibility = 'visible';
 }
 
 ////////////////////////
@@ -80,12 +98,15 @@ function fillCustomerNameNumber() {
 
 /* POPULATE THE LIST OF NAMES IN WINDOW */
 ipcRenderer.on('name-search', (event, message) => {
-  customerNameNumber = message.customerNameNumber;
-  customerPrices = message.customerPrices;
-  fillCustomerNameNumber();
+  customerNameNumberJson = message.customerNameNumberJson;
+  customerPricesNumbersArr = message.customerPricesNumbersArr;
+  fillCustomerNameNumberJson();
+  setTimeout(() => {
+    searchDock.focus();
+  }, 300);
 });
 
 /* MESSAGE TO RETRACT WINDOW BEFORE CLOSE */
 ipcRenderer.on('close-window-dock', (e, message) => {
-  border.style.opacity = '0';
+  border.style.visibility = 'hidden';
 });

@@ -38,6 +38,7 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 body {
   display: flex;
@@ -55,8 +56,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 115px;
-  height: 115px;
+  width: 96vw;
+  height: 96vh;
   border-radius: 50%;
 }
 
@@ -67,18 +68,17 @@ body {
   flex-direction: column;
   align-items: center;
   font-weight: bolder;
-  width: 85px;
-  height: 85px;
+  width: 72vw;
+  height: 72vh;
   border-radius: 50%;
   background-color: #fff;
-  z-index: 1;
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.5);
+  z-index: 2;
 }
 
 #logo {
   position: relative;
-  top: 2px;
-  width: 65px;
+  top: 2vh;
+  width: 56vw;
   height: auto;
 }
 
@@ -87,21 +87,21 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 10px solid transparent;
+  border: 12vw solid transparent;
   mix-blend-mode: overlay;
 }
 
 .spinner-color-a {
-  border-top: 10px solid var(--sec-blue);
+  border-top: 12vw solid var(--sec-blue);
   animation: rotate 2s linear infinite;
 }
 
 .spinner-color-b {
-  border-left: 10px solid var(--button-red);
+  border-left: 12vw solid var(--button-red);
   animation: rotate 2.5s linear infinite;
 }
 .spinner-color-c {
-  border-right: 10px solid var(--button-green);
+  border-right: 12vw solid var(--button-green);
   animation: rotate 1.5s linear infinite;
 }
 
