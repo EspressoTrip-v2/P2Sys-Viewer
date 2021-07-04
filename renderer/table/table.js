@@ -4,22 +4,10 @@ const { ipcRenderer, remote } = require('electron');
 
 /* GET WORKING DIRECTORY */
 let dir;
-function envFileChange() {
-  let fileName = `${process.cwd()}/resources/app.asar`;
-  /* LOCAL MODULES */
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = fileName.replace(pattern, '/');
-  } else dir = fileName;
-}
 if (!process.env.NODE_ENV) {
-  envFileChange();
+  dir = `${process.cwd()}\\resources\\app.asar`;
 } else {
   dir = process.cwd();
-  if (process.platform === 'win32') {
-    let pattern = /[\\]+/g;
-    dir = dir.replace(pattern, '/');
-  }
 }
 
 /* LOCAL IMPORTS */
@@ -29,7 +17,12 @@ const { tablePopulate } = require(`${dir}/renderer/table/tablePopulate.js`);
 let tableWindow = remote.getCurrentWindow();
 
 /* GLOBAL VARIABLES */
-let customerNumbervalue, productObject, productValue, windowState, pricelistNumber;
+let customerNumbervalue,
+  productObject,
+  productValue,
+  windowState,
+  priceListNumber,
+  resetTimeOut;
 
 /* CREATE ROW LOOKUP FOR PRODUCT NUMBERS */
 let productDict = {
@@ -93,17 +86,12 @@ let table = document.getElementById('table'),
   itemNoPopup = document.getElementById('product-itemno-popup'),
   itemNoList = document.getElementById('itemno'),
   blurItemNo = document.getElementById('blur'),
+  keysInfo = document.getElementById('keys'),
   soundPopup = document.getElementById('pop'),
   soundNotify = document.getElementById('notify'),
   typeFlagText = document.getElementById('type-flag'),
-  pasteNotifyPopUp = document.getElementById('paste-notification-popup'),
-  pasteNotifyPopUpYes = document.getElementById('paste-notification-yes'),
-  neverShowBtn = document.getElementById('never-show'),
   audioTag = Array.from(document.getElementsByTagName('audio'));
 
-/* GET LOCALSTORAGE OBJECT */
-/////////////////////////////
-let localStorageObject = JSON.parse(localStorage.getItem('notifications'));
 ///////////////
 /* FUNCTIONS */
 ///////////////
@@ -124,6 +112,7 @@ function htmlInnerFill(html) {
 function selectionPopUpClose() {
   itemNoPopup.close();
   blurItemNo.style.visibility = 'hidden';
+  keysInfo.style.display = 'none';
   itemNoAddListener(false);
   itemNoList.innerHTML = '';
 }
@@ -135,7 +124,7 @@ function itemNoEventListener(e) {
   let itemMessage = {
     itemNo: e.target.title,
     itemValue: productValue,
-    itemPricelist: pricelistNumber,
+    itemPricelist: priceListNumber,
   };
   ipcRenderer.send('paste-variables', itemMessage);
   selectionPopUpClose();
@@ -172,13 +161,14 @@ function populateItemlist(stringArr, dimensions, intArr) {
   itemNoList.insertAdjacentHTML('beforeend', html);
   itemNoAddListener();
   if (typeFlag) {
-    typeFlagText.innerText = 'TREATED';
+    typeFlagText.innerText = 'Treated';
     typeFlagText.style.backgroundColor = 'var(--button-gold)';
   } else {
-    typeFlagText.innerText = 'UNTREATED';
+    typeFlagText.innerText = 'Untreated';
     typeFlagText.style.backgroundColor = 'var(--sec-blue)';
   }
   blurItemNo.style.visibility = 'visible';
+  keysInfo.style.display = 'flex';
   setTimeout(() => {
     soundPopup.play();
     itemNoPopup.show();
@@ -419,28 +409,6 @@ function fillTable(json) {
   htmlInnerFill(generatedHtml);
   eventListenerAdd();
   ipcRenderer.send('global-shortcuts-register', null);
-  /* SHOW POPUP NOTIFICATION */
-  if (localStorageObject['pasteItems']) {
-    /* ADD EVENT LISTENERS FOR THE POPUP BUTTONS */
-    pasteNotifyPopUpYes.addEventListener('click', (e) => {
-      soundClick.play();
-      blurItemNo.style.visibility = 'hidden';
-      pasteNotifyPopUp.close();
-    });
-    neverShowBtn.addEventListener('click', (e) => {
-      soundClick.play();
-      localStorageObject['pasteItems'] = false;
-      localStorage.setItem('notifications', JSON.stringify(localStorageObject));
-      blurItemNo.style.visibility = 'hidden';
-      pasteNotifyPopUp.close();
-    });
-    setTimeout(() => {
-      /* SHOW POPUP */
-      blurItemNo.style.visibility = 'visible';
-      pasteNotifyPopUp.show();
-      soundPopup.play();
-    }, 1000);
-  }
   tableWindow.focus();
 }
 
@@ -467,26 +435,29 @@ infoBtn.addEventListener('click', (e) => {
   infoButtonClick();
 });
 
+function closeBtnEvent() {
+  ipcRenderer.send('global-shortcuts-unregister', null);
+  ipcRenderer.send('reset-flags', null);
+  ipcRenderer.send('table-close-timeout', null);
+}
+
 /* CLOSE BUTTON */
 closeBtn.addEventListener('click', (e) => {
   soundClick.play();
-  ipcRenderer.send('global-shortcuts-unregister', null);
-  ipcRenderer.send('reset-flags', null);
   setTimeout(() => {
-    tableWindow.close();
+    closeBtnEvent();
   }, 200);
 });
 
 /* HIDE BUTTON */
 window.addEventListener('blur', (e) => {
-  if (!(itemNoPopup.open || pasteNotifyPopUp.open)) {
+  if (!itemNoPopup.open) {
     /* HIDE THE INFO DROPDOWN IF OPEN */
     if (
       window.getComputedStyle(customerNameContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)'
     ) {
       infoButtonClick();
     }
-
     setTimeout(() => {
       /* SCROLLS THE TABLE DOWN TO STOP FREEZING ON UNHIDE */
       if (window.getComputedStyle(tableContainer).transform === 'matrix(1, 0, 0, 1, 0, 0)') {
@@ -545,8 +516,7 @@ ipcRenderer.on('table-window', (e, message) => {
   customerNumber.innerText = message.customerNumber;
   customerNumbervalue = message.customerNumber;
   /* SET TITLE OF BAR */
-  // minLogoBar.title = customerName.innerText;
-  pricelistNumber = message.pricelistNumber;
+  priceListNumber = message.priceListNumber;
   /* SEND THE CUSTOMER NUMBER TO BE EVALUATED FOR DEFAULT PRICELIST */
   ipcRenderer.send('default-price', customerNumber.innerText);
 });
